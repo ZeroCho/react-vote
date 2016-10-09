@@ -1,0 +1,50 @@
+{
+  "name": "react-vote",
+  "version": "0.1.0",
+  "description": "eact component for simple voting system, easy to customize and internationalize",
+  "main": "dist/react-vote.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && webpack --progess --colors --debug --ouput-pathinfo --display-error-details",
+    "prepublish": "npm run build",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerocho/react-vote.git"
+  },
+  "keywords": [
+    "react",
+    "vote",
+    "component"
+  ],
+  "author": "ZeroCho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zerocho/react-vote/issues"
+  },
+  "homepage": "https://github.com/zerocho/react-vote#readme",
+  "peerDependencies": {
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-1": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.3.0",
+    "rimraf": "^2.5.4",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2"
+  }
+}

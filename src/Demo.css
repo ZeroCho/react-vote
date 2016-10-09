@@ -1,0 +1,33 @@
+.voteWrapper {
+  border: 1px solid black;
+}
+
+.voteTitle {
+  font-weight: bolder;
+  text-align: center;
+}
+
+.removeButton {
+  float: right;
+  margin-right: 50px;
+}
+
+.itemWrapper:hover {
+  background: silver;
+}
+
+.itemTitle {
+  display: inline-block;
+  padding-left: 50px;
+}
+
+.voteButton {
+  float: right;
+  margin-right: 50px;
+}
+
+.itemCount {
+  font-weight: bold;
+  float: right;
+  margin-right: 50px;
+}
