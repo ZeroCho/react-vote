@@ -21535,6 +21535,7 @@
 	      _this.addInput.value = '';
 	    }, _this.removeItem = function (target) {
 	      var items = _this.state.items;
+	      console.log(target, _this, _this[target]);
 	      var title = _this[target].innerHTML;
 	      items = items.filter(function (item) {
 	        return item.title !== title;
@@ -21572,13 +21573,13 @@
 	          var j = i;
 	          var itemComponent = _react2.default.createElement(
 	            'div',
-	            { key: 'react-vote-item-' + i, className: _this.props.styles.itemWrapper },
+	            { key: 'react-vote-item-' + j, className: _this.props.styles.itemWrapper },
 	            _react2.default.createElement(
 	              'div',
 	              {
 	                className: _this.props.styles.itemTitle,
 	                ref: function ref(c) {
-	                  _this['react-vote-item-' + i] = c;
+	                  _this['react-vote-item-' + j] = c;
 	                }
 	              },
 	              item.title
@@ -21596,7 +21597,7 @@
 	              'button',
 	              {
 	                onClick: function onClick() {
-	                  return _this.removeItem('react-vote-item-' + i);
+	                  return _this.removeItem('react-vote-item-' + j);
 	                },
 	                className: _this.props.styles.removeButton
 	              },

@@ -111,10 +111,10 @@ class ReactVote extends Component {
         {this.state.items.map((item) => {
           const j = i;
           const itemComponent = (
-            <div key={`react-vote-item-${i}`} className={this.props.styles.itemWrapper}>
+            <div key={`react-vote-item-${j}`} className={this.props.styles.itemWrapper}>
               <div
                 className={this.props.styles.itemTitle}
-                ref={(c) => { this[`react-vote-item-${i}`] = c; }}
+                ref={(c) => { this[`react-vote-item-${j}`] = c; }}
               >
                 {item.title}
               </div>
@@ -126,7 +126,7 @@ class ReactVote extends Component {
                   {this.props.text.voteButtonText}
                 </button> :
                 <button
-                  onClick={() => this.removeItem(`react-vote-item-${i}`)}
+                  onClick={() => this.removeItem(`react-vote-item-${j}`)}
                   className={this.props.styles.removeButton}
                 >
                   {this.props.text.removeButtonText}
@@ -136,7 +136,6 @@ class ReactVote extends Component {
           i += 1;
           return itemComponent;
         })}
-
       </div>
     );
   };
