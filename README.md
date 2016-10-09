@@ -8,11 +8,17 @@ npm install react-vote --save
 ```
 
 ##How to use
+For a new vote do **NOT** put data prop. And put **getData** callback function to get vote data and to connect data with database
 ```
 var ReactVote = require('react-vote');
-<ReactVote />
+<ReactVote styles={customStyle} text={customText} getData={voteCallback} />
 ```
 
+For ongoing vote or vote result, put **data** prop. The structure of data prop is detailed below.
+```
+var ReactVote = require('react-vote');
+<ReactVote data={data} styles={customStyle} text={customText} getData={voteCallback} />
+```
 ES2015 style
 ```
 import ReactVote from 'react-vote';
@@ -20,7 +26,7 @@ import ReactVote from 'react-vote';
 
 ##Result
 I know, the style of this component looks crappy, but it's for **customization**. I didn't put any css codes for your **customization**. You can use **styles** prop to style it in your own way. **styles** prop is detailed in below. Also, you can change texts by using **text** prop. 
-
+![reactvote](https://cloud.githubusercontent.com/assets/10962668/19221127/f819ae10-8e77-11e6-8fb5-4340fd32f770.png)
 
 ##Props
 - data: Object
@@ -31,7 +37,7 @@ I know, the style of this component looks crappy, but it's for **customization**
 -- done: Bool. Tell you whether this vote is done or not
 - getData: Function(data). It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed** or **somebody votes this**. So you can put voting data into the **database** with this function
 - styles: Object. A group of classNames in this voting component. You can change these for style **customization** by mapping **classNames** with css files.
--- voteWrapper
+-- voteWrapper: The ancestor of all divs
 -- voteTitle
 -- titleInput
 -- addWrapper
@@ -39,7 +45,7 @@ I know, the style of this component looks crappy, but it's for **customization**
 -- addButton
 -- itemTitle
 -- itemCount
--- itemWrapper
+-- itemWrapper: Wrapper of itemTitle and itemCount
 -- removeButton
 -- confirmButton
 -- resultButton
@@ -52,8 +58,8 @@ I know, the style of this component looks crappy, but it's for **customization**
 -- removeButtonText
 -- confirmButtonText
 -- resultButtonText
--- gobackButtonText
--- notEnoughItemMessage
+-- goBackButtonText
+-- notEnoughItemMessage: Message of alert, triggered when you try to create vote with less than 2 items.
 -- voteButtonText
 
 ## Demo
