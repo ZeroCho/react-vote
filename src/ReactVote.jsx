@@ -18,10 +18,12 @@ class ReactVote extends Component {
       itemCount: PropTypes.string,
       itemWrapper: PropTypes.string,
       removeButton: PropTypes.string,
-      confirmButton: PropTypes.string,
+      createButton: PropTypes.string,
       resultButton: PropTypes.string,
       goBackButton: PropTypes.string,
       voteButton: PropTypes.string,
+      closeButton: PropTypes.string,
+      errorMessage: PropTypes.string,
     }),
     getData: PropTypes.func,
     text: PropTypes.shape({
@@ -29,10 +31,11 @@ class ReactVote extends Component {
       addInputPlaceholder: PropTypes.string,
       addButtonText: PropTypes.string,
       removeButtonText: PropTypes.string,
-      confirmButtonText: PropTypes.string,
+      closeButtonText: PropTypes.string,
+      createButtonText: PropTypes.string,
       resultButtonText: PropTypes.string,
       goBackButtonText: PropTypes.string,
-      notEnoughItemMessage: PropTypes.string,
+      errorMessage: PropTypes.string,
       voteButtonText: PropTypes.string,
     }),
   };
@@ -43,11 +46,12 @@ class ReactVote extends Component {
       titleInputPlaceholder: 'Title of this vote',
       addInputPlaceholder: 'Type title of new item here',
       removeButtonText: '×',
-      confirmButtonText: 'Confirm',
+      closeButtonText: 'Close vote',
+      createButtonText: 'Create',
       resultButtonText: 'Show result',
       goBackButtonText: 'Go back to vote',
-      voteButtonText: 'Vote this',
-      notEnoughItemMessage: 'Need more than two items!',
+      voteButtonText: 'Upvote',
+      errorMessage: 'Need at least two items!',
     },
   };
 
@@ -56,6 +60,7 @@ class ReactVote extends Component {
     items: this.props.data ? this.props.data.items : [],
     data: this.props.data,
     voted: false,
+    showMessage: false,
   };
 
   addItem = () => {
@@ -81,9 +86,9 @@ class ReactVote extends Component {
       done: false,
     };
     if (data.items.length < 2) {
-      return window.alert(this.props.text.notEnoughItemMessage);
+      return this.setState({ showMessage: true });
     }
-    this.setState({ data });
+    this.setState({ data, showMessage: false });
     return this.props.getData && this.props.getData(data);
   };
 
@@ -95,7 +100,14 @@ class ReactVote extends Component {
     this.setState({ showResult: false });
   };
 
-  vote = (idx) => {
+  closeVote = () => {
+    const data = this.state.data;
+    data.done = true;
+    this.setState({ data });
+    return this.props.getData && this.props.getData(data);
+  };
+
+  upvote = (idx) => {
     const items = this.state.items;
     const data = this.state.data;
     items[idx].count += 1;
@@ -119,12 +131,12 @@ class ReactVote extends Component {
                 {item.title}
               </div>
               {this.state.data ?
-                !this.state.voted && <button
-                  onClick={() => this.vote(j)}
-                  className={this.props.styles.voteButton}
-                >
-                  {this.props.text.voteButtonText}
-                </button> :
+              !this.state.voted && <button
+                onClick={() => this.upvote(j)}
+                className={this.props.styles.voteButton}
+              >
+                {this.props.text.voteButtonText}
+              </button> :
                 <button
                   onClick={() => this.removeItem(`react-vote-item-${j}`)}
                   className={this.props.styles.removeButton}
@@ -170,14 +182,13 @@ class ReactVote extends Component {
         <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
         {this.renderResult()}
         {!this.state.data.done &&
-          <button
-            className={this.props.styles.goBackButton}
-            onClick={this.showVoting}
-          >
-            {this.props.text.goBackButtonText}
-          </button>}
-      </div>
-      :
+        <button
+          className={this.props.styles.goBackButton}
+          onClick={this.showVoting}
+        >
+          {this.props.text.goBackButtonText}
+        </button>}
+      </div> :
       <div>
         <div className={this.props.styles.voteTitle}>{this.state.data && this.state.data.title}</div>
         {this.renderItems()}
@@ -187,12 +198,16 @@ class ReactVote extends Component {
         >
           {this.props.text.resultButtonText}
         </button>
+        <button
+          className={this.props.styles.closeButton}
+          onClick={this.closeVote}
+        >
+          {this.props.text.closeButtonText}
+        </button>
       </div>;
     return (
       <div className={this.props.styles.voteWrapper}>
-        {this.state.data ?
-          isVotingDone
-          :
+        {this.state.data ? isVotingDone :
           <div>
             <input
               className={this.props.styles.titleInput}
@@ -213,8 +228,10 @@ class ReactVote extends Component {
                 {this.props.text.addButtonText}
               </button>
             </div>
-            <button className={this.props.styles.confirmButton} onClick={this.confirmVote}>
-              {this.props.text.confirmButtonText}
+            {this.state.showMessage &&
+            <div className={this.props.styles.errorMessage}>{this.props.text.errorMessage}</div>}
+            <button className={this.props.styles.createButton} onClick={this.confirmVote}>
+              {this.props.text.createButtonText}
             </button>
           </div>
         }

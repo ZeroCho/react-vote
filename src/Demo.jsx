@@ -16,15 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
     itemCount: styles.itemCount,
     itemWrapper: styles.itemWrapper,
     removeButton: styles.removeButton,
-    confirmButton: styles.confirmButton,
+    createButton: styles.createButton,
     resultButton: styles.resultButton,
     goBackButton: styles.goBackButton,
     voteButton: styles.voteButton,
+    errorMessage: styles.errorMessage,
+    closeButton: styles.closeButton,
   };
   const customText = {
     voteButtonText: 'I\'m gonna vote this!',
     resultButtonText: 'Give me the result!',
     goBackButtonText: 'Let\'s go back!',
+    closeButtonText: 'I\'ll close this vote',
   };
   const getData = (data) => {
     console.log(data);

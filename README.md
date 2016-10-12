@@ -20,7 +20,7 @@ function voteCallback (data) {
 }
 ```
 
-For ongoing vote or vote result, put **data** prop. This component will read the **data** prop and execute it. The structure of data prop is detailed below.
+For ongoing vote or vote result, fetch vote data from the database and put it into the **data** prop. This component will read the **data** prop and execute it. The structure of data prop is detailed below.
 ```
 var ReactVote = require('react-vote');
 <ReactVote data={data} styles={customStyle} text={customText} getData={voteCallback} />
@@ -39,12 +39,12 @@ I know, the style of this component looks crappy, but it's for **customization**
 - title: String. Title of vote.
 - items: Array. Array of objects composed with title and count 
 `[{ title: 'vote option 1', count: 5 }, { title: 'vote option 2', count: 3 }]`
-- done: Bool. Tell you whether this vote is done or not. If done prop is true, you can only see the result, else you can toggle between voting window and result window.
+- done: Boolean. Tell you whether this vote is done or not. If done prop is true, you can only see the result, else you can toggle between voting window and result window.
 
-### getData: Function(data: Object).
-It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed** or **somebody votes this**. So you can put voting data into the **database** with this function
+### getData: Function(data: Object)
+It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function
 
-### styles: Object.
+### styles: Object
 A group of classNames in this voting component. You can change these for style **customization** by mapping **classNames** with css files.
 - voteWrapper: The ancestor of all divs
 - voteTitle
@@ -60,8 +60,10 @@ A group of classNames in this voting component. You can change these for style *
 - resultButton
 - goBackButton
 - voteButton
+- closeButton
+- errorMessage
 
-### text: Object.
+### text: Object
 A group of texts in this voting component. You can change these for **i18n**(internationalization).
 - titleInputPlaceholder
 - addInputPlaceholder
@@ -70,8 +72,9 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - confirmButtonText
 - resultButtonText
 - goBackButtonText
-- notEnoughItemMessage: Message of alert, triggered when you try to create vote with less than 2 items.
+- errorMessage: Message of alert, triggered when you try to create vote with less than 2 items.
 - voteButtonText
+- closeButtonText
 
 ## Demo
 [Live Demo](https://www.zerocho.com/portfolio/ReactVote)

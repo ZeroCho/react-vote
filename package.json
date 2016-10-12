@@ -1,6 +1,6 @@
 {
   "name": "react-vote",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "React component for simple voting system, easy to customize and internationalize",
   "main": "dist/react-vote.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.3.0",
+    "eslint-plugin-react": "^6.4.1",
     "rimraf": "^2.5.4",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2"

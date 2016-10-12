@@ -77,15 +77,18 @@
 	    itemCount: _Demo2.default.itemCount,
 	    itemWrapper: _Demo2.default.itemWrapper,
 	    removeButton: _Demo2.default.removeButton,
-	    confirmButton: _Demo2.default.confirmButton,
+	    createButton: _Demo2.default.createButton,
 	    resultButton: _Demo2.default.resultButton,
 	    goBackButton: _Demo2.default.goBackButton,
-	    voteButton: _Demo2.default.voteButton
+	    voteButton: _Demo2.default.voteButton,
+	    errorMessage: _Demo2.default.errorMessage,
+	    closeButton: _Demo2.default.closeButton
 	  };
 	  var customText = {
 	    voteButtonText: 'I\'m gonna vote this!',
 	    resultButtonText: 'Give me the result!',
-	    goBackButtonText: 'Let\'s go back!'
+	    goBackButtonText: 'Let\'s go back!',
+	    closeButtonText: 'I\'ll close this vote'
 	  };
 	  var getData = function getData(data) {
 	    console.log(data);
@@ -21526,7 +21529,8 @@
 	      showResult: false,
 	      items: _this.props.data ? _this.props.data.items : [],
 	      data: _this.props.data,
-	      voted: false
+	      voted: false,
+	      showMessage: false
 	    }, _this.addItem = function () {
 	      var title = _this.addInput.value;
 	      var items = _this.state.items;
@@ -21535,7 +21539,6 @@
 	      _this.addInput.value = '';
 	    }, _this.removeItem = function (target) {
 	      var items = _this.state.items;
-	      console.log(target, _this, _this[target]);
 	      var title = _this[target].innerHTML;
 	      items = items.filter(function (item) {
 	        return item.title !== title;
@@ -21549,15 +21552,20 @@
 	        done: false
 	      };
 	      if (data.items.length < 2) {
-	        return window.alert(_this.props.text.notEnoughItemMessage);
+	        return _this.setState({ showMessage: true });
 	      }
-	      _this.setState({ data: data });
+	      _this.setState({ data: data, showMessage: false });
 	      return _this.props.getData && _this.props.getData(data);
 	    }, _this.showResult = function () {
 	      _this.setState({ showResult: true });
 	    }, _this.showVoting = function () {
 	      _this.setState({ showResult: false });
-	    }, _this.vote = function (idx) {
+	    }, _this.closeVote = function () {
+	      var data = _this.state.data;
+	      data.done = true;
+	      _this.setState({ data: data });
+	      return _this.props.getData && _this.props.getData(data);
+	    }, _this.upvote = function (idx) {
 	      var items = _this.state.items;
 	      var data = _this.state.data;
 	      items[idx].count += 1;
@@ -21588,7 +21596,7 @@
 	              'button',
 	              {
 	                onClick: function onClick() {
-	                  return _this.vote(j);
+	                  return _this.upvote(j);
 	                },
 	                className: _this.props.styles.voteButton
 	              },
@@ -21678,6 +21686,14 @@
 	            onClick: this.showResult
 	          },
 	          this.props.text.resultButtonText
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          {
+	            className: this.props.styles.closeButton,
+	            onClick: this.closeVote
+	          },
+	          this.props.text.closeButtonText
 	        )
 	      );
 	      return _react2.default.createElement(
@@ -21713,10 +21729,15 @@
 	              this.props.text.addButtonText
 	            )
 	          ),
+	          this.state.showMessage && _react2.default.createElement(
+	            'div',
+	            { className: this.props.styles.errorMessage },
+	            this.props.text.errorMessage
+	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { className: this.props.styles.confirmButton, onClick: this.confirmVote },
-	            this.props.text.confirmButtonText
+	            { className: this.props.styles.createButton, onClick: this.confirmVote },
+	            this.props.text.createButtonText
 	          )
 	        )
 	      );
@@ -21743,10 +21764,12 @@
 	    itemCount: _react.PropTypes.string,
 	    itemWrapper: _react.PropTypes.string,
 	    removeButton: _react.PropTypes.string,
-	    confirmButton: _react.PropTypes.string,
+	    createButton: _react.PropTypes.string,
 	    resultButton: _react.PropTypes.string,
 	    goBackButton: _react.PropTypes.string,
-	    voteButton: _react.PropTypes.string
+	    voteButton: _react.PropTypes.string,
+	    closeButton: _react.PropTypes.string,
+	    errorMessage: _react.PropTypes.string
 	  }),
 	  getData: _react.PropTypes.func,
 	  text: _react.PropTypes.shape({
@@ -21754,10 +21777,11 @@
 	    addInputPlaceholder: _react.PropTypes.string,
 	    addButtonText: _react.PropTypes.string,
 	    removeButtonText: _react.PropTypes.string,
-	    confirmButtonText: _react.PropTypes.string,
+	    closeButtonText: _react.PropTypes.string,
+	    createButtonText: _react.PropTypes.string,
 	    resultButtonText: _react.PropTypes.string,
 	    goBackButtonText: _react.PropTypes.string,
-	    notEnoughItemMessage: _react.PropTypes.string,
+	    errorMessage: _react.PropTypes.string,
 	    voteButtonText: _react.PropTypes.string
 	  })
 	};
@@ -21767,11 +21791,12 @@
 	    titleInputPlaceholder: 'Title of this vote',
 	    addInputPlaceholder: 'Type title of new item here',
 	    removeButtonText: '×',
-	    confirmButtonText: 'Confirm',
+	    closeButtonText: 'Close vote',
+	    createButtonText: 'Create',
 	    resultButtonText: 'Show result',
 	    goBackButtonText: 'Go back to vote',
-	    voteButtonText: 'Vote this',
-	    notEnoughItemMessage: 'Need more than two items!'
+	    voteButtonText: 'Upvote',
+	    errorMessage: 'Need at least two items!'
 	  }
 	};
 	exports.default = ReactVote;
@@ -21811,7 +21836,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}", ""]);
+	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
@@ -21821,7 +21846,8 @@
 		"itemWrapper": "_26h4HMhGw_gIR2ijOZxBHt",
 		"itemTitle": "_3_ZWzak0O7omDyICZISLE_",
 		"voteButton": "_284ZAkSjdHSoBhchGzY0rG",
-		"itemCount": "_2blB909OMlg3TVoISCFX1T"
+		"itemCount": "_2blB909OMlg3TVoISCFX1T",
+		"errorMessage": "_3WMTFiCBNS_YGVqHnLVPts"
 	};
 
 /***/ },
