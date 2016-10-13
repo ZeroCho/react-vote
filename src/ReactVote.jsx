@@ -25,6 +25,7 @@ class ReactVote extends Component {
       voteButton: PropTypes.string,
       closeButton: PropTypes.string,
       errorMessage: PropTypes.string,
+      votedText: PropTypes.string,
     }),
     getData: PropTypes.func,
     text: PropTypes.shape({
@@ -38,6 +39,7 @@ class ReactVote extends Component {
       goBackButtonText: PropTypes.string,
       errorMessage: PropTypes.string,
       voteButtonText: PropTypes.string,
+      votedText: PropTypes.string,
     }),
     errorMessage: PropTypes.shape({
       notEnoughItems: PropTypes.string,
@@ -57,6 +59,7 @@ class ReactVote extends Component {
       resultButtonText: 'Show result',
       goBackButtonText: 'Go back to vote',
       voteButtonText: 'Upvote',
+      votedText: 'Voted',
     },
     errorMessage: {
       notEnoughItems: 'Need at least 2 item!',
@@ -127,17 +130,26 @@ class ReactVote extends Component {
     const items = this.state.items;
     const data = this.state.data;
     items[idx].count += 1;
+    items[idx].voted = true;
     data.items = items;
     this.setState({ voted: true, items, data });
     return this.props.getData && this.props.getData(data);
   };
 
-  renderItems = () => {
+  renderItems = (items) => {
     let i = 0;
     return (
       <div>
-        {this.state.items.map((item) => {
+        {items.map((item) => {
           const j = i;
+          const notVoted = !this.state.voted ?
+            <button
+              onClick={() => this.upvote(j)}
+              className={this.props.styles.voteButton}
+            >
+              {this.props.text.voteButtonText}
+            </button> :
+          item.voted && <span className={this.props.styles.votedText}> {this.props.text.votedText}</span>;
           const itemComponent = (
             <div key={`react-vote-item-${j}`} className={this.props.styles.itemWrapper}>
               <div
@@ -146,13 +158,7 @@ class ReactVote extends Component {
               >
                 {item.title}
               </div>
-              {this.state.data ?
-              !this.state.voted && <button
-                onClick={() => this.upvote(j)}
-                className={this.props.styles.voteButton}
-              >
-                {this.props.text.voteButtonText}
-              </button> :
+              {this.state.data ? notVoted :
                 <button
                   onClick={() => this.removeItem(`react-vote-item-${j}`)}
                   className={this.props.styles.removeButton}
@@ -168,12 +174,12 @@ class ReactVote extends Component {
     );
   };
 
-  renderResult = () => {
+  renderResult = (items) => {
     let i = 0;
-    const total = this.state.items.reduce((prev, current) => prev + current.count, 0);
+    const total = items.reduce((prev, current) => prev + current.count, 0);
     return (
       <div>
-        {this.state.items.map((item) => {
+        {items.map((item) => {
           const percentage = ((item.count / total) * 100).toFixed(2);
           const itemComponent = (
             <div key={`react-vote-result-${i}`} className={this.props.styles.itemWrapper}>
@@ -198,7 +204,7 @@ class ReactVote extends Component {
     const voting = (
       <div>
         <div className={this.props.styles.voteTitle}>{this.state.data && this.state.data.title}</div>
-        {this.renderItems()}
+        {this.renderItems(this.state.items)}
         <button
           className={this.props.styles.resultButton}
           onClick={this.showResult}
@@ -216,7 +222,7 @@ class ReactVote extends Component {
     const result = this.state.data &&
       <div>
         <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
-        {this.renderResult()}
+        {this.renderResult(this.state.items)}
         {!this.state.data.done &&
         <button
           className={this.props.styles.goBackButton}
@@ -235,7 +241,7 @@ class ReactVote extends Component {
               ref={(c) => { this.voteTitle = c; }}
               placeholder={this.props.text.titleInputPlaceholder}
             />
-            {this.renderItems()}
+            {this.renderItems(this.state.items)}
             <div className={this.props.styles.addWrapper}>
               <input
                 className={this.props.styles.addInput}

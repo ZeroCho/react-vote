@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resultButton: styles.resultButton,
     goBackButton: styles.goBackButton,
     voteButton: styles.voteButton,
+    votedText: styles.votedText,
     errorMessage: styles.errorMessage,
     closeButton: styles.closeButton,
   };
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resultButtonText: 'Give me the result!',
     goBackButtonText: 'Let\'s go back!',
     closeButtonText: 'I\'ll close this vote',
+    votedText: 'I chose this',
   };
   const getData = (data) => {
     console.log(data);

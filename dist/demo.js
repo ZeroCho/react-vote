@@ -81,6 +81,7 @@
 	    resultButton: _Demo2.default.resultButton,
 	    goBackButton: _Demo2.default.goBackButton,
 	    voteButton: _Demo2.default.voteButton,
+	    votedText: _Demo2.default.votedText,
 	    errorMessage: _Demo2.default.errorMessage,
 	    closeButton: _Demo2.default.closeButton
 	  };
@@ -88,7 +89,8 @@
 	    voteButtonText: 'I\'m gonna vote this!',
 	    resultButtonText: 'Give me the result!',
 	    goBackButtonText: 'Let\'s go back!',
-	    closeButtonText: 'I\'ll close this vote'
+	    closeButtonText: 'I\'ll close this vote',
+	    votedText: 'I chose this'
 	  };
 	  var getData = function getData(data) {
 	    console.log(data);
@@ -21575,16 +21577,32 @@
 	      var items = _this.state.items;
 	      var data = _this.state.data;
 	      items[idx].count += 1;
+	      items[idx].voted = true;
 	      data.items = items;
 	      _this.setState({ voted: true, items: items, data: data });
 	      return _this.props.getData && _this.props.getData(data);
-	    }, _this.renderItems = function () {
+	    }, _this.renderItems = function (items) {
 	      var i = 0;
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _this.state.items.map(function (item) {
+	        items.map(function (item) {
 	          var j = i;
+	          var notVoted = !_this.state.voted ? _react2.default.createElement(
+	            'button',
+	            {
+	              onClick: function onClick() {
+	                return _this.upvote(j);
+	              },
+	              className: _this.props.styles.voteButton
+	            },
+	            _this.props.text.voteButtonText
+	          ) : item.voted && _react2.default.createElement(
+	            'span',
+	            { className: _this.props.styles.votedText },
+	            ' ',
+	            _this.props.text.votedText
+	          );
 	          var itemComponent = _react2.default.createElement(
 	            'div',
 	            { key: 'react-vote-item-' + j, className: _this.props.styles.itemWrapper },
@@ -21598,16 +21616,7 @@
 	              },
 	              item.title
 	            ),
-	            _this.state.data ? !_this.state.voted && _react2.default.createElement(
-	              'button',
-	              {
-	                onClick: function onClick() {
-	                  return _this.upvote(j);
-	                },
-	                className: _this.props.styles.voteButton
-	              },
-	              _this.props.text.voteButtonText
-	            ) : _react2.default.createElement(
+	            _this.state.data ? notVoted : _react2.default.createElement(
 	              'button',
 	              {
 	                onClick: function onClick() {
@@ -21622,15 +21631,15 @@
 	          return itemComponent;
 	        })
 	      );
-	    }, _this.renderResult = function () {
+	    }, _this.renderResult = function (items) {
 	      var i = 0;
-	      var total = _this.state.items.reduce(function (prev, current) {
+	      var total = items.reduce(function (prev, current) {
 	        return prev + current.count;
 	      }, 0);
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _this.state.items.map(function (item) {
+	        items.map(function (item) {
 	          var percentage = (item.count / total * 100).toFixed(2);
 	          var itemComponent = _react2.default.createElement(
 	            'div',
@@ -21671,7 +21680,7 @@
 	          { className: this.props.styles.voteTitle },
 	          this.state.data && this.state.data.title
 	        ),
-	        this.renderItems(),
+	        this.renderItems(this.state.items),
 	        _react2.default.createElement(
 	          'button',
 	          {
@@ -21697,7 +21706,7 @@
 	          { className: this.props.styles.voteTitle },
 	          this.state.data.title
 	        ),
-	        this.renderResult(),
+	        this.renderResult(this.state.items),
 	        !this.state.data.done && _react2.default.createElement(
 	          'button',
 	          {
@@ -21721,7 +21730,7 @@
 	            },
 	            placeholder: this.props.text.titleInputPlaceholder
 	          }),
-	          this.renderItems(),
+	          this.renderItems(this.state.items),
 	          _react2.default.createElement(
 	            'div',
 	            { className: this.props.styles.addWrapper },
@@ -21782,7 +21791,8 @@
 	    goBackButton: _react.PropTypes.string,
 	    voteButton: _react.PropTypes.string,
 	    closeButton: _react.PropTypes.string,
-	    errorMessage: _react.PropTypes.string
+	    errorMessage: _react.PropTypes.string,
+	    votedText: _react.PropTypes.string
 	  }),
 	  getData: _react.PropTypes.func,
 	  text: _react.PropTypes.shape({
@@ -21795,7 +21805,8 @@
 	    resultButtonText: _react.PropTypes.string,
 	    goBackButtonText: _react.PropTypes.string,
 	    errorMessage: _react.PropTypes.string,
-	    voteButtonText: _react.PropTypes.string
+	    voteButtonText: _react.PropTypes.string,
+	    votedText: _react.PropTypes.string
 	  }),
 	  errorMessage: _react.PropTypes.shape({
 	    notEnoughItems: _react.PropTypes.string,
@@ -21813,7 +21824,8 @@
 	    createButtonText: 'Create',
 	    resultButtonText: 'Show result',
 	    goBackButtonText: 'Go back to vote',
-	    voteButtonText: 'Upvote'
+	    voteButtonText: 'Upvote',
+	    votedText: 'Voted'
 	  },
 	  errorMessage: {
 	    notEnoughItems: 'Need at least 2 item!',
@@ -21858,7 +21870,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}", ""]);
+	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3UOiOxtnUThrktAIjqubOx {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
@@ -21868,6 +21880,7 @@
 		"itemWrapper": "_26h4HMhGw_gIR2ijOZxBHt",
 		"itemTitle": "_3_ZWzak0O7omDyICZISLE_",
 		"voteButton": "_284ZAkSjdHSoBhchGzY0rG",
+		"votedText": "_3UOiOxtnUThrktAIjqubOx",
 		"itemCount": "_2blB909OMlg3TVoISCFX1T",
 		"errorMessage": "_3WMTFiCBNS_YGVqHnLVPts"
 	};

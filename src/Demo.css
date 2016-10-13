@@ -26,6 +26,11 @@
   margin-right: 50px;
 }
 
+.votedText {
+  float: right;
+  margin-right: 50px;
+}
+
 .itemCount {
   font-weight: bold;
   float: right;
