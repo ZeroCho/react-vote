@@ -21668,6 +21668,11 @@
 	  }
 	
 	  _createClass(ReactVote, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.setState({ data: nextProps.data, items: nextProps.data.items });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;

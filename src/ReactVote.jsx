@@ -77,6 +77,10 @@ class ReactVote extends Component {
     errorMessage: false,
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ data: nextProps.data, items: nextProps.data.items });
+  }
+
   addItem = () => {
     const title = this.addInput.value;
     const items = this.state.items;
