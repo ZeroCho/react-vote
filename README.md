@@ -35,6 +35,9 @@ I know, the style of this component looks crappy, but it's for **customization**
 ![reactvote](https://cloud.githubusercontent.com/assets/10962668/19221127/f819ae10-8e77-11e6-8fb5-4340fd32f770.png)
 
 ##Props
+### isAdmin: Boolean, Default: true
+Tell react-vote whether the client is an admin or not. Only admins can close vote.
+
 ### data: Object
 - title: String. Title of vote.
 - items: Array. Array of objects composed with title and count 
@@ -72,12 +75,21 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - confirmButtonText
 - resultButtonText
 - goBackButtonText
-- errorMessage: Message of alert, triggered when you try to create vote with less than 2 items.
 - voteButtonText
 - closeButtonText
 
+### errorMessage: Object
+Messages of error, triggered when you try something invalid.
+- notEnoughItems: When you create vote with less than two items.
+- noTitle: When you create vote without title.
+
 ## Demo
 [Live Demo](https://www.zerocho.com/portfolio/ReactVote)
+
+## TODO
+- multiple vote
+- result graph
+- total vote
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!

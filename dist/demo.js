@@ -21530,10 +21530,12 @@
 	      items: _this.props.data ? _this.props.data.items : [],
 	      data: _this.props.data,
 	      voted: false,
-	      showMessage: false
+	      showMessage: false,
+	      errorMessage: false
 	    }, _this.addItem = function () {
 	      var title = _this.addInput.value;
 	      var items = _this.state.items;
+	      if (!title || !title.trim()) return;
 	      items.push({ title: title, count: 0 });
 	      _this.setState({ items: items });
 	      _this.addInput.value = '';
@@ -21546,13 +21548,17 @@
 	      _this.setState({ items: items });
 	    }, _this.confirmVote = function () {
 	      var items = _this.state.items;
+	      var title = _this.voteTitle.value;
 	      var data = {
-	        title: _this.voteTitle.value,
+	        title: title,
 	        items: items,
 	        done: false
 	      };
+	      if (!title || !title.trim()) {
+	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.noTitle });
+	      }
 	      if (data.items.length < 2) {
-	        return _this.setState({ showMessage: true });
+	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.notEnoughItems });
 	      }
 	      _this.setState({ data: data, showMessage: false });
 	      return _this.props.getData && _this.props.getData(data);
@@ -21618,10 +21624,14 @@
 	      );
 	    }, _this.renderResult = function () {
 	      var i = 0;
+	      var total = _this.state.items.reduce(function (prev, current) {
+	        return prev + current.count;
+	      }, 0);
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _this.state.items.map(function (item) {
+	          var percentage = (item.count / total * 100).toFixed(2);
 	          var itemComponent = _react2.default.createElement(
 	            'div',
 	            { key: 'react-vote-result-' + i, className: _this.props.styles.itemWrapper },
@@ -21638,7 +21648,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: _this.props.styles.itemCount },
-	              item.count
+	              item.count + '(' + percentage + '%)'
 	            )
 	          );
 	          i += 1;
@@ -21670,7 +21680,7 @@
 	          },
 	          this.props.text.resultButtonText
 	        ),
-	        _react2.default.createElement(
+	        this.props.isAdmin && _react2.default.createElement(
 	          'button',
 	          {
 	            className: this.props.styles.closeButton,
@@ -21734,7 +21744,7 @@
 	          this.state.showMessage && _react2.default.createElement(
 	            'div',
 	            { className: this.props.styles.errorMessage },
-	            this.props.text.errorMessage
+	            this.state.errorMessage
 	          ),
 	          _react2.default.createElement(
 	            'button',
@@ -21750,6 +21760,7 @@
 	}(_react.Component);
 	
 	ReactVote.propTypes = {
+	  isAdmin: _react.PropTypes.bool,
 	  data: _react.PropTypes.shape({
 	    title: _react.PropTypes.string.required,
 	    items: _react.PropTypes.arrayOf(_react.PropTypes.object).required,
@@ -21785,9 +21796,14 @@
 	    goBackButtonText: _react.PropTypes.string,
 	    errorMessage: _react.PropTypes.string,
 	    voteButtonText: _react.PropTypes.string
+	  }),
+	  errorMessage: _react.PropTypes.shape({
+	    notEnoughItems: _react.PropTypes.string,
+	    noTitle: _react.PropTypes.string
 	  })
 	};
 	ReactVote.defaultProps = {
+	  isAdmin: true,
 	  text: {
 	    addButtonText: 'Add',
 	    titleInputPlaceholder: 'Title of this vote',
@@ -21797,8 +21813,11 @@
 	    createButtonText: 'Create',
 	    resultButtonText: 'Show result',
 	    goBackButtonText: 'Go back to vote',
-	    voteButtonText: 'Upvote',
-	    errorMessage: 'Need at least two items!'
+	    voteButtonText: 'Upvote'
+	  },
+	  errorMessage: {
+	    notEnoughItems: 'Need at least 2 item!',
+	    noTitle: 'Need a title!'
 	  },
 	  styles: {}
 	};

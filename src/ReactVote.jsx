@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 class ReactVote extends Component {
   static propTypes = {
+    isAdmin: PropTypes.bool,
     data: PropTypes.shape({
       title: PropTypes.string.required,
       items: PropTypes.arrayOf(PropTypes.object).required,
@@ -38,9 +39,14 @@ class ReactVote extends Component {
       errorMessage: PropTypes.string,
       voteButtonText: PropTypes.string,
     }),
+    errorMessage: PropTypes.shape({
+      notEnoughItems: PropTypes.string,
+      noTitle: PropTypes.string,
+    }),
   };
 
   static defaultProps = {
+    isAdmin: true,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
@@ -51,7 +57,10 @@ class ReactVote extends Component {
       resultButtonText: 'Show result',
       goBackButtonText: 'Go back to vote',
       voteButtonText: 'Upvote',
-      errorMessage: 'Need at least two items!',
+    },
+    errorMessage: {
+      notEnoughItems: 'Need at least 2 item!',
+      noTitle: 'Need a title!',
     },
     styles: {},
   };
@@ -62,11 +71,13 @@ class ReactVote extends Component {
     data: this.props.data,
     voted: false,
     showMessage: false,
+    errorMessage: false,
   };
 
   addItem = () => {
     const title = this.addInput.value;
     const items = this.state.items;
+    if (!title || !title.trim()) return;
     items.push({ title, count: 0 });
     this.setState({ items });
     this.addInput.value = '';
@@ -81,13 +92,17 @@ class ReactVote extends Component {
 
   confirmVote = () => {
     const items = this.state.items;
+    const title = this.voteTitle.value;
     const data = {
-      title: this.voteTitle.value,
+      title,
       items,
       done: false,
     };
+    if (!title || !title.trim()) {
+      return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.noTitle });
+    }
     if (data.items.length < 2) {
-      return this.setState({ showMessage: true });
+      return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.notEnoughItems });
     }
     this.setState({ data, showMessage: false });
     return this.props.getData && this.props.getData(data);
@@ -155,9 +170,11 @@ class ReactVote extends Component {
 
   renderResult = () => {
     let i = 0;
+    const total = this.state.items.reduce((prev, current) => prev + current.count, 0);
     return (
       <div>
         {this.state.items.map((item) => {
+          const percentage = ((item.count / total) * 100).toFixed(2);
           const itemComponent = (
             <div key={`react-vote-result-${i}`} className={this.props.styles.itemWrapper}>
               <div
@@ -166,7 +183,7 @@ class ReactVote extends Component {
               >
                 {item.title}
               </div>
-              <div className={this.props.styles.itemCount}>{item.count}</div>
+              <div className={this.props.styles.itemCount}>{`${item.count}(${percentage}%)`}</div>
             </div>
           );
           i += 1;
@@ -188,27 +205,26 @@ class ReactVote extends Component {
         >
           {this.props.text.resultButtonText}
         </button>
-        <button
+        {this.props.isAdmin && <button
           className={this.props.styles.closeButton}
           onClick={this.closeVote}
         >
           {this.props.text.closeButtonText}
-        </button>
+        </button>}
       </div>
     );
-    const result = this.state.data && (
-        <div>
-          <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
-          {this.renderResult()}
-          {!this.state.data.done &&
-          <button
-            className={this.props.styles.goBackButton}
-            onClick={this.showVoting}
-          >
-            {this.props.text.goBackButtonText}
-          </button>}
-        </div>
-      );
+    const result = this.state.data &&
+      <div>
+        <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
+        {this.renderResult()}
+        {!this.state.data.done &&
+        <button
+          className={this.props.styles.goBackButton}
+          onClick={this.showVoting}
+        >
+          {this.props.text.goBackButtonText}
+        </button>}
+      </div>;
     const isVotingDone = this.state.data && (this.state.data.done || this.state.showResult) ? result : voting;
     return (
       <div className={this.props.styles.voteWrapper}>
@@ -234,7 +250,7 @@ class ReactVote extends Component {
               </button>
             </div>
             {this.state.showMessage &&
-            <div className={this.props.styles.errorMessage}>{this.props.text.errorMessage}</div>}
+            <div className={this.props.styles.errorMessage}>{this.state.errorMessage}</div>}
             <button className={this.props.styles.createButton} onClick={this.confirmVote}>
               {this.props.text.createButtonText}
             </button>
