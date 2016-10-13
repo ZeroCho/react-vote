@@ -21653,24 +21653,7 @@
 	    value: function render() {
 	      var _this2 = this;
 	
-	      var isVotingDone = this.state.data && (this.state.data.done || this.state.showResult) ? _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: this.props.styles.voteTitle },
-	          this.state.data.title
-	        ),
-	        this.renderResult(),
-	        !this.state.data.done && _react2.default.createElement(
-	          'button',
-	          {
-	            className: this.props.styles.goBackButton,
-	            onClick: this.showVoting
-	          },
-	          this.props.text.goBackButtonText
-	        )
-	      ) : _react2.default.createElement(
+	      var voting = _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
@@ -21696,6 +21679,25 @@
 	          this.props.text.closeButtonText
 	        )
 	      );
+	      var result = this.state.data && _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: this.props.styles.voteTitle },
+	          this.state.data.title
+	        ),
+	        this.renderResult(),
+	        !this.state.data.done && _react2.default.createElement(
+	          'button',
+	          {
+	            className: this.props.styles.goBackButton,
+	            onClick: this.showVoting
+	          },
+	          this.props.text.goBackButtonText
+	        )
+	      );
+	      var isVotingDone = this.state.data && (this.state.data.done || this.state.showResult) ? result : voting;
 	      return _react2.default.createElement(
 	        'div',
 	        { className: this.props.styles.voteWrapper },
@@ -21797,7 +21799,8 @@
 	    goBackButtonText: 'Go back to vote',
 	    voteButtonText: 'Upvote',
 	    errorMessage: 'Need at least two items!'
-	  }
+	  },
+	  styles: {}
 	};
 	exports.default = ReactVote;
 

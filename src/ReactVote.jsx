@@ -53,6 +53,7 @@ class ReactVote extends Component {
       voteButtonText: 'Upvote',
       errorMessage: 'Need at least two items!',
     },
+    styles: {},
   };
 
   state = {
@@ -177,18 +178,7 @@ class ReactVote extends Component {
   };
 
   render() {
-    const isVotingDone = this.state.data && (this.state.data.done || this.state.showResult) ?
-      <div>
-        <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
-        {this.renderResult()}
-        {!this.state.data.done &&
-        <button
-          className={this.props.styles.goBackButton}
-          onClick={this.showVoting}
-        >
-          {this.props.text.goBackButtonText}
-        </button>}
-      </div> :
+    const voting = (
       <div>
         <div className={this.props.styles.voteTitle}>{this.state.data && this.state.data.title}</div>
         {this.renderItems()}
@@ -204,10 +194,25 @@ class ReactVote extends Component {
         >
           {this.props.text.closeButtonText}
         </button>
-      </div>;
+      </div>
+    );
+    const result = this.state.data && (
+        <div>
+          <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
+          {this.renderResult()}
+          {!this.state.data.done &&
+          <button
+            className={this.props.styles.goBackButton}
+            onClick={this.showVoting}
+          >
+            {this.props.text.goBackButtonText}
+          </button>}
+        </div>
+      );
+    const isVotingDone = this.state.data && (this.state.data.done || this.state.showResult) ? result : voting;
     return (
       <div className={this.props.styles.voteWrapper}>
-        {this.state.data ? isVotingDone :
+        {this.state.data ? isVotingDone : (
           <div>
             <input
               className={this.props.styles.titleInput}
@@ -234,7 +239,7 @@ class ReactVote extends Component {
               {this.props.text.createButtonText}
             </button>
           </div>
-        }
+        )}
       </div>
     );
   }

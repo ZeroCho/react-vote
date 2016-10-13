@@ -1,6 +1,6 @@
 {
   "name": "react-vote",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React component for simple voting system, easy to customize and internationalize",
   "main": "dist/react-vote.js",
   "scripts": {
