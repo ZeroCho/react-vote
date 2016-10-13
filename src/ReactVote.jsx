@@ -184,7 +184,7 @@ class ReactVote extends Component {
     return (
       <div>
         {items.map((item) => {
-          const percentage = ((item.count / total) * 100).toFixed(2);
+          const percentage = total === 0 ? 0 : ((item.count / total) * 100).toFixed(2);
           const itemComponent = (
             <div key={`react-vote-result-${i}`} className={this.props.styles.itemWrapper}>
               <div

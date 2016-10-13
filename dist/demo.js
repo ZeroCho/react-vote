@@ -21640,7 +21640,7 @@
 	        'div',
 	        null,
 	        items.map(function (item) {
-	          var percentage = (item.count / total * 100).toFixed(2);
+	          var percentage = total === 0 ? 0 : (item.count / total * 100).toFixed(2);
 	          var itemComponent = _react2.default.createElement(
 	            'div',
 	            { key: 'react-vote-result-' + i, className: _this.props.styles.itemWrapper },
