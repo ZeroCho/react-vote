@@ -95,6 +95,9 @@
 	  var getData = function getData(data) {
 	    console.log(data);
 	  };
+	  var isAdmin = function isAdmin() {
+	    return true;
+	  };
 	  document.body.appendChild(rootNode);
 	  _reactDom2.default.render(_react2.default.createElement(
 	    'div',
@@ -104,21 +107,34 @@
 	      null,
 	      'New Vote'
 	    ),
-	    _react2.default.createElement(_ReactVote2.default, { styles: basicCss, getData: getData }),
+	    _react2.default.createElement(_ReactVote2.default, {
+	      styles: basicCss,
+	      getData: getData
+	    }),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(
 	      'strong',
 	      null,
 	      'Ongoing Vote'
 	    ),
-	    _react2.default.createElement(_ReactVote2.default, { styles: basicCss, data: { title: 'Ongoing', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }, text: customText }),
+	    _react2.default.createElement(_ReactVote2.default, {
+	      styles: basicCss,
+	      data: { title: 'Ongoing', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
+	      text: customText,
+	      isAdmin: isAdmin(),
+	      getData: getData
+	    }),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(
 	      'strong',
 	      null,
 	      'Done Vote'
 	    ),
-	    _react2.default.createElement(_ReactVote2.default, { styles: basicCss, data: { title: 'Done', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true } })
+	    _react2.default.createElement(_ReactVote2.default, {
+	      styles: basicCss,
+	      data: { title: 'Done', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true },
+	      getData: getData
+	    })
 	  ), rootNode);
 	});
 
@@ -21531,6 +21547,7 @@
 	      showResult: false,
 	      items: _this.props.data ? _this.props.data.items : [],
 	      data: _this.props.data,
+	      isAdmin: _this.props.isAdmin,
 	      voted: false,
 	      showMessage: false,
 	      errorMessage: false
@@ -21670,7 +21687,9 @@
 	  _createClass(ReactVote, [{
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
-	      this.setState({ data: nextProps.data, items: nextProps.data.items });
+	      if (nextProps.data) {
+	        this.setState({ data: nextProps.data, items: nextProps.data.items, isAdmin: nextProps.isAdmin });
+	      }
 	    }
 	  }, {
 	    key: 'render',
@@ -21694,7 +21713,7 @@
 	          },
 	          this.props.text.resultButtonText
 	        ),
-	        this.props.isAdmin && _react2.default.createElement(
+	        this.state.isAdmin && _react2.default.createElement(
 	          'button',
 	          {
 	            className: this.props.styles.closeButton,

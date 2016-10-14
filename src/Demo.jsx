@@ -34,17 +34,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const getData = (data) => {
     console.log(data);
   };
+  const isAdmin = () => true;
   document.body.appendChild(rootNode);
   ReactDOM.render(
     <div>
       <strong>New Vote</strong>
-      <ReactVote styles={basicCss} getData={getData} />
+      <ReactVote
+        styles={basicCss}
+        getData={getData}
+      />
       <br />
       <strong>Ongoing Vote</strong>
-      <ReactVote styles={basicCss} data={{ title: 'Ongoing', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }} text={customText} />
+      <ReactVote
+        styles={basicCss}
+        data={{ title: 'Ongoing', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
+        text={customText}
+        isAdmin={isAdmin()}
+        getData={getData}
+      />
       <br />
       <strong>Done Vote</strong>
-      <ReactVote styles={basicCss} data={{ title: 'Done', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true }} />
+      <ReactVote
+        styles={basicCss}
+        data={{ title: 'Done', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true }}
+        getData={getData}
+      />
     </div>,
     rootNode
   );

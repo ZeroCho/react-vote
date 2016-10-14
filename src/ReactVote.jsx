@@ -72,13 +72,16 @@ class ReactVote extends Component {
     showResult: false,
     items: this.props.data ? this.props.data.items : [],
     data: this.props.data,
+    isAdmin: this.props.isAdmin,
     voted: false,
     showMessage: false,
     errorMessage: false,
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.data, items: nextProps.data.items });
+    if (nextProps.data) {
+      this.setState({ data: nextProps.data, items: nextProps.data.items, isAdmin: nextProps.isAdmin });
+    }
   }
 
   addItem = () => {
@@ -215,7 +218,7 @@ class ReactVote extends Component {
         >
           {this.props.text.resultButtonText}
         </button>
-        {this.props.isAdmin && <button
+        {this.state.isAdmin && <button
           className={this.props.styles.closeButton}
           onClick={this.closeVote}
         >
