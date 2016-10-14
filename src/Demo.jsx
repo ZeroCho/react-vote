@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <ReactVote
         styles={basicCss}
         getData={getData}
+        isAdmin={isAdmin()}
       />
       <br />
       <strong>Ongoing Vote</strong>

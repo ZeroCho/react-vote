@@ -37,7 +37,6 @@ class ReactVote extends Component {
       createButtonText: PropTypes.string,
       resultButtonText: PropTypes.string,
       goBackButtonText: PropTypes.string,
-      errorMessage: PropTypes.string,
       voteButtonText: PropTypes.string,
       votedText: PropTypes.string,
     }),
@@ -48,7 +47,7 @@ class ReactVote extends Component {
   };
 
   static defaultProps = {
-    isAdmin: true,
+    isAdmin: false,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',

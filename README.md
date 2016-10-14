@@ -11,7 +11,7 @@ npm install react-vote --save
 For a new vote do **NOT** put data prop. And put **getData** callback function to get vote data and to connect data with database
 ```
 var ReactVote = require('react-vote');
-<ReactVote styles={customStyle} text={customText} getData={voteCallback} />
+<ReactVote styles={customStyle} text={customText} getData={voteCallback} isAdmin={true} />
 ```
 You can get data parameter which looks like `{ title: 'title of this vote', items: [{ title: 'option1', count: 5}, { title: 'option2', count: 3}], done: false }`
 ```
@@ -23,7 +23,7 @@ function voteCallback (data) {
 For ongoing vote or vote result, fetch vote data from the database and put it into the **data** prop. This component will read the **data** prop and execute it. The structure of data prop is detailed below.
 ```
 var ReactVote = require('react-vote');
-<ReactVote data={data} styles={customStyle} text={customText} getData={voteCallback} />
+<ReactVote data={data} styles={customStyle} text={customText} getData={voteCallback} isAdmin={true} />
 ```
 ES2015 style
 ```
@@ -33,8 +33,9 @@ import ReactVote from 'react-vote';
 ##Result
 I know, the style of this component looks crappy, but it's for **customization**. I didn't put any css codes for your **customization**. You can use **styles** prop to style it in your own way. **styles** prop is detailed in below. Also, you can change texts by using **text** prop. 
 ![reactvote](https://cloud.githubusercontent.com/assets/10962668/19356993/a2becc44-91aa-11e6-9cfd-98406f47e367.png)
+
 ##Props
-### isAdmin: Boolean, Default: true
+### isAdmin: Boolean, Default: false
 Tell react-vote whether the client is an admin or not. Only admins can close vote.
 
 ### data: Object

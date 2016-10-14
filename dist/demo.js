@@ -109,7 +109,8 @@
 	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
-	      getData: getData
+	      getData: getData,
+	      isAdmin: isAdmin()
 	    }),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(
@@ -21828,7 +21829,6 @@
 	    createButtonText: _react.PropTypes.string,
 	    resultButtonText: _react.PropTypes.string,
 	    goBackButtonText: _react.PropTypes.string,
-	    errorMessage: _react.PropTypes.string,
 	    voteButtonText: _react.PropTypes.string,
 	    votedText: _react.PropTypes.string
 	  }),
@@ -21838,7 +21838,7 @@
 	  })
 	};
 	ReactVote.defaultProps = {
-	  isAdmin: true,
+	  isAdmin: false,
 	  text: {
 	    addButtonText: 'Add',
 	    titleInputPlaceholder: 'Title of this vote',
