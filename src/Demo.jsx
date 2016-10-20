@@ -54,6 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
         getData={getData}
       />
       <br />
+      <ReactVote
+        styles={basicCss}
+        data={{ title: 'Multiple', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
+        text={customText}
+        isAdmin={isAdmin()}
+        getData={getData}
+        multiple
+      />
+      <br />
       <strong>Done Vote</strong>
       <ReactVote
         styles={basicCss}

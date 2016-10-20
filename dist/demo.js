@@ -126,6 +126,15 @@
 	      getData: getData
 	    }),
 	    _react2.default.createElement('br', null),
+	    _react2.default.createElement(_ReactVote2.default, {
+	      styles: basicCss,
+	      data: { title: 'Multiple', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
+	      text: customText,
+	      isAdmin: isAdmin(),
+	      getData: getData,
+	      multiple: true
+	    }),
+	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(
 	      'strong',
 	      null,
@@ -21550,6 +21559,7 @@
 	      data: _this.props.data,
 	      isAdmin: _this.props.isAdmin,
 	      voted: false,
+	      multiple: _this.props.multiple,
 	      showMessage: false,
 	      errorMessage: false
 	    }, _this.addItem = function () {
@@ -21606,7 +21616,12 @@
 	        null,
 	        items.map(function (item) {
 	          var j = i;
-	          var notVoted = !_this.state.voted ? _react2.default.createElement(
+	          var checkVoted = item.voted ? _react2.default.createElement(
+	            'span',
+	            { className: _this.props.styles.votedText },
+	            ' ',
+	            _this.props.text.votedText
+	          ) : (_this.state.multiple || !_this.state.voted) && _react2.default.createElement(
 	            'button',
 	            {
 	              onClick: function onClick() {
@@ -21615,11 +21630,6 @@
 	              className: _this.props.styles.voteButton
 	            },
 	            _this.props.text.voteButtonText
-	          ) : item.voted && _react2.default.createElement(
-	            'span',
-	            { className: _this.props.styles.votedText },
-	            ' ',
-	            _this.props.text.votedText
 	          );
 	          var itemComponent = _react2.default.createElement(
 	            'div',
@@ -21634,7 +21644,7 @@
 	              },
 	              item.title
 	            ),
-	            _this.state.data ? notVoted : _react2.default.createElement(
+	            _this.state.data ? checkVoted : _react2.default.createElement(
 	              'button',
 	              {
 	                onClick: function onClick() {
@@ -21800,6 +21810,7 @@
 	    items: _react.PropTypes.arrayOf(_react.PropTypes.object).required,
 	    done: _react.PropTypes.bool.required
 	  }),
+	  multiple: _react.PropTypes.bool,
 	  styles: _react.PropTypes.shape({
 	    voteWrapper: _react.PropTypes.string,
 	    voteTitle: _react.PropTypes.string,
@@ -21839,6 +21850,7 @@
 	};
 	ReactVote.defaultProps = {
 	  isAdmin: false,
+	  multiple: false,
 	  text: {
 	    addButtonText: 'Add',
 	    titleInputPlaceholder: 'Title of this vote',

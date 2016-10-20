@@ -8,6 +8,7 @@ class ReactVote extends Component {
       items: PropTypes.arrayOf(PropTypes.object).required,
       done: PropTypes.bool.required,
     }),
+    multiple: PropTypes.bool,
     styles: PropTypes.shape({
       voteWrapper: PropTypes.string,
       voteTitle: PropTypes.string,
@@ -48,6 +49,7 @@ class ReactVote extends Component {
 
   static defaultProps = {
     isAdmin: false,
+    multiple: false,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
@@ -73,6 +75,7 @@ class ReactVote extends Component {
     data: this.props.data,
     isAdmin: this.props.isAdmin,
     voted: false,
+    multiple: this.props.multiple,
     showMessage: false,
     errorMessage: false,
   };
@@ -148,14 +151,9 @@ class ReactVote extends Component {
       <div>
         {items.map((item) => {
           const j = i;
-          const notVoted = !this.state.voted ?
-            <button
-              onClick={() => this.upvote(j)}
-              className={this.props.styles.voteButton}
-            >
-              {this.props.text.voteButtonText}
-            </button> :
-          item.voted && <span className={this.props.styles.votedText}> {this.props.text.votedText}</span>;
+          const checkVoted = item.voted
+            ? <span className={this.props.styles.votedText}> {this.props.text.votedText}</span>
+            : (this.state.multiple || !this.state.voted) && <button onClick={() => this.upvote(j)} className={this.props.styles.voteButton}>{this.props.text.voteButtonText}</button>;
           const itemComponent = (
             <div key={`react-vote-item-${j}`} className={this.props.styles.itemWrapper}>
               <div
@@ -164,7 +162,7 @@ class ReactVote extends Component {
               >
                 {item.title}
               </div>
-              {this.state.data ? notVoted :
+              {this.state.data ? checkVoted :
                 <button
                   onClick={() => this.removeItem(`react-vote-item-${j}`)}
                   className={this.props.styles.removeButton}
