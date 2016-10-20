@@ -32,11 +32,15 @@ import ReactVote from 'react-vote';
 
 ##Result
 I know, the style of this component looks crappy, but it's for **customization**. I didn't put any css codes for your **customization**. You can use **styles** prop to style it in your own way. **styles** prop is detailed in below. Also, you can change texts by using **text** prop. 
-![reactvote](https://cloud.githubusercontent.com/assets/10962668/19356993/a2becc44-91aa-11e6-9cfd-98406f47e367.png)
+![reactvote](https://cloud.githubusercontent.com/assets/10962668/19561661/97642dca-9714-11e6-8e15-8ad9f7a223d9.png)
 
 ##Props
+
 ### isAdmin: Boolean, Default: false
 Tell react-vote whether the client is an admin or not. Only admins can close vote.
+
+### multiple: Boolean, Default: false
+If true, you can choose multiple choices
 
 ### data: Object
 - title: String. Title of vote.
@@ -89,9 +93,8 @@ Messages of error, triggered when you try something invalid.
 [Live Demo](https://www.zerocho.com/portfolio/ReactVote)
 
 ## TODO
-- multiple vote
 - result graph
-- total vote
+- check ones who already vote
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!
