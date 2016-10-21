@@ -42,6 +42,9 @@ Tell react-vote whether the client is an admin or not. Only admins can close vot
 ### multiple: Boolean, Default: false
 If true, you can choose multiple choices
 
+### total: Boolean, Default: true
+If true, you can show total number of vote at result.
+
 ### data: Object
 - title: String. Title of vote.
 - items: Array. Array of objects composed with title and count 
@@ -63,7 +66,7 @@ A group of classNames in this voting component. You can change these for style *
 - itemCount
 - itemWrapper: Wrapper of itemTitle and itemCount
 - removeButton
-- confirmButton
+- createButton
 - resultButton
 - goBackButton
 - voteButton
@@ -73,28 +76,29 @@ A group of classNames in this voting component. You can change these for style *
 
 ### text: Object
 A group of texts in this voting component. You can change these for **i18n**(internationalization).
-- titleInputPlaceholder
-- addInputPlaceholder
-- addButtonText
-- removeButtonText
-- confirmButtonText
-- resultButtonText
-- goBackButtonText
-- voteButtonText
-- closeButtonText
-- votedText: Text which shows that you already voted this item.
+- titleInputPlaceholder: Default: 'Title of this vote'
+- addInputPlaceholder: Default: 'Type title of new option here'
+- addButtonText: Default: 'Add'
+- removeButtonText: Default: '×'
+- resultButtonText: Default: 'Show result'
+- goBackButtonText: Default: 'Go back to vote'
+- voteButtonText: Default: 'Upvote'
+- createButtonText: Default: 'Create'
+- closeButtonText: Default: 'Close vote'
+- votedText: Default: 'Voted'
+- totalText: Default: 'Total'
 
 ### errorMessage: Object
 Messages of error, triggered when you try something invalid.
-- notEnoughItems: When you create vote with less than two items.
-- noTitle: When you create vote without title.
+- notEnoughItems: Default: 'Need at least 2 item!', When you create vote with less than two items.
+- noTitle: Default: 'Need a title', When you create vote without title.
 
 ## Demo
 [Live Demo](https://www.zerocho.com/portfolio/ReactVote)
 
 ## TODO
 - result graph
-- check ones who already vote
+- check ones who already voted
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!

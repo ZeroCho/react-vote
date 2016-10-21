@@ -3,12 +3,13 @@ import React, { Component, PropTypes } from 'react';
 class ReactVote extends Component {
   static propTypes = {
     isAdmin: PropTypes.bool,
+    total: PropTypes.bool,
+    multiple: PropTypes.bool,
     data: PropTypes.shape({
       title: PropTypes.string.required,
       items: PropTypes.arrayOf(PropTypes.object).required,
       done: PropTypes.bool.required,
     }),
-    multiple: PropTypes.bool,
     styles: PropTypes.shape({
       voteWrapper: PropTypes.string,
       voteTitle: PropTypes.string,
@@ -40,6 +41,7 @@ class ReactVote extends Component {
       goBackButtonText: PropTypes.string,
       voteButtonText: PropTypes.string,
       votedText: PropTypes.string,
+      totalText: PropTypes.string,
     }),
     errorMessage: PropTypes.shape({
       notEnoughItems: PropTypes.string,
@@ -50,10 +52,11 @@ class ReactVote extends Component {
   static defaultProps = {
     isAdmin: false,
     multiple: false,
+    total: true,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
-      addInputPlaceholder: 'Type title of new item here',
+      addInputPlaceholder: 'Type title of new option here',
       removeButtonText: '×',
       closeButtonText: 'Close vote',
       createButtonText: 'Create',
@@ -61,6 +64,7 @@ class ReactVote extends Component {
       goBackButtonText: 'Go back to vote',
       voteButtonText: 'Upvote',
       votedText: 'Voted',
+      totalText: 'Total',
     },
     errorMessage: {
       notEnoughItems: 'Need at least 2 item!',
@@ -74,6 +78,7 @@ class ReactVote extends Component {
     items: this.props.data ? this.props.data.items : [],
     data: this.props.data,
     isAdmin: this.props.isAdmin,
+    total: this.props.total,
     voted: false,
     multiple: this.props.multiple,
     showMessage: false,
@@ -199,7 +204,10 @@ class ReactVote extends Component {
           i += 1;
           return itemComponent;
         })}
-
+        {this.state.total && <div>
+          <div className={this.props.styles.itemTitle}>{this.props.text.totalText}</div>
+          <div className={this.props.styles.itemCount}>{total}</div>
+        </div>}
       </div>
     );
   };

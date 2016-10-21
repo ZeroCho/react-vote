@@ -21558,6 +21558,7 @@
 	      items: _this.props.data ? _this.props.data.items : [],
 	      data: _this.props.data,
 	      isAdmin: _this.props.isAdmin,
+	      total: _this.props.total,
 	      voted: false,
 	      multiple: _this.props.multiple,
 	      showMessage: false,
@@ -21623,12 +21624,9 @@
 	            _this.props.text.votedText
 	          ) : (_this.state.multiple || !_this.state.voted) && _react2.default.createElement(
 	            'button',
-	            {
-	              onClick: function onClick() {
+	            { onClick: function onClick() {
 	                return _this.upvote(j);
-	              },
-	              className: _this.props.styles.voteButton
-	            },
+	              }, className: _this.props.styles.voteButton },
 	            _this.props.text.voteButtonText
 	          );
 	          var itemComponent = _react2.default.createElement(
@@ -21690,7 +21688,21 @@
 	          );
 	          i += 1;
 	          return itemComponent;
-	        })
+	        }),
+	        _this.state.total && _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'div',
+	            { className: _this.props.styles.itemTitle },
+	            _this.props.text.totalText
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: _this.props.styles.itemCount },
+	            total
+	          )
+	        )
 	      );
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
@@ -21805,12 +21817,13 @@
 	
 	ReactVote.propTypes = {
 	  isAdmin: _react.PropTypes.bool,
+	  total: _react.PropTypes.bool,
+	  multiple: _react.PropTypes.bool,
 	  data: _react.PropTypes.shape({
 	    title: _react.PropTypes.string.required,
 	    items: _react.PropTypes.arrayOf(_react.PropTypes.object).required,
 	    done: _react.PropTypes.bool.required
 	  }),
-	  multiple: _react.PropTypes.bool,
 	  styles: _react.PropTypes.shape({
 	    voteWrapper: _react.PropTypes.string,
 	    voteTitle: _react.PropTypes.string,
@@ -21841,7 +21854,8 @@
 	    resultButtonText: _react.PropTypes.string,
 	    goBackButtonText: _react.PropTypes.string,
 	    voteButtonText: _react.PropTypes.string,
-	    votedText: _react.PropTypes.string
+	    votedText: _react.PropTypes.string,
+	    totalText: _react.PropTypes.string
 	  }),
 	  errorMessage: _react.PropTypes.shape({
 	    notEnoughItems: _react.PropTypes.string,
@@ -21851,17 +21865,19 @@
 	ReactVote.defaultProps = {
 	  isAdmin: false,
 	  multiple: false,
+	  total: true,
 	  text: {
 	    addButtonText: 'Add',
 	    titleInputPlaceholder: 'Title of this vote',
-	    addInputPlaceholder: 'Type title of new item here',
+	    addInputPlaceholder: 'Type title of new option here',
 	    removeButtonText: '×',
 	    closeButtonText: 'Close vote',
 	    createButtonText: 'Create',
 	    resultButtonText: 'Show result',
 	    goBackButtonText: 'Go back to vote',
 	    voteButtonText: 'Upvote',
-	    votedText: 'Voted'
+	    votedText: 'Voted',
+	    totalText: 'Total'
 	  },
 	  errorMessage: {
 	    notEnoughItems: 'Need at least 2 item!',
