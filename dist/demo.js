@@ -105,22 +105,12 @@
 	  _reactDom2.default.render(_react2.default.createElement(
 	    'div',
 	    null,
-	    _react2.default.createElement(
-	      'strong',
-	      null,
-	      'New Vote with custom CSS'
-	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
 	      getData: getData,
 	      isAdmin: isAdmin()
 	    }),
 	    _react2.default.createElement('br', null),
-	    _react2.default.createElement(
-	      'strong',
-	      null,
-	      'Ongoing Vote with Custom Text'
-	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
 	      data: { title: 'Ongoing Vote with Custom Text', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
@@ -129,11 +119,6 @@
 	      getData: getData
 	    }),
 	    _react2.default.createElement('br', null),
-	    _react2.default.createElement(
-	      'strong',
-	      null,
-	      'Multiple Vote and not-Admin'
-	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
 	      data: { title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
@@ -142,11 +127,6 @@
 	      multiple: true
 	    }),
 	    _react2.default.createElement('br', null),
-	    _react2.default.createElement(
-	      'strong',
-	      null,
-	      'Expansion Vote'
-	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
 	      data: { title: 'Expansion Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
@@ -155,11 +135,6 @@
 	      expansion: true
 	    }),
 	    _react2.default.createElement('br', null),
-	    _react2.default.createElement(
-	      'strong',
-	      null,
-	      'Closed Vote'
-	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
 	      data: { title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true },
@@ -21545,6 +21520,8 @@
 	  value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
@@ -21576,12 +21553,12 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactVote.__proto__ || Object.getPrototypeOf(ReactVote)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
 	      showResult: false,
 	      items: _this.props.data ? _this.props.data.items : [],
-	      data: {
+	      data: _extends({}, _this.props.data, {
 	        title: _this.props.data && _this.props.data.title,
 	        items: _this.props.data && _this.props.data.items,
 	        done: _this.props.data && _this.props.data.done,
 	        closed: _this.props.data && _this.props.data.closed
-	      },
+	      }),
 	      isAdmin: _this.props.isAdmin,
 	      total: _this.props.total,
 	      expansion: _this.props.expansion,
@@ -21834,37 +21811,41 @@
 	            },
 	            placeholder: this.props.text.titleInputPlaceholder
 	          }),
-	          this.renderItems(this.state.items),
 	          _react2.default.createElement(
 	            'div',
 	            { className: this.props.styles.addWrapper },
-	            _react2.default.createElement('input', {
-	              className: this.props.styles.addInput,
-	              ref: function ref(c) {
-	                _this2.addInput = c;
-	              },
-	              placeholder: this.props.text.addInputPlaceholder
-	            }),
+	            this.renderItems(this.state.items),
 	            _react2.default.createElement(
-	              'button',
-	              {
-	                className: this.props.styles.addButton,
-	                onClick: this.addItem
-	              },
-	              this.props.text.addButtonText
+	              'div',
+	              null,
+	              _react2.default.createElement('input', {
+	                className: this.props.styles.addInput,
+	                ref: function ref(c) {
+	                  _this2.addInput = c;
+	                },
+	                placeholder: this.props.text.addInputPlaceholder
+	              }),
+	              _react2.default.createElement(
+	                'button',
+	                {
+	                  className: this.props.styles.addButton,
+	                  onClick: this.addItem
+	                },
+	                this.props.text.addButtonText
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              null,
+	              _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
+	                  _this2.multipleCheck = c;
+	                } }),
+	              this.props.text.multipleCheckbox,
+	              _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
+	                  _this2.expansionCheck = c;
+	                } }),
+	              this.props.text.expansionCheckbox
 	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
-	                _this2.multipleCheck = c;
-	              } }),
-	            this.props.text.multipleCheckbox,
-	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
-	                _this2.expansionCheck = c;
-	              } }),
-	            this.props.text.expansionCheckbox
 	          ),
 	          this.state.showMessage && _react2.default.createElement(
 	            'div',
@@ -22004,12 +21985,13 @@
 	
 	
 	// module
-	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3UOiOxtnUThrktAIjqubOx {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}\r\n\r\n._2_O1MjGrHkbFeGo2I3tuuY {\r\n  margin-left: 50px;\r\n}", ""]);
+	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n._3sy8gJOYGKytZb2ksLYR2u {\r\n  margin: 0 auto;\r\n  display: block;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3UOiOxtnUThrktAIjqubOx {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}\r\n\r\n._2_O1MjGrHkbFeGo2I3tuuY {\r\n  margin-left: 50px;\r\n}\r\n\r\n._3S6SUJU6fyO9DvMPaypJoY, ._3Gl8lNPWyBd4YYBX3puHpQ, ._2rzeleFc6LhiRilZ_2xatS {\r\n  margin-left: 50px;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
 		"voteWrapper": "_3wpJR2ZSqZ1N5pv3KDWDlJ",
 		"voteTitle": "_3SQbwclUuMtHcHl9M0L_4h",
+		"titleInput": "_3sy8gJOYGKytZb2ksLYR2u",
 		"removeButton": "yqUPHyf2hsuGUENlzH6lb",
 		"itemWrapper": "_26h4HMhGw_gIR2ijOZxBHt",
 		"itemTitle": "_3_ZWzak0O7omDyICZISLE_",
@@ -22017,7 +21999,10 @@
 		"votedText": "_3UOiOxtnUThrktAIjqubOx",
 		"itemCount": "_2blB909OMlg3TVoISCFX1T",
 		"errorMessage": "_3WMTFiCBNS_YGVqHnLVPts",
-		"expansionInput": "_2_O1MjGrHkbFeGo2I3tuuY"
+		"expansionInput": "_2_O1MjGrHkbFeGo2I3tuuY",
+		"createButton": "_3S6SUJU6fyO9DvMPaypJoY",
+		"resultButton": "_3Gl8lNPWyBd4YYBX3puHpQ",
+		"addWrapper": "_2rzeleFc6LhiRilZ_2xatS"
 	};
 
 /***/ },

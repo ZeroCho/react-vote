@@ -34,7 +34,7 @@ import ReactVote from 'react-vote';
 
 ##Result
 I know, the style of this component looks crappy, but it's for **customization**. I didn't put any css codes for your **customization**. You can use **styles** prop to style it in your own way. **styles** prop is detailed in below. Also, you can change texts by using **text** prop. 
-![reactvote](https://cloud.githubusercontent.com/assets/10962668/19561661/97642dca-9714-11e6-8e15-8ad9f7a223d9.png)
+![reactvote](https://cloud.githubusercontent.com/assets/10962668/19619889/d797c13e-98ab-11e6-8836-30afd0e34186.png)
 
 ##Props
 

@@ -41,14 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(rootNode);
   ReactDOM.render(
     <div>
-      <strong>New Vote with custom CSS</strong>
       <ReactVote
         styles={basicCss}
         getData={getData}
         isAdmin={isAdmin()}
       />
       <br />
-      <strong>Ongoing Vote with Custom Text</strong>
       <ReactVote
         styles={basicCss}
         data={{ title: 'Ongoing Vote with Custom Text', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
@@ -57,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         getData={getData}
       />
       <br />
-      <strong>Multiple Vote and not-Admin</strong>
       <ReactVote
         styles={basicCss}
         data={{ title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
@@ -66,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         multiple
       />
       <br />
-      <strong>Expansion Vote</strong>
       <ReactVote
         styles={basicCss}
         data={{ title: 'Expansion Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
@@ -75,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         expansion
       />
       <br />
-      <strong>Closed Vote</strong>
       <ReactVote
         styles={basicCss}
         data={{ title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true }}

@@ -7,6 +7,11 @@
   text-align: center;
 }
 
+.titleInput {
+  margin: 0 auto;
+  display: block;
+}
+
 .removeButton {
   float: right;
   margin-right: 50px;
@@ -43,5 +48,9 @@
 }
 
 .expansionInput {
+  margin-left: 50px;
+}
+
+.createButton, .resultButton, .addWrapper {
   margin-left: 50px;
 }

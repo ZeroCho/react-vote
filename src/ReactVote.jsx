@@ -90,6 +90,7 @@ class ReactVote extends Component {
     showResult: false,
     items: this.props.data ? this.props.data.items : [],
     data: {
+      ...this.props.data,
       title: this.props.data && this.props.data.title,
       items: this.props.data && this.props.data.items,
       done: this.props.data && this.props.data.done,
@@ -258,7 +259,8 @@ class ReactVote extends Component {
       <div>
         <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
         {this.renderItems(this.state.items)}
-        {(this.state.expansion && (!this.state.voted || this.state.multiple)) && <div className={this.props.styles.itemWrapper}>
+        {(this.state.expansion && (!this.state.voted || this.state.multiple)) &&
+        <div className={this.props.styles.itemWrapper}>
           <input className={this.props.styles.expansionInput} ref={(c) => { this.expansionInput = c; }} placeholder={this.props.text.expansionPlaceholder} />
           <button className={this.props.styles.expansionButton} onClick={this.expandVote}>{this.props.text.expansionButtonText}</button>
         </div>}
@@ -298,23 +300,25 @@ class ReactVote extends Component {
               ref={(c) => { this.voteTitle = c; }}
               placeholder={this.props.text.titleInputPlaceholder}
             />
-            {this.renderItems(this.state.items)}
             <div className={this.props.styles.addWrapper}>
-              <input
-                className={this.props.styles.addInput}
-                ref={(c) => { this.addInput = c; }}
-                placeholder={this.props.text.addInputPlaceholder}
-              />
-              <button
-                className={this.props.styles.addButton}
-                onClick={this.addItem}
-              >
-                {this.props.text.addButtonText}
-              </button>
-            </div>
-            <div>
-              <input type="checkbox" ref={(c) => { this.multipleCheck = c; }} />{this.props.text.multipleCheckbox}
-              <input type="checkbox" ref={(c) => { this.expansionCheck = c; }} />{this.props.text.expansionCheckbox}
+              {this.renderItems(this.state.items)}
+              <div>
+                <input
+                  className={this.props.styles.addInput}
+                  ref={(c) => { this.addInput = c; }}
+                  placeholder={this.props.text.addInputPlaceholder}
+                />
+                <button
+                  className={this.props.styles.addButton}
+                  onClick={this.addItem}
+                >
+                  {this.props.text.addButtonText}
+                </button>
+              </div>
+              <div>
+                <input type="checkbox" ref={(c) => { this.multipleCheck = c; }} />{this.props.text.multipleCheckbox}
+                <input type="checkbox" ref={(c) => { this.expansionCheck = c; }} />{this.props.text.expansionCheckbox}
+              </div>
             </div>
             {this.state.showMessage &&
             <div className={this.props.styles.errorMessage}>{this.state.errorMessage}</div>}
