@@ -8,24 +8,26 @@ npm install react-vote --save
 ```
 
 ##How to use
-For a new vote do **NOT** put data prop. And put **getData** callback function to get vote data and to connect data with database
+For a new voting system, **DON'T** put data prop. And put **getData** callback function to get voting data and connect with database
 ```
 var ReactVote = require('react-vote');
 <ReactVote styles={customStyle} text={customText} getData={voteCallback} isAdmin={true} />
 ```
-You can get data parameter which looks like `{ title: 'title of this vote', items: [{ title: 'option1', count: 5}, { title: 'option2', count: 3}], done: false }`
+
+You can get data parameter inside the callback function
 ```
 function voteCallback (data) {
  // save data into the database here!
+ console.log(data); // { title: 'title of this vote', items: [{ title: 'option1', count: 5}, { title: 'option2', count: 3}], done: false, multiple: false, expansion: false }
 }
 ```
 
-For ongoing vote or vote result, fetch vote data from the database and put it into the **data** prop. This component will read the **data** prop and execute it. The structure of data prop is detailed below.
+For ongoing vote or voting result, fetch vote data from the database and put it into the **data** prop. This component will read the **data** prop and execute it. The structure of data prop is detailed below.
 ```
-var ReactVote = require('react-vote');
-<ReactVote data={data} styles={customStyle} text={customText} getData={voteCallback} isAdmin={true} />
+<ReactVote data={data} getData={voteCallback} isAdmin={true} styles={customStyle} text={customText} errorMessage={customMessage} />
 ```
-ES2015 style
+
+ES2015(ES6) style
 ```
 import ReactVote from 'react-vote';
 ```
@@ -45,17 +47,21 @@ If true, you can choose multiple choices
 ### total: Boolean, Default: true
 If true, you can show total number of vote at result.
 
+### expansion: Boolean, Default: false
+If true, voters can add option(See demo)
+
 ### data: Object
 - title: String. Title of vote.
-- items: Array. Array of objects composed with title and count 
-`[{ title: 'vote option 1', count: 5 }, { title: 'vote option 2', count: 3 }]`
-- done: Boolean. Tell you whether this vote is done or not. If done prop is true, you can only see the result, else you can toggle between voting window and result window.
+- items: Array. Array of objects composed with title and count `[{ title: 'vote option 1', count: 5 }, { title: 'vote option 2', count: 3 }]`
+- closed: Boolean. Tell you whether this vote is done or not. If done prop is true, you can only see the result, else you can toggle between voting window and result window.
+- done: Boolean. **Depreciated**. Alias of closed.
 
 ### getData: Function(data: Object)
 It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function
 
 ### styles: Object
 A group of classNames in this voting component. You can change these for style **customization** by mapping **classNames** with css files.
+
 - voteWrapper: The ancestor of all divs
 - voteTitle
 - titleInput
@@ -73,9 +79,11 @@ A group of classNames in this voting component. You can change these for style *
 - votedText
 - closeButton
 - errorMessage
+- expansionButton
 
 ### text: Object
 A group of texts in this voting component. You can change these for **i18n**(internationalization).
+
 - titleInputPlaceholder: Default: 'Title of this vote'
 - addInputPlaceholder: Default: 'Type title of new option here'
 - addButtonText: Default: 'Add'
@@ -87,9 +95,14 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - closeButtonText: Default: 'Close vote'
 - votedText: Default: 'Voted'
 - totalText: Default: 'Total'
+- multipleCheckbox: Default: 'multiple?'
+- expansionCheckbox: Default: 'expansion?'
+- expansionPlaceholder: Default: 'Add an option yourself'
+- expansionButtonText: Default: 'Add'
 
 ### errorMessage: Object
 Messages of error, triggered when you try something invalid.
+
 - notEnoughItems: Default: 'Need at least 2 item!', When you create vote with less than two items.
 - noTitle: Default: 'Need a title', When you create vote without title.
 
@@ -99,6 +112,7 @@ Messages of error, triggered when you try something invalid.
 ## TODO
 - result graph
 - check ones who already voted
+- autoClose at certain number
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!

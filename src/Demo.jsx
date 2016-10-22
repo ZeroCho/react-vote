@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     votedText: styles.votedText,
     errorMessage: styles.errorMessage,
     closeButton: styles.closeButton,
+    expansionButton: styles.expansionButton,
+    expansionInput: styles.expansionInput,
   };
   const customText = {
     voteButtonText: 'I\'m gonna vote this!',
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     goBackButtonText: 'Let\'s go back!',
     closeButtonText: 'I\'ll close this vote',
     votedText: 'I chose this',
+    totalText: 'Total number of vote is:',
   };
   const getData = (data) => {
     console.log(data);
@@ -38,35 +41,44 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(rootNode);
   ReactDOM.render(
     <div>
-      <strong>New Vote</strong>
+      <strong>New Vote with custom CSS</strong>
       <ReactVote
         styles={basicCss}
         getData={getData}
         isAdmin={isAdmin()}
       />
       <br />
-      <strong>Ongoing Vote</strong>
+      <strong>Ongoing Vote with Custom Text</strong>
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Ongoing', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
+        data={{ title: 'Ongoing Vote with Custom Text', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
         text={customText}
         isAdmin={isAdmin()}
         getData={getData}
       />
       <br />
+      <strong>Multiple Vote and not-Admin</strong>
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Multiple', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
-        text={customText}
-        isAdmin={isAdmin()}
+        data={{ title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
+        isAdmin={false}
         getData={getData}
         multiple
       />
       <br />
-      <strong>Done Vote</strong>
+      <strong>Expansion Vote</strong>
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Done', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true }}
+        data={{ title: 'Expansion Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
+        isAdmin={isAdmin()}
+        getData={getData}
+        expansion
+      />
+      <br />
+      <strong>Closed Vote</strong>
+      <ReactVote
+        styles={basicCss}
+        data={{ title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true }}
         getData={getData}
       />
     </div>,

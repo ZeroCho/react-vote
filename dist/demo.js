@@ -83,14 +83,17 @@
 	    voteButton: _Demo2.default.voteButton,
 	    votedText: _Demo2.default.votedText,
 	    errorMessage: _Demo2.default.errorMessage,
-	    closeButton: _Demo2.default.closeButton
+	    closeButton: _Demo2.default.closeButton,
+	    expansionButton: _Demo2.default.expansionButton,
+	    expansionInput: _Demo2.default.expansionInput
 	  };
 	  var customText = {
 	    voteButtonText: 'I\'m gonna vote this!',
 	    resultButtonText: 'Give me the result!',
 	    goBackButtonText: 'Let\'s go back!',
 	    closeButtonText: 'I\'ll close this vote',
-	    votedText: 'I chose this'
+	    votedText: 'I chose this',
+	    totalText: 'Total number of vote is:'
 	  };
 	  var getData = function getData(data) {
 	    console.log(data);
@@ -105,7 +108,7 @@
 	    _react2.default.createElement(
 	      'strong',
 	      null,
-	      'New Vote'
+	      'New Vote with custom CSS'
 	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
@@ -116,21 +119,25 @@
 	    _react2.default.createElement(
 	      'strong',
 	      null,
-	      'Ongoing Vote'
+	      'Ongoing Vote with Custom Text'
 	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
-	      data: { title: 'Ongoing', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
+	      data: { title: 'Ongoing Vote with Custom Text', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
 	      text: customText,
 	      isAdmin: isAdmin(),
 	      getData: getData
 	    }),
 	    _react2.default.createElement('br', null),
+	    _react2.default.createElement(
+	      'strong',
+	      null,
+	      'Multiple Vote and not-Admin'
+	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
-	      data: { title: 'Multiple', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
-	      text: customText,
-	      isAdmin: isAdmin(),
+	      data: { title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
+	      isAdmin: false,
 	      getData: getData,
 	      multiple: true
 	    }),
@@ -138,11 +145,24 @@
 	    _react2.default.createElement(
 	      'strong',
 	      null,
-	      'Done Vote'
+	      'Expansion Vote'
 	    ),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
-	      data: { title: 'Done', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true },
+	      data: { title: 'Expansion Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
+	      isAdmin: isAdmin(),
+	      getData: getData,
+	      expansion: true
+	    }),
+	    _react2.default.createElement('br', null),
+	    _react2.default.createElement(
+	      'strong',
+	      null,
+	      'Closed Vote'
+	    ),
+	    _react2.default.createElement(_ReactVote2.default, {
+	      styles: basicCss,
+	      data: { title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: true },
 	      getData: getData
 	    })
 	  ), rootNode);
@@ -21556,9 +21576,15 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactVote.__proto__ || Object.getPrototypeOf(ReactVote)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
 	      showResult: false,
 	      items: _this.props.data ? _this.props.data.items : [],
-	      data: _this.props.data,
+	      data: {
+	        title: _this.props.data && _this.props.data.title,
+	        items: _this.props.data && _this.props.data.items,
+	        done: _this.props.data && _this.props.data.done,
+	        closed: _this.props.data && _this.props.data.closed
+	      },
 	      isAdmin: _this.props.isAdmin,
 	      total: _this.props.total,
+	      expansion: _this.props.expansion,
 	      voted: false,
 	      multiple: _this.props.multiple,
 	      showMessage: false,
@@ -21577,13 +21603,18 @@
 	        return item.title !== title;
 	      });
 	      _this.setState({ items: items });
-	    }, _this.confirmVote = function () {
+	    }, _this.createVote = function () {
 	      var items = _this.state.items;
 	      var title = _this.voteTitle.value;
+	      var multiple = _this.multipleCheck.checked;
+	      var expansion = _this.expansionCheck.checked;
 	      var data = {
 	        title: title,
 	        items: items,
-	        done: false
+	        multiple: multiple,
+	        expansion: expansion,
+	        done: false,
+	        closed: false
 	      };
 	      if (!title || !title.trim()) {
 	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.noTitle });
@@ -21591,7 +21622,21 @@
 	      if (data.items.length < 2) {
 	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.notEnoughItems });
 	      }
-	      _this.setState({ data: data, showMessage: false });
+	      _this.setState({ data: data, showMessage: false, multiple: multiple, expansion: expansion, items: items });
+	      return _this.props.getData && _this.props.getData(data);
+	    }, _this.expandVote = function () {
+	      var title = _this.expansionInput.value;
+	      if (!title || !title.trim()) {
+	        return false;
+	      }
+	      var data = _this.state.data;
+	      var item = {
+	        title: title,
+	        count: 0
+	      };
+	      data.items.push(item);
+	      _this.setState({ data: data, items: data.items });
+	      _this.expansionInput.value = '';
 	      return _this.props.getData && _this.props.getData(data);
 	    }, _this.showResult = function () {
 	      _this.setState({ showResult: true });
@@ -21600,6 +21645,7 @@
 	    }, _this.closeVote = function () {
 	      var data = _this.state.data;
 	      data.done = true;
+	      data.closed = true;
 	      _this.setState({ data: data });
 	      return _this.props.getData && _this.props.getData(data);
 	    }, _this.upvote = function (idx) {
@@ -21620,7 +21666,6 @@
 	          var checkVoted = item.voted ? _react2.default.createElement(
 	            'span',
 	            { className: _this.props.styles.votedText },
-	            ' ',
 	            _this.props.text.votedText
 	          ) : (_this.state.multiple || !_this.state.voted) && _react2.default.createElement(
 	            'button',
@@ -21642,7 +21687,7 @@
 	              },
 	              item.title
 	            ),
-	            _this.state.data ? checkVoted : _react2.default.createElement(
+	            _this.state.data.title ? checkVoted : _react2.default.createElement(
 	              'button',
 	              {
 	                onClick: function onClick() {
@@ -21691,7 +21736,7 @@
 	        }),
 	        _this.state.total && _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: _this.props.styles.itemWrapper },
 	          _react2.default.createElement(
 	            'div',
 	            { className: _this.props.styles.itemTitle },
@@ -21725,9 +21770,21 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: this.props.styles.voteTitle },
-	          this.state.data && this.state.data.title
+	          this.state.data.title
 	        ),
 	        this.renderItems(this.state.items),
+	        this.state.expansion && (!this.state.voted || this.state.multiple) && _react2.default.createElement(
+	          'div',
+	          { className: this.props.styles.itemWrapper },
+	          _react2.default.createElement('input', { className: this.props.styles.expansionInput, ref: function ref(c) {
+	              _this2.expansionInput = c;
+	            }, placeholder: this.props.text.expansionPlaceholder }),
+	          _react2.default.createElement(
+	            'button',
+	            { className: this.props.styles.expansionButton, onClick: this.expandVote },
+	            this.props.text.expansionButtonText
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'button',
 	          {
@@ -21745,7 +21802,7 @@
 	          this.props.text.closeButtonText
 	        )
 	      );
-	      var result = this.state.data && _react2.default.createElement(
+	      var result = this.state.data.title && _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
@@ -21754,7 +21811,7 @@
 	          this.state.data.title
 	        ),
 	        this.renderResult(this.state.items),
-	        !this.state.data.done && _react2.default.createElement(
+	        !this.state.data.done && !this.state.data.closed && _react2.default.createElement(
 	          'button',
 	          {
 	            className: this.props.styles.goBackButton,
@@ -21763,11 +21820,11 @@
 	          this.props.text.goBackButtonText
 	        )
 	      );
-	      var isVotingDone = this.state.data && (this.state.data.done || this.state.showResult) ? result : voting;
+	      var isVotingClosed = this.state.data.title && (this.state.data.done || this.state.data.closed || this.state.showResult) ? result : voting;
 	      return _react2.default.createElement(
 	        'div',
 	        { className: this.props.styles.voteWrapper },
-	        this.state.data ? isVotingDone : _react2.default.createElement(
+	        this.state.data.title ? isVotingClosed : _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement('input', {
@@ -21797,6 +21854,18 @@
 	              this.props.text.addButtonText
 	            )
 	          ),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
+	                _this2.multipleCheck = c;
+	              } }),
+	            this.props.text.multipleCheckbox,
+	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
+	                _this2.expansionCheck = c;
+	              } }),
+	            this.props.text.expansionCheckbox
+	          ),
 	          this.state.showMessage && _react2.default.createElement(
 	            'div',
 	            { className: this.props.styles.errorMessage },
@@ -21804,7 +21873,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { className: this.props.styles.createButton, onClick: this.confirmVote },
+	            { className: this.props.styles.createButton, onClick: this.createVote },
 	            this.props.text.createButtonText
 	          )
 	        )
@@ -21822,8 +21891,10 @@
 	  data: _react.PropTypes.shape({
 	    title: _react.PropTypes.string.required,
 	    items: _react.PropTypes.arrayOf(_react.PropTypes.object).required,
-	    done: _react.PropTypes.bool.required
+	    done: _react.PropTypes.bool,
+	    closed: _react.PropTypes.bool.required
 	  }),
+	  expansion: _react.PropTypes.bool,
 	  styles: _react.PropTypes.shape({
 	    voteWrapper: _react.PropTypes.string,
 	    voteTitle: _react.PropTypes.string,
@@ -21841,7 +21912,9 @@
 	    voteButton: _react.PropTypes.string,
 	    closeButton: _react.PropTypes.string,
 	    errorMessage: _react.PropTypes.string,
-	    votedText: _react.PropTypes.string
+	    votedText: _react.PropTypes.string,
+	    expansionButton: _react.PropTypes.string,
+	    expansionInput: _react.PropTypes.string
 	  }),
 	  getData: _react.PropTypes.func,
 	  text: _react.PropTypes.shape({
@@ -21855,7 +21928,11 @@
 	    goBackButtonText: _react.PropTypes.string,
 	    voteButtonText: _react.PropTypes.string,
 	    votedText: _react.PropTypes.string,
-	    totalText: _react.PropTypes.string
+	    totalText: _react.PropTypes.string,
+	    multipleCheckbox: _react.PropTypes.string,
+	    expansionCheckbox: _react.PropTypes.string,
+	    expansionPlaceholder: _react.PropTypes.string,
+	    expansionButtonText: _react.PropTypes.string
 	  }),
 	  errorMessage: _react.PropTypes.shape({
 	    notEnoughItems: _react.PropTypes.string,
@@ -21866,6 +21943,7 @@
 	  isAdmin: false,
 	  multiple: false,
 	  total: true,
+	  expansion: false,
 	  text: {
 	    addButtonText: 'Add',
 	    titleInputPlaceholder: 'Title of this vote',
@@ -21877,7 +21955,11 @@
 	    goBackButtonText: 'Go back to vote',
 	    voteButtonText: 'Upvote',
 	    votedText: 'Voted',
-	    totalText: 'Total'
+	    totalText: 'Total',
+	    multipleCheckbox: 'multiple?',
+	    expansionCheckbox: 'expansion?',
+	    expansionPlaceholder: 'Add an option yourself',
+	    expansionButtonText: 'Add'
 	  },
 	  errorMessage: {
 	    notEnoughItems: 'Need at least 2 item!',
@@ -21922,7 +22004,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3UOiOxtnUThrktAIjqubOx {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}", ""]);
+	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3UOiOxtnUThrktAIjqubOx {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}\r\n\r\n._2_O1MjGrHkbFeGo2I3tuuY {\r\n  margin-left: 50px;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
@@ -21934,7 +22016,8 @@
 		"voteButton": "_284ZAkSjdHSoBhchGzY0rG",
 		"votedText": "_3UOiOxtnUThrktAIjqubOx",
 		"itemCount": "_2blB909OMlg3TVoISCFX1T",
-		"errorMessage": "_3WMTFiCBNS_YGVqHnLVPts"
+		"errorMessage": "_3WMTFiCBNS_YGVqHnLVPts",
+		"expansionInput": "_2_O1MjGrHkbFeGo2I3tuuY"
 	};
 
 /***/ },

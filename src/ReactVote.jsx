@@ -8,8 +8,10 @@ class ReactVote extends Component {
     data: PropTypes.shape({
       title: PropTypes.string.required,
       items: PropTypes.arrayOf(PropTypes.object).required,
-      done: PropTypes.bool.required,
+      done: PropTypes.bool,
+      closed: PropTypes.bool.required,
     }),
+    expansion: PropTypes.bool,
     styles: PropTypes.shape({
       voteWrapper: PropTypes.string,
       voteTitle: PropTypes.string,
@@ -28,6 +30,8 @@ class ReactVote extends Component {
       closeButton: PropTypes.string,
       errorMessage: PropTypes.string,
       votedText: PropTypes.string,
+      expansionButton: PropTypes.string,
+      expansionInput: PropTypes.string,
     }),
     getData: PropTypes.func,
     text: PropTypes.shape({
@@ -42,6 +46,10 @@ class ReactVote extends Component {
       voteButtonText: PropTypes.string,
       votedText: PropTypes.string,
       totalText: PropTypes.string,
+      multipleCheckbox: PropTypes.string,
+      expansionCheckbox: PropTypes.string,
+      expansionPlaceholder: PropTypes.string,
+      expansionButtonText: PropTypes.string,
     }),
     errorMessage: PropTypes.shape({
       notEnoughItems: PropTypes.string,
@@ -53,6 +61,7 @@ class ReactVote extends Component {
     isAdmin: false,
     multiple: false,
     total: true,
+    expansion: false,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
@@ -65,6 +74,10 @@ class ReactVote extends Component {
       voteButtonText: 'Upvote',
       votedText: 'Voted',
       totalText: 'Total',
+      multipleCheckbox: 'multiple?',
+      expansionCheckbox: 'expansion?',
+      expansionPlaceholder: 'Add an option yourself',
+      expansionButtonText: 'Add',
     },
     errorMessage: {
       notEnoughItems: 'Need at least 2 item!',
@@ -76,9 +89,15 @@ class ReactVote extends Component {
   state = {
     showResult: false,
     items: this.props.data ? this.props.data.items : [],
-    data: this.props.data,
+    data: {
+      title: this.props.data && this.props.data.title,
+      items: this.props.data && this.props.data.items,
+      done: this.props.data && this.props.data.done,
+      closed: this.props.data && this.props.data.closed,
+    },
     isAdmin: this.props.isAdmin,
     total: this.props.total,
+    expansion: this.props.expansion,
     voted: false,
     multiple: this.props.multiple,
     showMessage: false,
@@ -107,13 +126,18 @@ class ReactVote extends Component {
     this.setState({ items });
   };
 
-  confirmVote = () => {
+  createVote = () => {
     const items = this.state.items;
     const title = this.voteTitle.value;
+    const multiple = this.multipleCheck.checked;
+    const expansion = this.expansionCheck.checked;
     const data = {
       title,
       items,
+      multiple,
+      expansion,
       done: false,
+      closed: false,
     };
     if (!title || !title.trim()) {
       return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.noTitle });
@@ -121,7 +145,23 @@ class ReactVote extends Component {
     if (data.items.length < 2) {
       return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.notEnoughItems });
     }
-    this.setState({ data, showMessage: false });
+    this.setState({ data, showMessage: false, multiple, expansion, items });
+    return this.props.getData && this.props.getData(data);
+  };
+
+  expandVote = () => {
+    const title = this.expansionInput.value;
+    if (!title || !title.trim()) {
+      return false;
+    }
+    const data = this.state.data;
+    const item = {
+      title,
+      count: 0,
+    };
+    data.items.push(item);
+    this.setState({ data, items: data.items });
+    this.expansionInput.value = '';
     return this.props.getData && this.props.getData(data);
   };
 
@@ -136,6 +176,7 @@ class ReactVote extends Component {
   closeVote = () => {
     const data = this.state.data;
     data.done = true;
+    data.closed = true;
     this.setState({ data });
     return this.props.getData && this.props.getData(data);
   };
@@ -157,7 +198,7 @@ class ReactVote extends Component {
         {items.map((item) => {
           const j = i;
           const checkVoted = item.voted
-            ? <span className={this.props.styles.votedText}> {this.props.text.votedText}</span>
+            ? <span className={this.props.styles.votedText}>{this.props.text.votedText}</span>
             : (this.state.multiple || !this.state.voted) && <button onClick={() => this.upvote(j)} className={this.props.styles.voteButton}>{this.props.text.voteButtonText}</button>;
           const itemComponent = (
             <div key={`react-vote-item-${j}`} className={this.props.styles.itemWrapper}>
@@ -167,7 +208,7 @@ class ReactVote extends Component {
               >
                 {item.title}
               </div>
-              {this.state.data ? checkVoted :
+              {this.state.data.title ? checkVoted :
                 <button
                   onClick={() => this.removeItem(`react-vote-item-${j}`)}
                   className={this.props.styles.removeButton}
@@ -204,7 +245,7 @@ class ReactVote extends Component {
           i += 1;
           return itemComponent;
         })}
-        {this.state.total && <div>
+        {this.state.total && <div className={this.props.styles.itemWrapper}>
           <div className={this.props.styles.itemTitle}>{this.props.text.totalText}</div>
           <div className={this.props.styles.itemCount}>{total}</div>
         </div>}
@@ -215,8 +256,12 @@ class ReactVote extends Component {
   render() {
     const voting = (
       <div>
-        <div className={this.props.styles.voteTitle}>{this.state.data && this.state.data.title}</div>
+        <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
         {this.renderItems(this.state.items)}
+        {(this.state.expansion && (!this.state.voted || this.state.multiple)) && <div className={this.props.styles.itemWrapper}>
+          <input className={this.props.styles.expansionInput} ref={(c) => { this.expansionInput = c; }} placeholder={this.props.text.expansionPlaceholder} />
+          <button className={this.props.styles.expansionButton} onClick={this.expandVote}>{this.props.text.expansionButtonText}</button>
+        </div>}
         <button
           className={this.props.styles.resultButton}
           onClick={this.showResult}
@@ -231,11 +276,11 @@ class ReactVote extends Component {
         </button>}
       </div>
     );
-    const result = this.state.data &&
+    const result = this.state.data.title &&
       <div>
         <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
         {this.renderResult(this.state.items)}
-        {!this.state.data.done &&
+        {(!this.state.data.done && !this.state.data.closed) &&
         <button
           className={this.props.styles.goBackButton}
           onClick={this.showVoting}
@@ -243,10 +288,10 @@ class ReactVote extends Component {
           {this.props.text.goBackButtonText}
         </button>}
       </div>;
-    const isVotingDone = this.state.data && (this.state.data.done || this.state.showResult) ? result : voting;
+    const isVotingClosed = this.state.data.title && (this.state.data.done || this.state.data.closed || this.state.showResult) ? result : voting;
     return (
       <div className={this.props.styles.voteWrapper}>
-        {this.state.data ? isVotingDone : (
+        {this.state.data.title ? isVotingClosed : (
           <div>
             <input
               className={this.props.styles.titleInput}
@@ -267,9 +312,13 @@ class ReactVote extends Component {
                 {this.props.text.addButtonText}
               </button>
             </div>
+            <div>
+              <input type="checkbox" ref={(c) => { this.multipleCheck = c; }} />{this.props.text.multipleCheckbox}
+              <input type="checkbox" ref={(c) => { this.expansionCheck = c; }} />{this.props.text.expansionCheckbox}
+            </div>
             {this.state.showMessage &&
             <div className={this.props.styles.errorMessage}>{this.state.errorMessage}</div>}
-            <button className={this.props.styles.createButton} onClick={this.confirmVote}>
+            <button className={this.props.styles.createButton} onClick={this.createVote}>
               {this.props.text.createButtonText}
             </button>
           </div>
