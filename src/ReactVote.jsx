@@ -11,6 +11,8 @@ class ReactVote extends Component {
       done: PropTypes.bool,
       closed: PropTypes.bool.required,
     }),
+    autoClose: PropTypes.number,
+    voted: PropTypes.bool,
     expansion: PropTypes.bool,
     styles: PropTypes.shape({
       voteWrapper: PropTypes.string,
@@ -22,6 +24,7 @@ class ReactVote extends Component {
       itemTitle: PropTypes.string,
       itemCount: PropTypes.string,
       itemWrapper: PropTypes.string,
+      buttonWrapper: PropTypes.string,
       removeButton: PropTypes.string,
       createButton: PropTypes.string,
       resultButton: PropTypes.string,
@@ -62,6 +65,7 @@ class ReactVote extends Component {
     multiple: false,
     total: true,
     expansion: false,
+    voted: false,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
@@ -99,10 +103,11 @@ class ReactVote extends Component {
     isAdmin: this.props.isAdmin,
     total: this.props.total,
     expansion: this.props.expansion,
-    voted: false,
+    voted: this.props.voted || false,
     multiple: this.props.multiple,
     showMessage: false,
     errorMessage: false,
+    autoClose: this.props.autoClose,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -185,6 +190,10 @@ class ReactVote extends Component {
   upvote = (idx) => {
     const items = this.state.items;
     const data = this.state.data;
+    const total = items.reduce((prev, current) => prev + current.count, 0);
+    if (total === this.state.autoClose) {
+      return this.closeVote();
+    }
     items[idx].count += 1;
     items[idx].voted = true;
     data.items = items;
@@ -264,18 +273,20 @@ class ReactVote extends Component {
           <input className={this.props.styles.expansionInput} ref={(c) => { this.expansionInput = c; }} placeholder={this.props.text.expansionPlaceholder} />
           <button className={this.props.styles.expansionButton} onClick={this.expandVote}>{this.props.text.expansionButtonText}</button>
         </div>}
-        <button
-          className={this.props.styles.resultButton}
-          onClick={this.showResult}
-        >
-          {this.props.text.resultButtonText}
-        </button>
-        {this.state.isAdmin && <button
-          className={this.props.styles.closeButton}
-          onClick={this.closeVote}
-        >
-          {this.props.text.closeButtonText}
-        </button>}
+        <div className={this.props.styles.buttonWrapper}>
+          <button
+            className={this.props.styles.resultButton}
+            onClick={this.showResult}
+          >
+            {this.props.text.resultButtonText}
+          </button>
+          {this.state.isAdmin && <button
+            className={this.props.styles.closeButton}
+            onClick={this.closeVote}
+          >
+            {this.props.text.closeButtonText}
+          </button>}
+        </div>
       </div>
     );
     const result = this.state.data.title &&
@@ -283,12 +294,14 @@ class ReactVote extends Component {
         <div className={this.props.styles.voteTitle}>{this.state.data.title}</div>
         {this.renderResult(this.state.items)}
         {(!this.state.data.done && !this.state.data.closed) &&
-        <button
-          className={this.props.styles.goBackButton}
-          onClick={this.showVoting}
-        >
-          {this.props.text.goBackButtonText}
-        </button>}
+        <div className={this.props.styles.buttonWrapper}>
+          <button
+            className={this.props.styles.goBackButton}
+            onClick={this.showVoting}
+          >
+            {this.props.text.goBackButtonText}
+          </button>
+        </div>}
       </div>;
     const isVotingClosed = this.state.data.title && (this.state.data.done || this.state.data.closed || this.state.showResult) ? result : voting;
     return (

@@ -51,6 +51,6 @@
   margin-left: 50px;
 }
 
-.createButton, .resultButton, .addWrapper {
-  margin-left: 50px;
+.buttonWrapper {
+  text-align: center;
 }

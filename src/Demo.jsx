@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     itemTitle: styles.itemTitle,
     itemCount: styles.itemCount,
     itemWrapper: styles.itemWrapper,
+    buttonWrapper: styles.buttonWrapper,
     removeButton: styles.removeButton,
     createButton: styles.createButton,
     resultButton: styles.resultButton,
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text={customText}
         isAdmin={isAdmin()}
         getData={getData}
+        voted
       />
       <br />
       <ReactVote

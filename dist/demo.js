@@ -76,6 +76,7 @@
 	    itemTitle: _Demo2.default.itemTitle,
 	    itemCount: _Demo2.default.itemCount,
 	    itemWrapper: _Demo2.default.itemWrapper,
+	    buttonWrapper: _Demo2.default.buttonWrapper,
 	    removeButton: _Demo2.default.removeButton,
 	    createButton: _Demo2.default.createButton,
 	    resultButton: _Demo2.default.resultButton,
@@ -116,7 +117,8 @@
 	      data: { title: 'Ongoing Vote with Custom Text', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
 	      text: customText,
 	      isAdmin: isAdmin(),
-	      getData: getData
+	      getData: getData,
+	      voted: true
 	    }),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(_ReactVote2.default, {
@@ -21562,10 +21564,11 @@
 	      isAdmin: _this.props.isAdmin,
 	      total: _this.props.total,
 	      expansion: _this.props.expansion,
-	      voted: false,
+	      voted: _this.props.voted || false,
 	      multiple: _this.props.multiple,
 	      showMessage: false,
-	      errorMessage: false
+	      errorMessage: false,
+	      autoClose: _this.props.autoClose
 	    }, _this.addItem = function () {
 	      var title = _this.addInput.value;
 	      var items = _this.state.items;
@@ -21628,6 +21631,12 @@
 	    }, _this.upvote = function (idx) {
 	      var items = _this.state.items;
 	      var data = _this.state.data;
+	      var total = items.reduce(function (prev, current) {
+	        return prev + current.count;
+	      }, 0);
+	      if (total === _this.state.autoClose) {
+	        return _this.closeVote();
+	      }
 	      items[idx].count += 1;
 	      items[idx].voted = true;
 	      data.items = items;
@@ -21763,20 +21772,24 @@
 	          )
 	        ),
 	        _react2.default.createElement(
-	          'button',
-	          {
-	            className: this.props.styles.resultButton,
-	            onClick: this.showResult
-	          },
-	          this.props.text.resultButtonText
-	        ),
-	        this.state.isAdmin && _react2.default.createElement(
-	          'button',
-	          {
-	            className: this.props.styles.closeButton,
-	            onClick: this.closeVote
-	          },
-	          this.props.text.closeButtonText
+	          'div',
+	          { className: this.props.styles.buttonWrapper },
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              className: this.props.styles.resultButton,
+	              onClick: this.showResult
+	            },
+	            this.props.text.resultButtonText
+	          ),
+	          this.state.isAdmin && _react2.default.createElement(
+	            'button',
+	            {
+	              className: this.props.styles.closeButton,
+	              onClick: this.closeVote
+	            },
+	            this.props.text.closeButtonText
+	          )
 	        )
 	      );
 	      var result = this.state.data.title && _react2.default.createElement(
@@ -21789,12 +21802,16 @@
 	        ),
 	        this.renderResult(this.state.items),
 	        !this.state.data.done && !this.state.data.closed && _react2.default.createElement(
-	          'button',
-	          {
-	            className: this.props.styles.goBackButton,
-	            onClick: this.showVoting
-	          },
-	          this.props.text.goBackButtonText
+	          'div',
+	          { className: this.props.styles.buttonWrapper },
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              className: this.props.styles.goBackButton,
+	              onClick: this.showVoting
+	            },
+	            this.props.text.goBackButtonText
+	          )
 	        )
 	      );
 	      var isVotingClosed = this.state.data.title && (this.state.data.done || this.state.data.closed || this.state.showResult) ? result : voting;
@@ -21875,6 +21892,8 @@
 	    done: _react.PropTypes.bool,
 	    closed: _react.PropTypes.bool.required
 	  }),
+	  autoClose: _react.PropTypes.number,
+	  voted: _react.PropTypes.bool,
 	  expansion: _react.PropTypes.bool,
 	  styles: _react.PropTypes.shape({
 	    voteWrapper: _react.PropTypes.string,
@@ -21886,6 +21905,7 @@
 	    itemTitle: _react.PropTypes.string,
 	    itemCount: _react.PropTypes.string,
 	    itemWrapper: _react.PropTypes.string,
+	    buttonWrapper: _react.PropTypes.string,
 	    removeButton: _react.PropTypes.string,
 	    createButton: _react.PropTypes.string,
 	    resultButton: _react.PropTypes.string,
@@ -21925,6 +21945,7 @@
 	  multiple: false,
 	  total: true,
 	  expansion: false,
+	  voted: false,
 	  text: {
 	    addButtonText: 'Add',
 	    titleInputPlaceholder: 'Title of this vote',
@@ -21985,7 +22006,7 @@
 	
 	
 	// module
-	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n._3sy8gJOYGKytZb2ksLYR2u {\r\n  margin: 0 auto;\r\n  display: block;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3UOiOxtnUThrktAIjqubOx {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}\r\n\r\n._2_O1MjGrHkbFeGo2I3tuuY {\r\n  margin-left: 50px;\r\n}\r\n\r\n._3S6SUJU6fyO9DvMPaypJoY, ._3Gl8lNPWyBd4YYBX3puHpQ, ._2rzeleFc6LhiRilZ_2xatS {\r\n  margin-left: 50px;\r\n}", ""]);
+	exports.push([module.id, "._3wpJR2ZSqZ1N5pv3KDWDlJ {\r\n  border: 1px solid black;\r\n}\r\n\r\n._3SQbwclUuMtHcHl9M0L_4h {\r\n  font-weight: bolder;\r\n  text-align: center;\r\n}\r\n\r\n._3sy8gJOYGKytZb2ksLYR2u {\r\n  margin: 0 auto;\r\n  display: block;\r\n}\r\n\r\n.yqUPHyf2hsuGUENlzH6lb {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._26h4HMhGw_gIR2ijOZxBHt:hover {\r\n  background: silver;\r\n}\r\n\r\n._3_ZWzak0O7omDyICZISLE_ {\r\n  display: inline-block;\r\n  padding-left: 50px;\r\n}\r\n\r\n._284ZAkSjdHSoBhchGzY0rG {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3UOiOxtnUThrktAIjqubOx {\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._2blB909OMlg3TVoISCFX1T {\r\n  font-weight: bold;\r\n  float: right;\r\n  margin-right: 50px;\r\n}\r\n\r\n._3WMTFiCBNS_YGVqHnLVPts {\r\n  color: red;\r\n  font-weight: bold;\r\n}\r\n\r\n._2_O1MjGrHkbFeGo2I3tuuY {\r\n  margin-left: 50px;\r\n}\r\n\r\n._1DhM01j4qRX5sY_HaR1qW5 {\r\n  text-align: center;\r\n}", ""]);
 	
 	// exports
 	exports.locals = {
@@ -22000,9 +22021,7 @@
 		"itemCount": "_2blB909OMlg3TVoISCFX1T",
 		"errorMessage": "_3WMTFiCBNS_YGVqHnLVPts",
 		"expansionInput": "_2_O1MjGrHkbFeGo2I3tuuY",
-		"createButton": "_3S6SUJU6fyO9DvMPaypJoY",
-		"resultButton": "_3Gl8lNPWyBd4YYBX3puHpQ",
-		"addWrapper": "_2rzeleFc6LhiRilZ_2xatS"
+		"buttonWrapper": "_1DhM01j4qRX5sY_HaR1qW5"
 	};
 
 /***/ },

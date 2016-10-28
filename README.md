@@ -50,6 +50,12 @@ If true, you can show total number of vote at result.
 ### expansion: Boolean, Default: false
 If true, voters can add option(See demo)
 
+### autoClose: Number
+If set, vote closed automatically when voting count is met.
+
+### voted: Boolean, Default: false
+If true, client cannot vote anymore. Put function here which distinguish whether the certain client already voted or not.
+
 ### data: Object
 - title: String. Title of vote.
 - items: Array. Array of objects composed with title and count `[{ title: 'vote option 1', count: 5 }, { title: 'vote option 2', count: 3 }]`
@@ -65,12 +71,13 @@ A group of classNames in this voting component. You can change these for style *
 - voteWrapper: The ancestor of all divs
 - voteTitle
 - titleInput
-- addWrapper
+- addWrapper: Wrapper of addInput, checkboxes, and addButton
 - addInput
 - addButton
 - itemTitle
 - itemCount
 - itemWrapper: Wrapper of itemTitle and itemCount
+- buttonWrapper: Wrapper of bottom buttons
 - removeButton
 - createButton
 - resultButton
@@ -112,7 +119,6 @@ Messages of error, triggered when you try something invalid.
 ## TODO
 - result graph
 - check ones who already voted
-- autoClose at certain number
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!
