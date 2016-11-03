@@ -24,7 +24,7 @@
     "url": "https://github.com/zerocho/react-vote/issues"
   },
   "homepage": "https://github.com/zerocho/react-vote#readme",
-  "peerDependencies": {
+  "dependencies": {
     "react": "^15.3.0",
     "react-dom": "^15.3.0"
   },

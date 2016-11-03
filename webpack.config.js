@@ -25,6 +25,7 @@ module.exports = [{
   externals: ['react', 'react-dom'],
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
       compress: {
         warnings: false
       }

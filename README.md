@@ -8,23 +8,23 @@ npm install react-vote --save
 ```
 
 ##How to use
-For a new voting system, **DON'T** put data prop. And put **getData** callback function to get voting data and connect with database
+For a new voting system, **DON'T** put data prop. And put **getData** callback function to get voting data and connect with database. Use unique identifier of client as **clientId** to check whether the client already voted or not.
 ```
 var ReactVote = require('react-vote');
-<ReactVote styles={customStyle} text={customText} getData={voteCallback} isAdmin={true} />
+<ReactVote styles={customStyle} text={customText} getData={voteCallback} isAdmin={true}, clientId={clientId} />
 ```
 
 You can get data parameter inside the callback function
 ```
 function voteCallback (data) {
  // save data into the database here!
- console.log(data); // { title: 'title of this vote', items: [{ title: 'option1', count: 5}, { title: 'option2', count: 3}], done: false, multiple: false, expansion: false }
+ console.log(data); // { title: 'title of this vote', items: [{ title: 'option1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'option2', count: 3, voters: ['f', 'g', 'h'] }], done: false, multiple: false, expansion: false }
 }
 ```
 
 For ongoing vote or voting result, fetch vote data from the database and put it into the **data** prop. This component will read the **data** prop and execute it. The structure of data prop is detailed below.
 ```
-<ReactVote data={data} getData={voteCallback} isAdmin={true} styles={customStyle} text={customText} errorMessage={customMessage} />
+<ReactVote data={data} getData={voteCallback} isAdmin={true} clientId={clientId} styles={customStyle} text={customText} errorMessage={customMessage} />
 ```
 
 ES2015(ES6) style
@@ -53,13 +53,14 @@ If true, voters can add option(See demo)
 ### autoClose: Number
 If set, vote closed automatically when voting count is met.
 
-### voted: Boolean, Default: false
-If true, client cannot vote anymore. Put function here which distinguish whether the certain client already voted or not.
+### clientId: String/Number
+Put unique identifier of client here. React-vote will check whether that client already voted or not. Good example of identifiers are IPs or ObjectIds
 
 ### data: Object
 - title: String. Title of vote.
-- items: Array. Array of objects composed with title and count `[{ title: 'vote option 1', count: 5 }, { title: 'vote option 2', count: 3 }]`
+- items: Array. Array of objects composed with title and count `[{ title: 'vote option 1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'vote option 2', count: 3, voters: ['f', 'g', 'h'] }]`
 - closed: Boolean. Tell you whether this vote is done or not. If done prop is true, you can only see the result, else you can toggle between voting window and result window.
+- voters: Array. Array of unique identifier of voters.
 - done: Boolean. **Depreciated**. Alias of closed.
 
 ### getData: Function(data: Object)
@@ -118,7 +119,6 @@ Messages of error, triggered when you try something invalid.
 
 ## TODO
 - result graph
-- check ones who already voted
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!

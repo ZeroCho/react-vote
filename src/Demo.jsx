@@ -54,6 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
         text={customText}
         isAdmin={isAdmin()}
         getData={getData}
+        clientId="tester"
+      />
+      <br />
+      <ReactVote
+        styles={basicCss}
+        data={{ title: 'Ongoing Vote with already voted person', voters: ['tester'], items: [{ title: 'a', count: 5 }, { title: 'b', count: 3, voters: ['tester'] }], done: false }}
+        text={customText}
+        isAdmin={isAdmin()}
+        getData={getData}
+        clientId="tester"
         voted
       />
       <br />
@@ -62,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data={{ title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false }}
         isAdmin={false}
         getData={getData}
+        clientId="tester"
         multiple
       />
       <br />

@@ -118,6 +118,16 @@
 	      text: customText,
 	      isAdmin: isAdmin(),
 	      getData: getData,
+	      clientId: 'tester'
+	    }),
+	    _react2.default.createElement('br', null),
+	    _react2.default.createElement(_ReactVote2.default, {
+	      styles: basicCss,
+	      data: { title: 'Ongoing Vote with already voted person', voters: ['tester'], items: [{ title: 'a', count: 5 }, { title: 'b', count: 3, voters: ['tester'] }], done: false },
+	      text: customText,
+	      isAdmin: isAdmin(),
+	      getData: getData,
+	      clientId: 'tester',
 	      voted: true
 	    }),
 	    _react2.default.createElement('br', null),
@@ -126,6 +136,7 @@
 	      data: { title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], done: false },
 	      isAdmin: false,
 	      getData: getData,
+	      clientId: 'tester',
 	      multiple: true
 	    }),
 	    _react2.default.createElement('br', null),
@@ -21558,13 +21569,14 @@
 	      data: _extends({}, _this.props.data, {
 	        title: _this.props.data && _this.props.data.title,
 	        items: _this.props.data && _this.props.data.items,
-	        done: _this.props.data && _this.props.data.done,
-	        closed: _this.props.data && _this.props.data.closed
+	        voters: _this.props.data && _this.props.data.voters || [],
+	        done: _this.props.data && _this.props.data.done || false,
+	        closed: _this.props.data && _this.props.data.closed || false
 	      }),
 	      isAdmin: _this.props.isAdmin,
 	      total: _this.props.total,
 	      expansion: _this.props.expansion,
-	      voted: _this.props.voted || false,
+	      voted: _this.props.clientId && !_this.props.multiple && _this.props.data.voters && _this.props.data.voters.indexOf(_this.props.clientId) > -1 || false,
 	      multiple: _this.props.multiple,
 	      showMessage: false,
 	      errorMessage: false,
@@ -21639,7 +21651,19 @@
 	      }
 	      items[idx].count += 1;
 	      items[idx].voted = true;
+	      var clientId = _this.props.clientId;
+	      if (!items[idx].voters) {
+	        items[idx].voters = [];
+	      }
+	      items[idx].voters.push(clientId);
 	      data.items = items;
+	      if (data.voters) {
+	        if (data.voters.indexOf(clientId) === -1) {
+	          data.voters.push(clientId);
+	        }
+	      } else {
+	        data.voters = [clientId];
+	      }
 	      _this.setState({ voted: true, items: items, data: data });
 	      return _this.props.getData && _this.props.getData(data);
 	    }, _this.renderItems = function (items) {
@@ -21649,24 +21673,33 @@
 	        null,
 	        items.map(function (item) {
 	          var j = i;
-	          var checkVoted = item.voted ? _react2.default.createElement(
+	          var _this$props = _this.props,
+	              styles = _this$props.styles,
+	              text = _this$props.text,
+	              clientId = _this$props.clientId;
+	
+	          var isAlreadyVoted = clientId && item.voters && item.voters.indexOf(clientId) > -1;
+	          var checkVoted = item.voted || isAlreadyVoted ? _react2.default.createElement(
 	            'span',
-	            { className: _this.props.styles.votedText },
-	            _this.props.text.votedText
+	            { className: styles.votedText },
+	            text.votedText
 	          ) : (_this.state.multiple || !_this.state.voted) && _react2.default.createElement(
 	            'button',
-	            { onClick: function onClick() {
+	            {
+	              onClick: function onClick() {
 	                return _this.upvote(j);
-	              }, className: _this.props.styles.voteButton },
-	            _this.props.text.voteButtonText
+	              },
+	              className: styles.voteButton
+	            },
+	            text.voteButtonText
 	          );
 	          var itemComponent = _react2.default.createElement(
 	            'div',
-	            { key: 'react-vote-item-' + j, className: _this.props.styles.itemWrapper },
+	            { key: 'react-vote-item-' + j, className: styles.itemWrapper },
 	            _react2.default.createElement(
 	              'div',
 	              {
-	                className: _this.props.styles.itemTitle,
+	                className: styles.itemTitle,
 	                ref: function ref(c) {
 	                  _this['react-vote-item-' + j] = c;
 	                }
@@ -21679,9 +21712,9 @@
 	                onClick: function onClick() {
 	                  return _this.removeItem('react-vote-item-' + j);
 	                },
-	                className: _this.props.styles.removeButton
+	                className: styles.removeButton
 	              },
-	              _this.props.text.removeButtonText
+	              text.removeButtonText
 	            )
 	          );
 	          i += 1;
@@ -21693,52 +21726,85 @@
 	      var total = items.reduce(function (prev, current) {
 	        return prev + current.count;
 	      }, 0);
+	      var styles = _this.props.styles;
+	      var isAlreadyVoted = _this.props.clientId && !_this.state.multiple && _this.state.data.voters.indexOf(_this.props.clientId) > -1;
+	      var text = _this.props.text;
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        items.map(function (item) {
-	          var percentage = total === 0 ? 0 : (item.count / total * 100).toFixed(2);
-	          var itemComponent = _react2.default.createElement(
+	        _react2.default.createElement(
+	          'div',
+	          { className: styles.voteTitle },
+	          _this.state.data.title
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          items.map(function (item) {
+	            var percentage = total === 0 ? 0 : (item.count / total * 100).toFixed(2);
+	            var itemComponent = _react2.default.createElement(
+	              'div',
+	              { key: 'react-vote-result-' + i, className: styles.itemWrapper },
+	              _react2.default.createElement(
+	                'div',
+	                {
+	                  className: styles.itemTitle,
+	                  ref: function ref(c) {
+	                    _this['react-vote-result-' + i] = c;
+	                  }
+	                },
+	                item.title
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: styles.itemCount },
+	                item.count + '(' + percentage + '%)'
+	              )
+	            );
+	            i += 1;
+	            return itemComponent;
+	          }),
+	          _this.state.total && _react2.default.createElement(
 	            'div',
-	            { key: 'react-vote-result-' + i, className: _this.props.styles.itemWrapper },
+	            { className: styles.itemWrapper },
 	            _react2.default.createElement(
 	              'div',
-	              {
-	                className: _this.props.styles.itemTitle,
-	                ref: function ref(c) {
-	                  _this['react-vote-result-' + i] = c;
-	                }
-	              },
-	              item.title
+	              { className: styles.itemTitle },
+	              text.totalText
 	            ),
 	            _react2.default.createElement(
 	              'div',
-	              { className: _this.props.styles.itemCount },
-	              item.count + '(' + percentage + '%)'
+	              { className: styles.itemCount },
+	              total
 	            )
-	          );
-	          i += 1;
-	          return itemComponent;
-	        }),
-	        _this.state.total && _react2.default.createElement(
+	          )
+	        ),
+	        !_this.state.data.done && !_this.state.data.closed && !isAlreadyVoted && _react2.default.createElement(
 	          'div',
-	          { className: _this.props.styles.itemWrapper },
+	          { className: styles.buttonWrapper },
 	          _react2.default.createElement(
-	            'div',
-	            { className: _this.props.styles.itemTitle },
-	            _this.props.text.totalText
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: _this.props.styles.itemCount },
-	            total
+	            'button',
+	            {
+	              className: styles.goBackButton,
+	              onClick: _this.showVoting
+	            },
+	            text.goBackButtonText
 	          )
 	        )
 	      );
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
+	  // TODO: check the case when is multiple and voted every options
+	
 	  _createClass(ReactVote, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      if (this.props.data && this.props.data.done) {
+	        console.error('data.done is deprecated. Please use data.closed instead. data.done prop will be deleted next update and it will break your application');
+	      }
+	    }
+	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.data) {
@@ -21746,135 +21812,139 @@
 	      }
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
+	    key: 'renderCreationView',
+	    value: function renderCreationView() {
 	      var _this2 = this;
 	
-	      var voting = _react2.default.createElement(
+	      var _props = this.props,
+	          styles = _props.styles,
+	          text = _props.text;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement('input', {
+	          className: styles.titleInput,
+	          ref: function ref(c) {
+	            _this2.voteTitle = c;
+	          },
+	          placeholder: text.titleInputPlaceholder
+	        }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: styles.addWrapper },
+	          this.renderItems(this.state.items),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement('input', {
+	              className: styles.addInput,
+	              ref: function ref(c) {
+	                _this2.addInput = c;
+	              },
+	              placeholder: text.addInputPlaceholder
+	            }),
+	            _react2.default.createElement(
+	              'button',
+	              {
+	                className: styles.addButton,
+	                onClick: this.addItem
+	              },
+	              text.addButtonText
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
+	                _this2.multipleCheck = c;
+	              } }),
+	            text.multipleCheckbox,
+	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
+	                _this2.expansionCheck = c;
+	              } }),
+	            text.expansionCheckbox
+	          )
+	        ),
+	        this.state.showMessage && _react2.default.createElement(
+	          'div',
+	          { className: styles.errorMessage },
+	          this.state.errorMessage
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { className: styles.createButton, onClick: this.createVote },
+	          text.createButtonText
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
+	
+	      var _props2 = this.props,
+	          styles = _props2.styles,
+	          text = _props2.text,
+	          clientId = _props2.clientId;
+	
+	      var isAlreadyVoted = clientId && !this.state.multiple && this.state.data.voters.indexOf(clientId) > -1;
+	      var checkVotingClosed = this.state.data.done || this.state.data.closed;
+	      var isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult || isAlreadyVoted);
+	      var canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
+	      var ongoingOnClosed = isVotingClosed ? this.renderResult(this.state.items) : _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: this.props.styles.voteTitle },
+	          { className: styles.voteTitle },
 	          this.state.data.title
 	        ),
 	        this.renderItems(this.state.items),
-	        this.state.expansion && (!this.state.voted || this.state.multiple) && _react2.default.createElement(
+	        canExpanded && _react2.default.createElement(
 	          'div',
-	          { className: this.props.styles.itemWrapper },
-	          _react2.default.createElement('input', { className: this.props.styles.expansionInput, ref: function ref(c) {
-	              _this2.expansionInput = c;
-	            }, placeholder: this.props.text.expansionPlaceholder }),
+	          { className: styles.itemWrapper },
+	          _react2.default.createElement('input', {
+	            className: styles.expansionInput,
+	            ref: function ref(c) {
+	              _this3.expansionInput = c;
+	            },
+	            placeholder: text.expansionPlaceholder
+	          }),
 	          _react2.default.createElement(
 	            'button',
-	            { className: this.props.styles.expansionButton, onClick: this.expandVote },
-	            this.props.text.expansionButtonText
+	            {
+	              className: styles.expansionButton,
+	              onClick: this.expandVote
+	            },
+	            text.expansionButtonText
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: this.props.styles.buttonWrapper },
+	          { className: styles.buttonWrapper },
 	          _react2.default.createElement(
 	            'button',
 	            {
-	              className: this.props.styles.resultButton,
+	              className: styles.resultButton,
 	              onClick: this.showResult
 	            },
-	            this.props.text.resultButtonText
+	            text.resultButtonText
 	          ),
 	          this.state.isAdmin && _react2.default.createElement(
 	            'button',
 	            {
-	              className: this.props.styles.closeButton,
+	              className: styles.closeButton,
 	              onClick: this.closeVote
 	            },
-	            this.props.text.closeButtonText
+	            text.closeButtonText
 	          )
 	        )
 	      );
-	      var result = this.state.data.title && _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: this.props.styles.voteTitle },
-	          this.state.data.title
-	        ),
-	        this.renderResult(this.state.items),
-	        !this.state.data.done && !this.state.data.closed && _react2.default.createElement(
-	          'div',
-	          { className: this.props.styles.buttonWrapper },
-	          _react2.default.createElement(
-	            'button',
-	            {
-	              className: this.props.styles.goBackButton,
-	              onClick: this.showVoting
-	            },
-	            this.props.text.goBackButtonText
-	          )
-	        )
-	      );
-	      var isVotingClosed = this.state.data.title && (this.state.data.done || this.state.data.closed || this.state.showResult) ? result : voting;
 	      return _react2.default.createElement(
 	        'div',
-	        { className: this.props.styles.voteWrapper },
-	        this.state.data.title ? isVotingClosed : _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement('input', {
-	            className: this.props.styles.titleInput,
-	            ref: function ref(c) {
-	              _this2.voteTitle = c;
-	            },
-	            placeholder: this.props.text.titleInputPlaceholder
-	          }),
-	          _react2.default.createElement(
-	            'div',
-	            { className: this.props.styles.addWrapper },
-	            this.renderItems(this.state.items),
-	            _react2.default.createElement(
-	              'div',
-	              null,
-	              _react2.default.createElement('input', {
-	                className: this.props.styles.addInput,
-	                ref: function ref(c) {
-	                  _this2.addInput = c;
-	                },
-	                placeholder: this.props.text.addInputPlaceholder
-	              }),
-	              _react2.default.createElement(
-	                'button',
-	                {
-	                  className: this.props.styles.addButton,
-	                  onClick: this.addItem
-	                },
-	                this.props.text.addButtonText
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              null,
-	              _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
-	                  _this2.multipleCheck = c;
-	                } }),
-	              this.props.text.multipleCheckbox,
-	              _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
-	                  _this2.expansionCheck = c;
-	                } }),
-	              this.props.text.expansionCheckbox
-	            )
-	          ),
-	          this.state.showMessage && _react2.default.createElement(
-	            'div',
-	            { className: this.props.styles.errorMessage },
-	            this.state.errorMessage
-	          ),
-	          _react2.default.createElement(
-	            'button',
-	            { className: this.props.styles.createButton, onClick: this.createVote },
-	            this.props.text.createButtonText
-	          )
-	        )
+	        { className: styles.voteWrapper },
+	        this.state.data.title ? ongoingOnClosed : this.renderCreationView()
 	      );
 	    }
 	  }]);
@@ -21886,14 +21956,15 @@
 	  isAdmin: _react.PropTypes.bool,
 	  total: _react.PropTypes.bool,
 	  multiple: _react.PropTypes.bool,
+	  clientId: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
 	  data: _react.PropTypes.shape({
-	    title: _react.PropTypes.string.required,
-	    items: _react.PropTypes.arrayOf(_react.PropTypes.object).required,
+	    title: _react.PropTypes.string.isRequired,
+	    voters: _react.PropTypes.arrayOf(_react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number])),
+	    items: _react.PropTypes.arrayOf(_react.PropTypes.object).isRequired,
 	    done: _react.PropTypes.bool,
-	    closed: _react.PropTypes.bool.required
+	    closed: _react.PropTypes.bool
 	  }),
 	  autoClose: _react.PropTypes.number,
-	  voted: _react.PropTypes.bool,
 	  expansion: _react.PropTypes.bool,
 	  styles: _react.PropTypes.shape({
 	    voteWrapper: _react.PropTypes.string,
