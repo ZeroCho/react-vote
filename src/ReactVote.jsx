@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
+// TODO: export only changed data
+
 class ReactVote extends Component {
   static propTypes = {
     isAdmin: PropTypes.bool,
@@ -254,9 +256,11 @@ class ReactVote extends Component {
         </div>
         {this.state.showMessage &&
         <div className={styles.errorMessage}>{this.state.errorMessage}</div>}
-        <button className={styles.createButton} onClick={this.createVote}>
-          {text.createButtonText}
-        </button>
+        <div className={styles.buttonWrapper}>
+          <button className={styles.createButton} onClick={this.createVote}>
+            {text.createButtonText}
+          </button>
+        </div>
       </div>
     );
   }
@@ -352,6 +356,7 @@ class ReactVote extends Component {
     const checkVotingClosed = this.state.data.done || this.state.data.closed;
     const isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult || isAlreadyVoted);
     const canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
+    // TODO: add autoClose setter
     const ongoingOnClosed = isVotingClosed
       ? this.renderResult(this.state.items)
       : (<div>
