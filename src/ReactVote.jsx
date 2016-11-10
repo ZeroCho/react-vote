@@ -149,6 +149,7 @@ class ReactVote extends Component {
     const title = this.voteTitle.value;
     const multiple = this.multipleCheck.checked;
     const expansion = this.expansionCheck.checked;
+    const autoClose = this.autoClose.value ? parseInt(this.autoClose.value, 10) : false;
     const data = {
       title,
       items,
@@ -157,13 +158,16 @@ class ReactVote extends Component {
       done: false,
       closed: false,
     };
+    if (autoClose && !Number.isNaN(autoClose)) {
+      data.autoClose = autoClose;
+    }
     if (!title || !title.trim()) {
       return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.noTitle });
     }
     if (data.items.length < 2) {
       return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.notEnoughItems });
     }
-    this.setState({ data, showMessage: false, multiple, expansion, items });
+    this.setState({ data, showMessage: false, multiple, expansion, autoClose, items });
     return this.props.getData && this.props.getData(data);
   };
 
@@ -250,8 +254,13 @@ class ReactVote extends Component {
             </button>
           </div>
           <div>
-            <input type="checkbox" ref={(c) => { this.multipleCheck = c; }} />{text.multipleCheckbox}
-            <input type="checkbox" ref={(c) => { this.expansionCheck = c; }} />{text.expansionCheckbox}
+            <label htmlFor="multiple">
+              <input id="multiple" type="checkbox" ref={(c) => { this.multipleCheck = c; }} />{text.multipleCheckbox}
+            </label>
+            <label htmlFor="expansion">
+              <input id="expansion" type="checkbox" ref={(c) => { this.expansionCheck = c; }} />{text.expansionCheckbox}
+            </label>
+            <label htmlFor="autoClose">autoClose: <input id="autoClose" ref={(c) => { this.autoClose = c; }} /></label>
           </div>
         </div>
         {this.state.showMessage &&
@@ -356,7 +365,6 @@ class ReactVote extends Component {
     const checkVotingClosed = this.state.data.done || this.state.data.closed;
     const isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult || isAlreadyVoted);
     const canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
-    // TODO: add autoClose setter
     const ongoingOnClosed = isVotingClosed
       ? this.renderResult(this.state.items)
       : (<div>

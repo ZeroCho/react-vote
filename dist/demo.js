@@ -21549,6 +21549,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	// TODO: export only changed data
+	
 	var ReactVote = function (_Component) {
 	  _inherits(ReactVote, _Component);
 	
@@ -21600,6 +21602,7 @@
 	      var title = _this.voteTitle.value;
 	      var multiple = _this.multipleCheck.checked;
 	      var expansion = _this.expansionCheck.checked;
+	      var autoClose = _this.autoClose.value ? parseInt(_this.autoClose.value, 10) : false;
 	      var data = {
 	        title: title,
 	        items: items,
@@ -21608,13 +21611,17 @@
 	        done: false,
 	        closed: false
 	      };
+	      if (autoClose && !Number.isNaN(autoClose)) {
+	        data.autoClose = autoClose;
+	      }
+	      console.log(autoClose, data);
 	      if (!title || !title.trim()) {
 	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.noTitle });
 	      }
 	      if (data.items.length < 2) {
 	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.notEnoughItems });
 	      }
-	      _this.setState({ data: data, showMessage: false, multiple: multiple, expansion: expansion, items: items });
+	      _this.setState({ data: data, showMessage: false, multiple: multiple, expansion: expansion, autoClose: autoClose, items: items });
 	      return _this.props.getData && _this.props.getData(data);
 	    }, _this.expandVote = function () {
 	      var title = _this.expansionInput.value;
@@ -21856,14 +21863,30 @@
 	          _react2.default.createElement(
 	            'div',
 	            null,
-	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
-	                _this2.multipleCheck = c;
-	              } }),
-	            text.multipleCheckbox,
-	            _react2.default.createElement('input', { type: 'checkbox', ref: function ref(c) {
-	                _this2.expansionCheck = c;
-	              } }),
-	            text.expansionCheckbox
+	            _react2.default.createElement(
+	              'label',
+	              { htmlFor: 'multiple' },
+	              _react2.default.createElement('input', { id: 'multiple', type: 'checkbox', ref: function ref(c) {
+	                  _this2.multipleCheck = c;
+	                } }),
+	              text.multipleCheckbox
+	            ),
+	            _react2.default.createElement(
+	              'label',
+	              { htmlFor: 'expansion' },
+	              _react2.default.createElement('input', { id: 'expansion', type: 'checkbox', ref: function ref(c) {
+	                  _this2.expansionCheck = c;
+	                } }),
+	              text.expansionCheckbox
+	            ),
+	            _react2.default.createElement(
+	              'label',
+	              { htmlFor: 'autoClose' },
+	              'autoClose: ',
+	              _react2.default.createElement('input', { id: 'autoClose', ref: function ref(c) {
+	                  _this2.autoClose = c;
+	                } })
+	            )
 	          )
 	        ),
 	        this.state.showMessage && _react2.default.createElement(
@@ -21872,9 +21895,13 @@
 	          this.state.errorMessage
 	        ),
 	        _react2.default.createElement(
-	          'button',
-	          { className: styles.createButton, onClick: this.createVote },
-	          text.createButtonText
+	          'div',
+	          { className: styles.buttonWrapper },
+	          _react2.default.createElement(
+	            'button',
+	            { className: styles.createButton, onClick: this.createVote },
+	            text.createButtonText
+	          )
 	        )
 	      );
 	    }
