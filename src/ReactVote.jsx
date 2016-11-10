@@ -256,10 +256,10 @@ class ReactVote extends Component {
           <div>
             <label htmlFor="multiple">
               <input id="multiple" type="checkbox" ref={(c) => { this.multipleCheck = c; }} />{text.multipleCheckbox}
-            </label>
+            </label>&nbsp;
             <label htmlFor="expansion">
               <input id="expansion" type="checkbox" ref={(c) => { this.expansionCheck = c; }} />{text.expansionCheckbox}
-            </label>
+            </label>&nbsp;
             <label htmlFor="autoClose">autoClose: <input id="autoClose" ref={(c) => { this.autoClose = c; }} /></label>
           </div>
         </div>
@@ -299,13 +299,7 @@ class ReactVote extends Component {
               >
                 {item.title}
               </div>
-              {this.state.data.title ? checkVoted :
-                <button
-                  onClick={() => this.removeItem(`react-vote-item-${j}`)}
-                  className={styles.removeButton}
-                >
-                  {text.removeButtonText}
-                </button>}
+              {this.state.data.title ? checkVoted : <button onClick={() => this.removeItem(`react-vote-item-${j}`)} className={styles.removeButton}>{text.removeButtonText}</button>}
             </div>
           );
           i += 1;
