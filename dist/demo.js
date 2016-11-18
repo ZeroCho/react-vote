@@ -21614,7 +21614,6 @@
 	      if (autoClose && !Number.isNaN(autoClose)) {
 	        data.autoClose = autoClose;
 	      }
-	      console.log(autoClose, data);
 	      if (!title || !title.trim()) {
 	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.noTitle });
 	      }
@@ -21715,12 +21714,9 @@
 	            ),
 	            _this.state.data.title ? checkVoted : _react2.default.createElement(
 	              'button',
-	              {
-	                onClick: function onClick() {
+	              { onClick: function onClick() {
 	                  return _this.removeItem('react-vote-item-' + j);
-	                },
-	                className: styles.removeButton
-	              },
+	                }, className: styles.removeButton },
 	              text.removeButtonText
 	            )
 	          );
@@ -21871,6 +21867,7 @@
 	                } }),
 	              text.multipleCheckbox
 	            ),
+	            '\xA0',
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'expansion' },
@@ -21879,6 +21876,7 @@
 	                } }),
 	              text.expansionCheckbox
 	            ),
+	            '\xA0',
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'autoClose' },
