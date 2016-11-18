@@ -90,6 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
         getData={getData}
       />
     </div>,
-    rootNode
+    rootNode,
   );
 });
