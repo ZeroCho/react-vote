@@ -88,6 +88,7 @@ A group of classNames in this voting component. You can change these for style *
 - closeButton
 - errorMessage
 - expansionButton
+- expansionInput
 
 ### text: Object
 A group of texts in this voting component. You can change these for **i18n**(internationalization).
