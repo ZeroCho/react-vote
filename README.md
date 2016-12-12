@@ -120,6 +120,7 @@ Messages of error, triggered when you try something invalid.
 
 ## TODO
 - result graph
+- option change while voting
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!
