@@ -94,7 +94,6 @@ class ReactVote extends Component {
   };
 
   // TODO: check the case when is multiple and voted every options
-
   state = {
     showResult: false,
     items: this.props.data ? this.props.data.items : [],
@@ -206,10 +205,7 @@ class ReactVote extends Component {
   upvote = (idx) => {
     const items = this.state.items;
     const data = this.state.data;
-    const total = items.reduce((prev, current) => prev + current.count, 0);
-    if (total === this.state.autoClose) {
-      return this.closeVote();
-    }
+    const currentTotal = items.reduce((prev, current) => prev + current.count, 0);
     items[idx].count += 1;
     items[idx].voted = true;
     const clientId = this.props.clientId;
@@ -226,6 +222,9 @@ class ReactVote extends Component {
       data.voters = [clientId];
     }
     this.setState({ voted: true, items, data });
+    if (currentTotal + 1 >= this.state.autoClose) {
+      return this.closeVote();
+    }
     return this.props.getData && this.props.getData(data);
   };
 
@@ -235,7 +234,9 @@ class ReactVote extends Component {
       <div>
         <input
           className={styles.titleInput}
-          ref={(c) => { this.voteTitle = c; }}
+          ref={(c) => {
+            this.voteTitle = c;
+          }}
           placeholder={text.titleInputPlaceholder}
         />
         <div className={styles.addWrapper}>
@@ -243,7 +244,9 @@ class ReactVote extends Component {
           <div>
             <input
               className={styles.addInput}
-              ref={(c) => { this.addInput = c; }}
+              ref={(c) => {
+                this.addInput = c;
+              }}
               placeholder={text.addInputPlaceholder}
             />
             <button
@@ -255,12 +258,33 @@ class ReactVote extends Component {
           </div>
           <div>
             <label htmlFor="multiple">
-              <input id="multiple" type="checkbox" ref={(c) => { this.multipleCheck = c; }} />{text.multipleCheckbox}
+              <input
+                id="multiple"
+                type="checkbox"
+                ref={(c) => {
+                  this.multipleCheck = c;
+                }}
+              />
+              {text.multipleCheckbox}
             </label>&nbsp;
             <label htmlFor="expansion">
-              <input id="expansion" type="checkbox" ref={(c) => { this.expansionCheck = c; }} />{text.expansionCheckbox}
+              <input
+                id="expansion"
+                type="checkbox"
+                ref={(c) => {
+                  this.expansionCheck = c;
+                }}
+              />
+              {text.expansionCheckbox}
             </label>&nbsp;
-            <label htmlFor="autoClose">autoClose: <input id="autoClose" ref={(c) => { this.autoClose = c; }} /></label>
+            <label htmlFor="autoClose">autoClose:&nbsp;
+              <input
+                id="autoClose"
+                ref={(c) => {
+                  this.autoClose = c;
+                }}
+              />
+            </label>
           </div>
         </div>
         {this.state.showMessage &&
@@ -285,21 +309,32 @@ class ReactVote extends Component {
           const checkVoted = item.voted || isAlreadyVoted
             ? <span className={styles.votedText}>{text.votedText}</span>
             : (this.state.multiple || !this.state.voted)
-          && <button
-            onClick={() => this.upvote(j)}
-            className={styles.voteButton}
-          >
-            {text.voteButtonText}
-          </button>;
+            && <button
+              onClick={() => this.upvote(j)}
+              className={styles.voteButton}
+            >
+              {text.voteButtonText}
+            </button>;
           const itemComponent = (
             <div key={`react-vote-item-${j}`} className={styles.itemWrapper}>
               <div
                 className={styles.itemTitle}
-                ref={(c) => { this[`react-vote-item-${j}`] = c; }}
+                ref={(c) => {
+                  this[`react-vote-item-${j}`] = c;
+                }}
               >
                 {item.title}
               </div>
-              {this.state.data.title ? checkVoted : <button onClick={() => this.removeItem(`react-vote-item-${j}`)} className={styles.removeButton}>{text.removeButtonText}</button>}
+              {this.state.data.title
+                ? checkVoted
+                : (
+                  <button
+                    onClick={() => this.removeItem(`react-vote-item-${j}`)}
+                    className={styles.removeButton}
+                  >
+                    {text.removeButtonText}
+                  </button>
+                )}
             </div>
           );
           i += 1;
@@ -325,7 +360,9 @@ class ReactVote extends Component {
               <div key={`react-vote-result-${i}`} className={styles.itemWrapper}>
                 <div
                   className={styles.itemTitle}
-                  ref={(c) => { this[`react-vote-result-${i}`] = c; }}
+                  ref={(c) => {
+                    this[`react-vote-result-${i}`] = c;
+                  }}
                 >
                   {item.title}
                 </div>
@@ -361,39 +398,42 @@ class ReactVote extends Component {
     const canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
     const ongoingOnClosed = isVotingClosed
       ? this.renderResult(this.state.items)
-      : (<div>
-        <div className={styles.voteTitle}>{this.state.data.title}</div>
-        {this.renderItems(this.state.items)}
-        {canExpanded &&
-        <div className={styles.itemWrapper}>
-          <input
-            className={styles.expansionInput}
-            ref={(c) => { this.expansionInput = c; }}
-            placeholder={text.expansionPlaceholder}
-          />
-          <button
-            className={styles.expansionButton}
-            onClick={this.expandVote}
-          >
-            {text.expansionButtonText}
-          </button>
-        </div>}
-        <div className={styles.buttonWrapper}>
-          <button
-            className={styles.resultButton}
-            onClick={this.showResult}
-          >
-            {text.resultButtonText}
-          </button>
-          {this.state.isAdmin && <button
-            className={styles.closeButton}
-            onClick={this.closeVote}
-          >
-            {text.closeButtonText}
-          </button>}
+      : (
+        <div>
+          <div className={styles.voteTitle}>{this.state.data.title}</div>
+          {this.renderItems(this.state.items)}
+          {canExpanded &&
+          <div className={styles.itemWrapper}>
+            <input
+              className={styles.expansionInput}
+              ref={(c) => {
+                this.expansionInput = c;
+              }}
+              placeholder={text.expansionPlaceholder}
+            />
+            <button
+              className={styles.expansionButton}
+              onClick={this.expandVote}
+            >
+              {text.expansionButtonText}
+            </button>
+          </div>}
+          <div className={styles.buttonWrapper}>
+            <button
+              className={styles.resultButton}
+              onClick={this.showResult}
+            >
+              {text.resultButtonText}
+            </button>
+            {this.state.isAdmin && <button
+              className={styles.closeButton}
+              onClick={this.closeVote}
+            >
+              {text.closeButtonText}
+            </button>}
+          </div>
         </div>
-      </div>
-    );
+      );
     return (
       <div className={styles.voteWrapper}>
         {this.state.data.title ? ongoingOnClosed : this.renderCreationView()}
