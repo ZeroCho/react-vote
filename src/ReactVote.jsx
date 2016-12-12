@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 // TODO: export only changed data
-
 class ReactVote extends Component {
   static propTypes = {
     isAdmin: PropTypes.bool,
@@ -12,7 +11,6 @@ class ReactVote extends Component {
       title: PropTypes.string.isRequired,
       voters: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
       items: PropTypes.arrayOf(PropTypes.object).isRequired,
-      done: PropTypes.bool,
       closed: PropTypes.bool,
     }),
     autoClose: PropTypes.number,
@@ -102,7 +100,6 @@ class ReactVote extends Component {
       title: this.props.data && this.props.data.title,
       items: this.props.data && this.props.data.items,
       voters: (this.props.data && this.props.data.voters) || [],
-      done: (this.props.data && this.props.data.done) || false,
       closed: (this.props.data && this.props.data.closed) || false,
     },
     isAdmin: this.props.isAdmin,
@@ -114,12 +111,6 @@ class ReactVote extends Component {
     errorMessage: false,
     autoClose: this.props.autoClose,
   };
-
-  componentWillMount() {
-    if (this.props.data && this.props.data.done) {
-      console.error('data.done is deprecated. Please use data.closed instead. data.done prop will be deleted next update and it will break your application');
-    }
-  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
@@ -154,7 +145,6 @@ class ReactVote extends Component {
       items,
       multiple,
       expansion,
-      done: false,
       closed: false,
     };
     if (autoClose && !Number.isNaN(autoClose)) {
@@ -196,7 +186,6 @@ class ReactVote extends Component {
 
   closeVote = () => {
     const data = this.state.data;
-    data.done = true;
     data.closed = true;
     this.setState({ data });
     return this.props.getData && this.props.getData(data);
@@ -377,7 +366,7 @@ class ReactVote extends Component {
             <div className={styles.itemCount}>{total}</div>
           </div>}
         </div>
-        {(!this.state.data.done && !this.state.data.closed) && !isAlreadyVoted &&
+        {!this.state.data.closed && !isAlreadyVoted &&
         <div className={styles.buttonWrapper}>
           <button
             className={styles.goBackButton}
@@ -393,7 +382,7 @@ class ReactVote extends Component {
   render() {
     const { styles, text, clientId } = this.props;
     const isAlreadyVoted = (clientId && !this.state.multiple && this.state.data.voters.indexOf(clientId) > -1);
-    const checkVotingClosed = this.state.data.done || this.state.data.closed;
+    const checkVotingClosed = this.state.data.closed;
     const isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult || isAlreadyVoted);
     const canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
     const ongoingOnClosed = isVotingClosed
