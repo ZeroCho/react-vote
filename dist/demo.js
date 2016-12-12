@@ -3305,30 +3305,38 @@
 	// Set.prototype.keys
 	Set.prototype != null && typeof Set.prototype.keys === 'function' && isNative(Set.prototype.keys);
 	
+	var setItem;
+	var getItem;
+	var removeItem;
+	var getItemIDs;
+	var addRoot;
+	var removeRoot;
+	var getRootIDs;
+	
 	if (canUseCollections) {
 	  var itemMap = new Map();
 	  var rootIDSet = new Set();
 	
-	  var setItem = function (id, item) {
+	  setItem = function (id, item) {
 	    itemMap.set(id, item);
 	  };
-	  var getItem = function (id) {
+	  getItem = function (id) {
 	    return itemMap.get(id);
 	  };
-	  var removeItem = function (id) {
+	  removeItem = function (id) {
 	    itemMap['delete'](id);
 	  };
-	  var getItemIDs = function () {
+	  getItemIDs = function () {
 	    return Array.from(itemMap.keys());
 	  };
 	
-	  var addRoot = function (id) {
+	  addRoot = function (id) {
 	    rootIDSet.add(id);
 	  };
-	  var removeRoot = function (id) {
+	  removeRoot = function (id) {
 	    rootIDSet['delete'](id);
 	  };
-	  var getRootIDs = function () {
+	  getRootIDs = function () {
 	    return Array.from(rootIDSet.keys());
 	  };
 	} else {
@@ -3344,31 +3352,31 @@
 	    return parseInt(key.substr(1), 10);
 	  };
 	
-	  var setItem = function (id, item) {
+	  setItem = function (id, item) {
 	    var key = getKeyFromID(id);
 	    itemByKey[key] = item;
 	  };
-	  var getItem = function (id) {
+	  getItem = function (id) {
 	    var key = getKeyFromID(id);
 	    return itemByKey[key];
 	  };
-	  var removeItem = function (id) {
+	  removeItem = function (id) {
 	    var key = getKeyFromID(id);
 	    delete itemByKey[key];
 	  };
-	  var getItemIDs = function () {
+	  getItemIDs = function () {
 	    return Object.keys(itemByKey).map(getIDFromKey);
 	  };
 	
-	  var addRoot = function (id) {
+	  addRoot = function (id) {
 	    var key = getKeyFromID(id);
 	    rootByKey[key] = true;
 	  };
-	  var removeRoot = function (id) {
+	  removeRoot = function (id) {
 	    var key = getKeyFromID(id);
 	    delete rootByKey[key];
 	  };
-	  var getRootIDs = function () {
+	  getRootIDs = function () {
 	    return Object.keys(rootByKey).map(getIDFromKey);
 	  };
 	}
@@ -4149,7 +4157,7 @@
 	
 	'use strict';
 	
-	module.exports = '15.4.0';
+	module.exports = '15.4.1';
 
 /***/ },
 /* 31 */
@@ -5554,6 +5562,28 @@
 	  return '.' + inst._rootNodeID;
 	};
 	
+	function isInteractive(tag) {
+	  return tag === 'button' || tag === 'input' || tag === 'select' || tag === 'textarea';
+	}
+	
+	function shouldPreventMouseEvent(name, type, props) {
+	  switch (name) {
+	    case 'onClick':
+	    case 'onClickCapture':
+	    case 'onDoubleClick':
+	    case 'onDoubleClickCapture':
+	    case 'onMouseDown':
+	    case 'onMouseDownCapture':
+	    case 'onMouseMove':
+	    case 'onMouseMoveCapture':
+	    case 'onMouseUp':
+	    case 'onMouseUpCapture':
+	      return !!(props.disabled && isInteractive(type));
+	    default:
+	      return false;
+	  }
+	}
+	
 	/**
 	 * This is a unified interface for event plugins to be installed and configured.
 	 *
@@ -5622,7 +5652,12 @@
 	   * @return {?function} The stored callback.
 	   */
 	  getListener: function (inst, registrationName) {
+	    // TODO: shouldPreventMouseEvent is DOM-specific and definitely should not
+	    // live here; needs to be moved to a better place soon
 	    var bankForRegistrationName = listenerBank[registrationName];
+	    if (shouldPreventMouseEvent(registrationName, inst._currentElement.type, inst._currentElement.props)) {
+	      return null;
+	    }
 	    var key = getDictionaryKey(inst);
 	    return bankForRegistrationName && bankForRegistrationName[key];
 	  },
@@ -19712,18 +19747,6 @@
 	  return tag === 'button' || tag === 'input' || tag === 'select' || tag === 'textarea';
 	}
 	
-	function shouldPreventMouseEvent(inst) {
-	  if (inst) {
-	    var disabled = inst._currentElement && inst._currentElement.props.disabled;
-	
-	    if (disabled) {
-	      return isInteractive(inst._tag);
-	    }
-	  }
-	
-	  return false;
-	}
-	
 	var SimpleEventPlugin = {
 	
 	  eventTypes: eventTypes,
@@ -19794,10 +19817,7 @@
 	      case 'topMouseDown':
 	      case 'topMouseMove':
 	      case 'topMouseUp':
-	        // Disabled elements should not respond to mouse events
-	        if (shouldPreventMouseEvent(targetInst)) {
-	          return null;
-	        }
+	      // TODO: Disabled elements should not respond to mouse events
 	      /* falls through */
 	      case 'topMouseOut':
 	      case 'topMouseOver':
@@ -21159,7 +21179,7 @@
 	
 	'use strict';
 	
-	module.exports = '15.4.0';
+	module.exports = '15.4.1';
 
 /***/ },
 /* 172 */
@@ -21570,7 +21590,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// TODO: export only changed data
-	
 	var ReactVote = function (_Component) {
 	  _inherits(ReactVote, _Component);
 	
@@ -21592,7 +21611,6 @@
 	        title: _this.props.data && _this.props.data.title,
 	        items: _this.props.data && _this.props.data.items,
 	        voters: _this.props.data && _this.props.data.voters || [],
-	        done: _this.props.data && _this.props.data.done || false,
 	        closed: _this.props.data && _this.props.data.closed || false
 	      }),
 	      isAdmin: _this.props.isAdmin,
@@ -21628,7 +21646,6 @@
 	        items: items,
 	        multiple: multiple,
 	        expansion: expansion,
-	        done: false,
 	        closed: false
 	      };
 	      if (autoClose && !Number.isNaN(autoClose)) {
@@ -21662,19 +21679,15 @@
 	      _this.setState({ showResult: false });
 	    }, _this.closeVote = function () {
 	      var data = _this.state.data;
-	      data.done = true;
 	      data.closed = true;
 	      _this.setState({ data: data });
 	      return _this.props.getData && _this.props.getData(data);
 	    }, _this.upvote = function (idx) {
 	      var items = _this.state.items;
 	      var data = _this.state.data;
-	      var total = items.reduce(function (prev, current) {
+	      var currentTotal = items.reduce(function (prev, current) {
 	        return prev + current.count;
 	      }, 0);
-	      if (total === _this.state.autoClose) {
-	        return _this.closeVote();
-	      }
 	      items[idx].count += 1;
 	      items[idx].voted = true;
 	      var clientId = _this.props.clientId;
@@ -21691,6 +21704,9 @@
 	        data.voters = [clientId];
 	      }
 	      _this.setState({ voted: true, items: items, data: data });
+	      if (currentTotal + 1 >= _this.state.autoClose) {
+	        return _this.closeVote();
+	      }
 	      return _this.props.getData && _this.props.getData(data);
 	    }, _this.renderItems = function (items) {
 	      var i = 0;
@@ -21734,9 +21750,12 @@
 	            ),
 	            _this.state.data.title ? checkVoted : _react2.default.createElement(
 	              'button',
-	              { onClick: function onClick() {
+	              {
+	                onClick: function onClick() {
 	                  return _this.removeItem('react-vote-item-' + j);
-	                }, className: styles.removeButton },
+	                },
+	                className: styles.removeButton
+	              },
 	              text.removeButtonText
 	            )
 	          );
@@ -21802,7 +21821,7 @@
 	            )
 	          )
 	        ),
-	        !_this.state.data.done && !_this.state.data.closed && !isAlreadyVoted && _react2.default.createElement(
+	        !_this.state.data.closed && !isAlreadyVoted && _react2.default.createElement(
 	          'div',
 	          { className: styles.buttonWrapper },
 	          _react2.default.createElement(
@@ -21820,14 +21839,8 @@
 	
 	  // TODO: check the case when is multiple and voted every options
 	
+	
 	  _createClass(ReactVote, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      if (this.props.data && this.props.data.done) {
-	        console.error('data.done is deprecated. Please use data.closed instead. data.done prop will be deleted next update and it will break your application');
-	      }
-	    }
-	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.data) {
@@ -21882,28 +21895,39 @@
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'multiple' },
-	              _react2.default.createElement('input', { id: 'multiple', type: 'checkbox', ref: function ref(c) {
+	              _react2.default.createElement('input', {
+	                id: 'multiple',
+	                type: 'checkbox',
+	                ref: function ref(c) {
 	                  _this2.multipleCheck = c;
-	                } }),
+	                }
+	              }),
 	              text.multipleCheckbox
 	            ),
 	            '\xA0',
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'expansion' },
-	              _react2.default.createElement('input', { id: 'expansion', type: 'checkbox', ref: function ref(c) {
+	              _react2.default.createElement('input', {
+	                id: 'expansion',
+	                type: 'checkbox',
+	                ref: function ref(c) {
 	                  _this2.expansionCheck = c;
-	                } }),
+	                }
+	              }),
 	              text.expansionCheckbox
 	            ),
 	            '\xA0',
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'autoClose' },
-	              'autoClose: ',
-	              _react2.default.createElement('input', { id: 'autoClose', ref: function ref(c) {
+	              'autoClose:\xA0',
+	              _react2.default.createElement('input', {
+	                id: 'autoClose',
+	                ref: function ref(c) {
 	                  _this2.autoClose = c;
-	                } })
+	                }
+	              })
 	            )
 	          )
 	        ),
@@ -21934,7 +21958,7 @@
 	          clientId = _props2.clientId;
 	
 	      var isAlreadyVoted = clientId && !this.state.multiple && this.state.data.voters.indexOf(clientId) > -1;
-	      var checkVotingClosed = this.state.data.done || this.state.data.closed;
+	      var checkVotingClosed = this.state.data.closed;
 	      var isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult || isAlreadyVoted);
 	      var canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
 	      var ongoingOnClosed = isVotingClosed ? this.renderResult(this.state.items) : _react2.default.createElement(
@@ -22006,7 +22030,6 @@
 	    title: _react.PropTypes.string.isRequired,
 	    voters: _react.PropTypes.arrayOf(_react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number])),
 	    items: _react.PropTypes.arrayOf(_react.PropTypes.object).isRequired,
-	    done: _react.PropTypes.bool,
 	    closed: _react.PropTypes.bool
 	  }),
 	  autoClose: _react.PropTypes.number,
