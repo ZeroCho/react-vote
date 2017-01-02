@@ -211,7 +211,12 @@ class ReactVote extends Component {
       data.voters = [clientId];
     }
     this.setState({ voted: true, items, data });
-    if (currentTotal + 1 >= this.state.autoClose) {
+    if (currentTotal + 1 > this.state.autoClose) {
+      return this.closeVote();
+    } else if (currentTotal + 1 === this.state.autoClose) {
+      if (this.props.getData) {
+        this.props.getData(data, items[idx].title);
+      }
       return this.closeVote();
     }
     return this.props.getData && this.props.getData(data, items[idx].title);

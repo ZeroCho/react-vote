@@ -21704,7 +21704,12 @@
 	        data.voters = [clientId];
 	      }
 	      _this.setState({ voted: true, items: items, data: data });
-	      if (currentTotal + 1 >= _this.state.autoClose) {
+	      if (currentTotal + 1 > _this.state.autoClose) {
+	        return _this.closeVote();
+	      } else if (currentTotal + 1 === _this.state.autoClose) {
+	        if (_this.props.getData) {
+	          _this.props.getData(data, items[idx].title);
+	        }
 	        return _this.closeVote();
 	      }
 	      return _this.props.getData && _this.props.getData(data, items[idx].title);
