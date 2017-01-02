@@ -214,7 +214,7 @@ class ReactVote extends Component {
     if (currentTotal + 1 >= this.state.autoClose) {
       return this.closeVote();
     }
-    return this.props.getData && this.props.getData(data);
+    return this.props.getData && this.props.getData(data, items[idx].title);
   };
 
   renderCreationView() {

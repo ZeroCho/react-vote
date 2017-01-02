@@ -63,8 +63,9 @@ Put unique identifier of client here. React-vote will check whether that client 
 - voters: Array. Array of unique identifier of voters.
 - done: Boolean. **Depreciated**. Alias of closed.
 
-### getData: Function(data: Object)
-It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function
+### getData: Function(data: Object, diff: itemTitle)
+It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function.
+When somebody upvotes, this function provides the second argument that shows the title of upvoted item.
 
 ### styles: Object
 A group of classNames in this voting component. You can change these for style **customization** by mapping **classNames** with css files.

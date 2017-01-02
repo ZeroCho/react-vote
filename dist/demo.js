@@ -96,8 +96,8 @@
 	    votedText: 'I chose this',
 	    totalText: 'Total number of vote is:'
 	  };
-	  var getData = function getData(data) {
-	    console.log(data);
+	  var getData = function getData(data, diff) {
+	    console.log(data, diff);
 	  };
 	  var isAdmin = function isAdmin() {
 	    return true;
@@ -21707,7 +21707,7 @@
 	      if (currentTotal + 1 >= _this.state.autoClose) {
 	        return _this.closeVote();
 	      }
-	      return _this.props.getData && _this.props.getData(data);
+	      return _this.props.getData && _this.props.getData(data, items[idx].title);
 	    }, _this.renderItems = function (items) {
 	      var i = 0;
 	      return _react2.default.createElement(

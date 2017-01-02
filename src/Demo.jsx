@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     votedText: 'I chose this',
     totalText: 'Total number of vote is:',
   };
-  const getData = (data) => {
-    console.log(data);
+  const getData = (data, diff) => {
+    console.log(data, diff);
   };
   const isAdmin = () => true;
   document.body.appendChild(rootNode);
