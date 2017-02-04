@@ -1,4 +1,6 @@
 #React Vote
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/ZeroCho/react-vote.svg)](https://greenkeeper.io/)
 React component for simple voting system, easy to customize and internationalize
 
 ##How to install
