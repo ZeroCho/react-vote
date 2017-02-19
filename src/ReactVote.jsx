@@ -118,6 +118,12 @@ class ReactVote extends Component {
     showMessage: false,
     errorMessage: false,
     autoClose: this.props.autoClose,
+    voteTitle: '',
+    addInput: '',
+    autoCloseNumber: null,
+    multipleCheck: false,
+    expansionCheck: false,
+    expansionInput: '',
   };
 
   componentWillMount() {
@@ -132,29 +138,51 @@ class ReactVote extends Component {
     }
   }
 
+  onVoteTitleChange = (e) => {
+    this.setState({ voteTitle: e.target.value });
+  };
+
+  onAddInputChange = (e) => {
+    this.setState({ addInput: e.target.value });
+  };
+
+  onMultipleCheckChange = (e) => {
+    this.setState({ multipleCheck: e.target.checked });
+  };
+
+  onExpansionCheckChange = (e) => {
+    this.setState({ expansionCheck: e.target.checked });
+  };
+
+  onAutoCloseChange = (e) => {
+    this.setState({ autoCloseNumber: e.target.value });
+  };
+
+  onExpansionInputChange = (e) => {
+    this.setState({ expansionInput: e.target.value });
+  };
+
   addItem = () => {
-    const title = this.addInput.value;
+    const title = this.state.addInput;
     const items = this.state.items;
     if (!title || !title.trim()) return;
     items.push({ title, count: 0 });
-    this.setState({ items });
-    this.addInput.value = '';
+    this.setState({ items, addInput: '' });
   };
 
   removeItem = (target) => {
     let items = this.state.items;
-    const title = this[target].innerHTML;
-    items = items.filter(item => item.title !== title);
+    items = items.filter((item, index) => index !== target);
     this.setState({ items });
   };
 
   createVote = () => {
     const { onCreate, getData, errorMessage: { noTitle, notEnoughItems } } = this.props;
     const items = this.state.items;
-    const title = this.voteTitle.value;
-    const multiple = this.multipleCheck.checked;
-    const expansion = this.expansionCheck.checked;
-    const autoClose = this.autoClose.value ? parseInt(this.autoClose.value, 10) : false;
+    const title = this.state.voteTitle;
+    const multiple = this.state.multipleCheck;
+    const expansion = this.state.expansionCheck;
+    const autoClose = this.state.autoCloseNumber ? parseInt(this.state.autoCloseNumber, 10) : false;
     const data = {
       title,
       items,
@@ -162,6 +190,7 @@ class ReactVote extends Component {
       expansion,
       closed: false,
     };
+    console.log(autoClose);
     if (autoClose && !Number.isNaN(autoClose)) {
       data.autoClose = autoClose;
     }
@@ -183,7 +212,7 @@ class ReactVote extends Component {
 
   expandVote = () => {
     const { onExpand, getData } = this.props;
-    const title = this.expansionInput.value;
+    const title = this.state.expansionInput;
     if (!title || !title.trim()) {
       return false;
     }
@@ -194,8 +223,7 @@ class ReactVote extends Component {
       voters: [],
     };
     data.items.push(item);
-    this.setState({ data, items: data.items });
-    this.expansionInput.value = '';
+    this.setState({ data, items: data.items, expansionInput: '' });
     if (getData && typeof getData === 'function') { // TODO: deprecate it
       getData(data);
     }
@@ -266,9 +294,8 @@ class ReactVote extends Component {
       <div>
         <input
           className={styles.titleInput}
-          ref={(c) => {
-            this.voteTitle = c;
-          }}
+          value={this.state.voteTitle}
+          onChange={this.onVoteTitleChange}
           placeholder={text.titleInputPlaceholder}
         />
         <div className={styles.addWrapper}>
@@ -276,9 +303,8 @@ class ReactVote extends Component {
           <div>
             <input
               className={styles.addInput}
-              ref={(c) => {
-                this.addInput = c;
-              }}
+              value={this.state.addInput}
+              onChange={this.onAddInputChange}
               placeholder={text.addInputPlaceholder}
             />
             <button
@@ -293,26 +319,23 @@ class ReactVote extends Component {
               <input
                 id="multiple"
                 type="checkbox"
-                ref={(c) => {
-                  this.multipleCheck = c;
-                }}
+                checked={this.state.multipleCheck}
+                onChange={this.onMultipleCheckChange}
               />
             </label>&nbsp;
             <label htmlFor="expansion">{text.expansionCheckbox}
               <input
                 id="expansion"
                 type="checkbox"
-                ref={(c) => {
-                  this.expansionCheck = c;
-                }}
+                checked={this.state.expansionCheck}
+                onChange={this.onExpansionCheckChange}
               />
             </label>&nbsp;
             <label htmlFor="autoClose">{text.autoCloseText}
               <input
                 id="autoClose"
-                ref={(c) => {
-                  this.autoClose = c;
-                }}
+                value={this.state.autoClose}
+                onChange={this.onAutoCloseChange}
                 placeholder={text.autoClosePlaceholder}
               />
             </label>
@@ -348,19 +371,14 @@ class ReactVote extends Component {
             </button>;
           const itemComponent = (
             <div key={`react-vote-item-${j}`} className={styles.itemWrapper}>
-              <div
-                className={styles.itemTitle}
-                ref={(c) => {
-                  this[`react-vote-item-${j}`] = c;
-                }}
-              >
+              <div className={styles.itemTitle}>
                 {item.title}
               </div>
               {this.state.data.title
                 ? checkVoted
                 : (
                   <button
-                    onClick={() => this.removeItem(`react-vote-item-${j}`)}
+                    onClick={() => this.removeItem(j)}
                     className={styles.removeButton}
                   >
                     {text.removeButtonText}
@@ -391,9 +409,6 @@ class ReactVote extends Component {
               <div key={`react-vote-result-${i}`} className={styles.itemWrapper}>
                 <div
                   className={styles.itemTitle}
-                  ref={(c) => {
-                    this[`react-vote-result-${i}`] = c;
-                  }}
                 >
                   {item.title}
                 </div>
@@ -437,9 +452,8 @@ class ReactVote extends Component {
           <div className={styles.itemWrapper}>
             <input
               className={styles.expansionInput}
-              ref={(c) => {
-                this.expansionInput = c;
-              }}
+              value={this.state.expansionInput}
+              onChange={this.onExpansionInputChange}
               placeholder={text.expansionPlaceholder}
             />
             <button

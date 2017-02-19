@@ -97,7 +97,19 @@
 	    totalText: 'Total number of vote is:'
 	  };
 	  var getData = function getData(data, diff) {
-	    console.log(data, diff);
+	    console.log('getData', data, diff);
+	  };
+	  var onCreate = function onCreate(title, data) {
+	    console.log('created', title, data);
+	  };
+	  var onUpvote = function onUpvote(title, index, data) {
+	    console.log('upvoted', title, index, data);
+	  };
+	  var onClose = function onClose(title, data) {
+	    console.log('closed', title, data);
+	  };
+	  var onExpand = function onExpand(title, item, data) {
+	    console.log('expanded', title, item, data);
 	  };
 	  var isAdmin = function isAdmin() {
 	    return true;
@@ -109,6 +121,10 @@
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
 	      getData: getData,
+	      onCreate: onCreate,
+	      onUpvote: onUpvote,
+	      onClose: onClose,
+	      onExpand: onExpand,
 	      isAdmin: isAdmin()
 	    }),
 	    _react2.default.createElement('br', null),
@@ -118,6 +134,10 @@
 	      text: customText,
 	      isAdmin: isAdmin(),
 	      getData: getData,
+	      onCreate: onCreate,
+	      onUpvote: onUpvote,
+	      onClose: onClose,
+	      onExpand: onExpand,
 	      clientId: 'tester'
 	    }),
 	    _react2.default.createElement('br', null),
@@ -127,31 +147,57 @@
 	      text: customText,
 	      isAdmin: isAdmin(),
 	      getData: getData,
+	      onCreate: onCreate,
+	      onUpvote: onUpvote,
+	      onClose: onClose,
+	      onExpand: onExpand,
 	      clientId: 'tester',
 	      voted: true
 	    }),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
-	      data: { title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false },
+	      data: { title: 'Multiple Choice Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false },
 	      isAdmin: false,
 	      getData: getData,
+	      onCreate: onCreate,
+	      onUpvote: onUpvote,
+	      onClose: onClose,
+	      onExpand: onExpand,
 	      clientId: 'tester',
 	      multiple: true
 	    }),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
-	      data: { title: 'Expansion Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false },
+	      data: { title: 'Expandable Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false },
 	      isAdmin: isAdmin(),
 	      getData: getData,
+	      onCreate: onCreate,
+	      onUpvote: onUpvote,
+	      onClose: onClose,
+	      onExpand: onExpand,
 	      expansion: true
 	    }),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(_ReactVote2.default, {
 	      styles: basicCss,
 	      data: { title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: true },
-	      getData: getData
+	      getData: getData,
+	      onCreate: onCreate,
+	      onUpvote: onUpvote,
+	      onClose: onClose,
+	      onExpand: onExpand
+	    }),
+	    _react2.default.createElement('br', null),
+	    _react2.default.createElement(_ReactVote2.default, {
+	      styles: basicCss,
+	      data: { title: 'Auto Closing Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], autoClose: 1 },
+	      getData: getData,
+	      onCreate: onCreate,
+	      onUpvote: onUpvote,
+	      onClose: onClose,
+	      onExpand: onExpand
 	    })
 	  ), rootNode);
 	});
@@ -21620,27 +21666,50 @@
 	      multiple: _this.props.multiple,
 	      showMessage: false,
 	      errorMessage: false,
-	      autoClose: _this.props.autoClose
+	      autoClose: _this.props.autoClose,
+	      voteTitle: '',
+	      addInput: '',
+	      autoCloseNumber: null,
+	      multipleCheck: false,
+	      expansionCheck: false,
+	      expansionInput: ''
+	    }, _this.onVoteTitleChange = function (e) {
+	      _this.setState({ voteTitle: e.target.value });
+	    }, _this.onAddInputChange = function (e) {
+	      _this.setState({ addInput: e.target.value });
+	    }, _this.onMultipleCheckChange = function (e) {
+	      _this.setState({ multipleCheck: e.target.checked });
+	    }, _this.onExpansionCheckChange = function (e) {
+	      _this.setState({ expansionCheck: e.target.checked });
+	    }, _this.onAutoCloseChange = function (e) {
+	      _this.setState({ autoCloseNumber: e.target.value });
+	    }, _this.onExpansionInputChange = function (e) {
+	      _this.setState({ expansionInput: e.target.value });
 	    }, _this.addItem = function () {
-	      var title = _this.addInput.value;
+	      var title = _this.state.addInput;
 	      var items = _this.state.items;
 	      if (!title || !title.trim()) return;
 	      items.push({ title: title, count: 0 });
-	      _this.setState({ items: items });
-	      _this.addInput.value = '';
+	      _this.setState({ items: items, addInput: '' });
 	    }, _this.removeItem = function (target) {
 	      var items = _this.state.items;
-	      var title = _this[target].innerHTML;
-	      items = items.filter(function (item) {
-	        return item.title !== title;
+	      items = items.filter(function (item, index) {
+	        return index !== target;
 	      });
 	      _this.setState({ items: items });
 	    }, _this.createVote = function () {
+	      var _this$props = _this.props,
+	          onCreate = _this$props.onCreate,
+	          getData = _this$props.getData,
+	          _this$props$errorMess = _this$props.errorMessage,
+	          noTitle = _this$props$errorMess.noTitle,
+	          notEnoughItems = _this$props$errorMess.notEnoughItems;
+	
 	      var items = _this.state.items;
-	      var title = _this.voteTitle.value;
-	      var multiple = _this.multipleCheck.checked;
-	      var expansion = _this.expansionCheck.checked;
-	      var autoClose = _this.autoClose.value ? parseInt(_this.autoClose.value, 10) : false;
+	      var title = _this.state.voteTitle;
+	      var multiple = _this.state.multipleCheck;
+	      var expansion = _this.state.expansionCheck;
+	      var autoClose = _this.state.autoCloseNumber ? parseInt(_this.state.autoCloseNumber, 10) : false;
 	      var data = {
 	        title: title,
 	        items: items,
@@ -21648,43 +21717,78 @@
 	        expansion: expansion,
 	        closed: false
 	      };
+	      console.log(autoClose);
 	      if (autoClose && !Number.isNaN(autoClose)) {
 	        data.autoClose = autoClose;
 	      }
 	      if (!title || !title.trim()) {
-	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.noTitle });
+	        return _this.setState({ showMessage: true, errorMessage: noTitle });
 	      }
 	      if (data.items.length < 2) {
-	        return _this.setState({ showMessage: true, errorMessage: _this.props.errorMessage.notEnoughItems });
+	        return _this.setState({ showMessage: true, errorMessage: notEnoughItems });
 	      }
 	      _this.setState({ data: data, showMessage: false, multiple: multiple, expansion: expansion, autoClose: autoClose, items: items });
-	      return _this.props.getData && _this.props.getData(data);
+	      if (getData && typeof getData === 'function') {
+	        // TODO: deprecate it
+	        getData(data);
+	      }
+	      if (onCreate && typeof onCreate === 'function') {
+	        return onCreate(data.title, data);
+	      }
+	      return true;
 	    }, _this.expandVote = function () {
-	      var title = _this.expansionInput.value;
+	      var _this$props2 = _this.props,
+	          onExpand = _this$props2.onExpand,
+	          getData = _this$props2.getData;
+	
+	      var title = _this.state.expansionInput;
 	      if (!title || !title.trim()) {
 	        return false;
 	      }
 	      var data = _this.state.data;
 	      var item = {
 	        title: title,
-	        count: 0
+	        count: 0,
+	        voters: []
 	      };
 	      data.items.push(item);
-	      _this.setState({ data: data, items: data.items });
-	      _this.expansionInput.value = '';
-	      return _this.props.getData && _this.props.getData(data);
+	      _this.setState({ data: data, items: data.items, expansionInput: '' });
+	      if (getData && typeof getData === 'function') {
+	        // TODO: deprecate it
+	        getData(data);
+	      }
+	      if (onExpand && typeof onExpand === 'function') {
+	        return onExpand(data.title, item, data);
+	      }
+	      return true;
 	    }, _this.showResult = function () {
 	      _this.setState({ showResult: true });
 	    }, _this.showVoting = function () {
 	      _this.setState({ showResult: false });
 	    }, _this.closeVote = function () {
+	      var _this$props3 = _this.props,
+	          getData = _this$props3.getData,
+	          onClose = _this$props3.onClose;
+	
 	      var data = _this.state.data;
 	      data.closed = true;
 	      _this.setState({ data: data });
-	      return _this.props.getData && _this.props.getData(data);
+	      if (getData && typeof getData === 'function') {
+	        // TODO: deprecate it
+	        getData(data);
+	      }
+	      if (onClose && typeof onClose === 'function') {
+	        onClose(data.title, data);
+	      }
 	    }, _this.upvote = function (idx) {
-	      var items = _this.state.items;
-	      var data = _this.state.data;
+	      var _this$state = _this.state,
+	          items = _this$state.items,
+	          data = _this$state.data,
+	          autoClose = _this$state.autoClose;
+	      var _this$props4 = _this.props,
+	          getData = _this$props4.getData,
+	          onUpvote = _this$props4.onUpvote;
+	
 	      var currentTotal = items.reduce(function (prev, current) {
 	        return prev + current.count;
 	      }, 0);
@@ -21704,15 +21808,19 @@
 	        data.voters = [clientId];
 	      }
 	      _this.setState({ voted: true, items: items, data: data });
-	      if (currentTotal + 1 > _this.state.autoClose) {
-	        return _this.closeVote();
-	      } else if (currentTotal + 1 === _this.state.autoClose) {
-	        if (_this.props.getData) {
-	          _this.props.getData(data, items[idx].title);
-	        }
-	        return _this.closeVote();
+	      if (getData && typeof getData === 'function') {
+	        // TODO: deprecate it
+	        getData(data, items[idx].title);
 	      }
-	      return _this.props.getData && _this.props.getData(data, items[idx].title);
+	      if (onUpvote && typeof onUpvote === 'function') {
+	        onUpvote(data.title, idx, data);
+	      }
+	      if (autoClose) {
+	        if (currentTotal + 1 >= autoClose) {
+	          return _this.closeVote();
+	        }
+	      }
+	      return true;
 	    }, _this.renderItems = function (items) {
 	      var i = 0;
 	      return _react2.default.createElement(
@@ -21720,10 +21828,10 @@
 	        null,
 	        items.map(function (item) {
 	          var j = i;
-	          var _this$props = _this.props,
-	              styles = _this$props.styles,
-	              text = _this$props.text,
-	              clientId = _this$props.clientId;
+	          var _this$props5 = _this.props,
+	              styles = _this$props5.styles,
+	              text = _this$props5.text,
+	              clientId = _this$props5.clientId;
 	
 	          var isAlreadyVoted = clientId && item.voters && item.voters.indexOf(clientId) > -1;
 	          var checkVoted = item.voted || isAlreadyVoted ? _react2.default.createElement(
@@ -21745,19 +21853,14 @@
 	            { key: 'react-vote-item-' + j, className: styles.itemWrapper },
 	            _react2.default.createElement(
 	              'div',
-	              {
-	                className: styles.itemTitle,
-	                ref: function ref(c) {
-	                  _this['react-vote-item-' + j] = c;
-	                }
-	              },
+	              { className: styles.itemTitle },
 	              item.title
 	            ),
 	            _this.state.data.title ? checkVoted : _react2.default.createElement(
 	              'button',
 	              {
 	                onClick: function onClick() {
-	                  return _this.removeItem('react-vote-item-' + j);
+	                  return _this.removeItem(j);
 	                },
 	                className: styles.removeButton
 	              },
@@ -21795,10 +21898,7 @@
 	              _react2.default.createElement(
 	                'div',
 	                {
-	                  className: styles.itemTitle,
-	                  ref: function ref(c) {
-	                    _this['react-vote-result-' + i] = c;
-	                  }
+	                  className: styles.itemTitle
 	                },
 	                item.title
 	              ),
@@ -21846,6 +21946,13 @@
 	
 	
 	  _createClass(ReactVote, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      if (this.props.getData && this.props.getData) {
+	        console.error('props getData is deprecated. Please use onCreate, onUpvote, onClose, onExpand instead. getData will be deleted next update and it will break your application');
+	      }
+	    }
+	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.data) {
@@ -21855,8 +21962,6 @@
 	  }, {
 	    key: 'renderCreationView',
 	    value: function renderCreationView() {
-	      var _this2 = this;
-	
 	      var _props = this.props,
 	          styles = _props.styles,
 	          text = _props.text;
@@ -21866,9 +21971,8 @@
 	        null,
 	        _react2.default.createElement('input', {
 	          className: styles.titleInput,
-	          ref: function ref(c) {
-	            _this2.voteTitle = c;
-	          },
+	          value: this.state.voteTitle,
+	          onChange: this.onVoteTitleChange,
 	          placeholder: text.titleInputPlaceholder
 	        }),
 	        _react2.default.createElement(
@@ -21880,9 +21984,8 @@
 	            null,
 	            _react2.default.createElement('input', {
 	              className: styles.addInput,
-	              ref: function ref(c) {
-	                _this2.addInput = c;
-	              },
+	              value: this.state.addInput,
+	              onChange: this.onAddInputChange,
 	              placeholder: text.addInputPlaceholder
 	            }),
 	            _react2.default.createElement(
@@ -21900,38 +22003,36 @@
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'multiple' },
+	              text.multipleCheckbox,
 	              _react2.default.createElement('input', {
 	                id: 'multiple',
 	                type: 'checkbox',
-	                ref: function ref(c) {
-	                  _this2.multipleCheck = c;
-	                }
-	              }),
-	              text.multipleCheckbox
+	                checked: this.state.multipleCheck,
+	                onChange: this.onMultipleCheckChange
+	              })
 	            ),
 	            '\xA0',
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'expansion' },
+	              text.expansionCheckbox,
 	              _react2.default.createElement('input', {
 	                id: 'expansion',
 	                type: 'checkbox',
-	                ref: function ref(c) {
-	                  _this2.expansionCheck = c;
-	                }
-	              }),
-	              text.expansionCheckbox
+	                checked: this.state.expansionCheck,
+	                onChange: this.onExpansionCheckChange
+	              })
 	            ),
 	            '\xA0',
 	            _react2.default.createElement(
 	              'label',
 	              { htmlFor: 'autoClose' },
-	              'autoClose:\xA0',
+	              text.autoCloseText,
 	              _react2.default.createElement('input', {
 	                id: 'autoClose',
-	                ref: function ref(c) {
-	                  _this2.autoClose = c;
-	                }
+	                value: this.state.autoClose,
+	                onChange: this.onAutoCloseChange,
+	                placeholder: text.autoClosePlaceholder
 	              })
 	            )
 	          )
@@ -21955,8 +22056,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this3 = this;
-	
 	      var _props2 = this.props,
 	          styles = _props2.styles,
 	          text = _props2.text,
@@ -21980,9 +22079,8 @@
 	          { className: styles.itemWrapper },
 	          _react2.default.createElement('input', {
 	            className: styles.expansionInput,
-	            ref: function ref(c) {
-	              _this3.expansionInput = c;
-	            },
+	            value: this.state.expansionInput,
+	            onChange: this.onExpansionInputChange,
 	            placeholder: text.expansionPlaceholder
 	          }),
 	          _react2.default.createElement(
@@ -22061,7 +22159,11 @@
 	    expansionButton: _react.PropTypes.string,
 	    expansionInput: _react.PropTypes.string
 	  }),
-	  getData: _react.PropTypes.func,
+	  getData: _react.PropTypes.func, // TODO: deprecate it
+	  onCreate: _react.PropTypes.func,
+	  onUpvote: _react.PropTypes.func,
+	  onExpand: _react.PropTypes.func,
+	  onClose: _react.PropTypes.func,
 	  text: _react.PropTypes.shape({
 	    titleInputPlaceholder: _react.PropTypes.string,
 	    addInputPlaceholder: _react.PropTypes.string,
@@ -22077,7 +22179,9 @@
 	    multipleCheckbox: _react.PropTypes.string,
 	    expansionCheckbox: _react.PropTypes.string,
 	    expansionPlaceholder: _react.PropTypes.string,
-	    expansionButtonText: _react.PropTypes.string
+	    expansionButtonText: _react.PropTypes.string,
+	    autoCloseText: _react.PropTypes.string,
+	    autoClosePlaceholder: _react.PropTypes.string
 	  }),
 	  errorMessage: _react.PropTypes.shape({
 	    notEnoughItems: _react.PropTypes.string,
@@ -22102,10 +22206,12 @@
 	    voteButtonText: 'Upvote',
 	    votedText: 'Voted',
 	    totalText: 'Total',
-	    multipleCheckbox: 'multiple?',
-	    expansionCheckbox: 'expansion?',
+	    multipleCheckbox: 'Multiple choice?',
+	    expansionCheckbox: 'Expandable?',
 	    expansionPlaceholder: 'Add an option yourself',
-	    expansionButtonText: 'Add'
+	    expansionButtonText: 'Add',
+	    autoCloseText: 'AutoClose number: ',
+	    autoClosePlaceholder: 'type autoClose number'
 	  },
 	  errorMessage: {
 	    notEnoughItems: 'Need at least 2 item!',
