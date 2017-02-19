@@ -8,28 +8,43 @@ npm install react-vote --save
 ```
 
 ##How to use
-For a new voting system, **DON'T** put data prop. And put **getData** callback function to get voting data and connect with database. Use unique identifier of client as **clientId** to check whether the client already voted or not.
+For a new voting system, **DO NOT** put the **data** prop.
+Put **onCreate, onUpvote, onClose** callback function to get voting data and connect with database.
+Use unique identifier of client IP adress as **clientId** to check whether the client already voted or not.
+You can only create or close vote when **isAdmin** prop is true. Make it false when you open vote to others.
 ```
-var ReactVote = require('react-vote');
-<ReactVote styles={customStyle} text={customText} getData={voteCallback} isAdmin={true}, clientId={clientId} />
+var ReactVote = require('react-vote'); // or import ReactVote from 'react-vote';
+<ReactVote
+  styles={customStyle}
+  text={customText}
+  onCreate={onCreate}
+  onUpvote={onUpvote}
+  onClose={onClose}
+  isAdmin={true}
+  clientId={clientId}
+/>
 ```
 
-You can get data parameter inside the callback function
+You can get voting data inside the callback function. See **Props** section below for more information.
 ```
-function voteCallback (data) {
- // save data into the database here!
+function onCreate (title, data) {
+ // Save data into the  databasehere!
  console.log(data); // { title: 'title of this vote', items: [{ title: 'option1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'option2', count: 3, voters: ['f', 'g', 'h'] }], done: false, multiple: false, expansion: false }
 }
 ```
 
-For ongoing vote or voting result, fetch vote data from the database and put it into the **data** prop. This component will read the **data** prop and execute it. The structure of data prop is detailed below.
+For ongoing vote or voting result, fetch vote data from the database and put it into the **data** prop.
+This component will read the **data** prop and execute it. The structure of data prop is detailed below.
 ```
-<ReactVote data={data} getData={voteCallback} isAdmin={true} clientId={clientId} styles={customStyle} text={customText} errorMessage={customMessage} />
-```
-
-ES2015(ES6) style
-```
-import ReactVote from 'react-vote';
+<ReactVote
+  data={data}
+  onUpvote={onUpvote}
+  isAdmin={false}
+  clientId={clientId}
+  styles={customStyle}
+  text={customText}
+  errorMessage={customMessage}
+/>
 ```
 
 ##Result
@@ -42,29 +57,42 @@ I know, the style of this component looks crappy, but it's for **customization**
 Tell react-vote whether the client is an admin or not. Only admins can close vote.
 
 ### multiple: Boolean, Default: false
-If true, you can choose multiple choices
+If true, people can choose multiple options instead of one.
 
 ### total: Boolean, Default: true
-If true, you can show total number of vote at result.
+If true, you can show total number of votes at result.
 
 ### expansion: Boolean, Default: false
-If true, voters can add option(See demo)
+If true, voters can add an option(See demo)
 
 ### autoClose: Number
-If set, vote closed automatically when voting count is met.
+If set, vote closed automatically when voting count equals autoClose number.
 
 ### clientId: String/Number
 Put unique identifier of client here. React-vote will check whether that client already voted or not. Good example of identifiers are IPs or ObjectIds
 
 ### data: Object
+Object that contains the whole information about the vote
+
 - title: String. Title of vote.
 - items: Array. Array of objects composed with title and count `[{ title: 'vote option 1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'vote option 2', count: 3, voters: ['f', 'g', 'h'] }]`
 - closed: Boolean. Tell you whether this vote is done or not. If done prop is true, you can only see the result, else you can toggle between voting window and result window.
 - voters: Array. Array of unique identifier of voters.
-- done: Boolean. **Depreciated**. Alias of closed.
+
+### onCreate: Function(title: String, data: Object)
+It's an callback function triggered when you create a new vote. The first parameter is the title of vote, and the second is a whole vote data.
+
+### onUpvote: Function(title: String, index: Number, data: Object)
+It's an callback function triggered when you upvoted. The first parameter is the title of vote, and the second is the index of upvoted item, and the third is a whole vote data.
+
+### onClose: Function(title: String, data: Object)
+It's an callback function triggered when the vote is closed. The first parameter is the title of vote, and the second is a whole vote data.
+
+### onExpand: Function(title: String, item: Object, data: Object)
+It's an callback function triggered when you add a new option. The first parameter is the title of vote, and the second is the added item, and the third is a whole vote data.
 
 ### getData: Function(data: Object, diff: itemTitle)
-It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function.
+**Deprecated** It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function.
 When somebody upvotes, this function provides the second argument that shows the title of upvoted item.
 
 ### styles: Object
@@ -105,10 +133,12 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - closeButtonText: Default: 'Close vote'
 - votedText: Default: 'Voted'
 - totalText: Default: 'Total'
-- multipleCheckbox: Default: 'multiple?'
-- expansionCheckbox: Default: 'expansion?'
+- multipleCheckbox: Default: 'Multiple choice?'
+- expansionCheckbox: Default: 'Expandable?'
 - expansionPlaceholder: Default: 'Add an option yourself'
 - expansionButtonText: Default: 'Add'
+- autoCloseText: Default: 'AutoClose number: '
+- autoClosePlaceholder: Default: 'type autoClose number'
 
 ### errorMessage: Object
 Messages of error, triggered when you try something invalid.
@@ -122,6 +152,7 @@ Messages of error, triggered when you try something invalid.
 ## TODO
 - result graph
 - option change while voting
+- downVote
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!
