@@ -12,10 +12,6 @@
     }
   },
   "rules": {
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
     "import/no-unresolved": 0,
     "react/no-unused-prop-types": [
       2,

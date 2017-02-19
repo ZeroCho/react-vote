@@ -37,7 +37,11 @@ class ReactVote extends Component {
       expansionButton: PropTypes.string,
       expansionInput: PropTypes.string,
     }),
-    getData: PropTypes.func,
+    getData: PropTypes.func, // TODO: deprecate it
+    onCreate: PropTypes.func,
+    onUpvote: PropTypes.func,
+    onExpand: PropTypes.func,
+    onClose: PropTypes.func,
     text: PropTypes.shape({
       titleInputPlaceholder: PropTypes.string,
       addInputPlaceholder: PropTypes.string,
@@ -54,6 +58,8 @@ class ReactVote extends Component {
       expansionCheckbox: PropTypes.string,
       expansionPlaceholder: PropTypes.string,
       expansionButtonText: PropTypes.string,
+      autoCloseText: PropTypes.string,
+      autoClosePlaceholder: PropTypes.string,
     }),
     errorMessage: PropTypes.shape({
       notEnoughItems: PropTypes.string,
@@ -79,10 +85,12 @@ class ReactVote extends Component {
       voteButtonText: 'Upvote',
       votedText: 'Voted',
       totalText: 'Total',
-      multipleCheckbox: 'multiple?',
-      expansionCheckbox: 'expansion?',
+      multipleCheckbox: 'Multiple choice?',
+      expansionCheckbox: 'Expandable?',
       expansionPlaceholder: 'Add an option yourself',
       expansionButtonText: 'Add',
+      autoCloseText: 'AutoClose number: ',
+      autoClosePlaceholder: 'type autoClose number',
     },
     errorMessage: {
       notEnoughItems: 'Need at least 2 item!',
@@ -112,6 +120,12 @@ class ReactVote extends Component {
     autoClose: this.props.autoClose,
   };
 
+  componentWillMount() {
+    if (this.props.getData && this.props.getData) {
+      console.error('props getData is deprecated. Please use onCreate, onUpvote, onClose, onExpand instead. getData will be deleted next update and it will break your application');
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
       this.setState({ data: nextProps.data, items: nextProps.data.items, isAdmin: nextProps.isAdmin });
@@ -135,6 +149,7 @@ class ReactVote extends Component {
   };
 
   createVote = () => {
+    const { onCreate, getData, errorMessage: { noTitle, notEnoughItems } } = this.props;
     const items = this.state.items;
     const title = this.voteTitle.value;
     const multiple = this.multipleCheck.checked;
@@ -151,16 +166,23 @@ class ReactVote extends Component {
       data.autoClose = autoClose;
     }
     if (!title || !title.trim()) {
-      return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.noTitle });
+      return this.setState({ showMessage: true, errorMessage: noTitle });
     }
     if (data.items.length < 2) {
-      return this.setState({ showMessage: true, errorMessage: this.props.errorMessage.notEnoughItems });
+      return this.setState({ showMessage: true, errorMessage: notEnoughItems });
     }
     this.setState({ data, showMessage: false, multiple, expansion, autoClose, items });
-    return this.props.getData && this.props.getData(data);
+    if (getData && typeof getData === 'function') { // TODO: deprecate it
+      getData(data);
+    }
+    if (onCreate && typeof onCreate === 'function') {
+      return onCreate(data.title, data);
+    }
+    return true;
   };
 
   expandVote = () => {
+    const { onExpand, getData } = this.props;
     const title = this.expansionInput.value;
     if (!title || !title.trim()) {
       return false;
@@ -169,11 +191,18 @@ class ReactVote extends Component {
     const item = {
       title,
       count: 0,
+      voters: [],
     };
     data.items.push(item);
     this.setState({ data, items: data.items });
     this.expansionInput.value = '';
-    return this.props.getData && this.props.getData(data);
+    if (getData && typeof getData === 'function') { // TODO: deprecate it
+      getData(data);
+    }
+    if (onExpand && typeof onExpand === 'function') {
+      return onExpand(data.title, item, data);
+    }
+    return true;
   };
 
   showResult = () => {
@@ -185,15 +214,21 @@ class ReactVote extends Component {
   };
 
   closeVote = () => {
+    const { getData, onClose } = this.props;
     const data = this.state.data;
     data.closed = true;
     this.setState({ data });
-    return this.props.getData && this.props.getData(data);
+    if (getData && typeof getData === 'function') { // TODO: deprecate it
+      getData(data);
+    }
+    if (onClose && typeof onClose === 'function') {
+      onClose(data.title, data);
+    }
   };
 
   upvote = (idx) => {
-    const items = this.state.items;
-    const data = this.state.data;
+    const { items, data, autoClose } = this.state;
+    const { getData, onUpvote } = this.props;
     const currentTotal = items.reduce((prev, current) => prev + current.count, 0);
     items[idx].count += 1;
     items[idx].voted = true;
@@ -211,15 +246,18 @@ class ReactVote extends Component {
       data.voters = [clientId];
     }
     this.setState({ voted: true, items, data });
-    if (currentTotal + 1 > this.state.autoClose) {
-      return this.closeVote();
-    } else if (currentTotal + 1 === this.state.autoClose) {
-      if (this.props.getData) {
-        this.props.getData(data, items[idx].title);
-      }
-      return this.closeVote();
+    if (getData && typeof getData === 'function') { // TODO: deprecate it
+      getData(data, items[idx].title);
     }
-    return this.props.getData && this.props.getData(data, items[idx].title);
+    if (onUpvote && typeof onUpvote === 'function') {
+      onUpvote(data.title, idx, data);
+    }
+    if (autoClose) {
+      if (currentTotal + 1 >= autoClose) {
+        return this.closeVote();
+      }
+    }
+    return true;
   };
 
   renderCreationView() {
@@ -251,7 +289,7 @@ class ReactVote extends Component {
             </button>
           </div>
           <div>
-            <label htmlFor="multiple">
+            <label htmlFor="multiple">{text.multipleCheckbox}
               <input
                 id="multiple"
                 type="checkbox"
@@ -259,9 +297,8 @@ class ReactVote extends Component {
                   this.multipleCheck = c;
                 }}
               />
-              {text.multipleCheckbox}
             </label>&nbsp;
-            <label htmlFor="expansion">
+            <label htmlFor="expansion">{text.expansionCheckbox}
               <input
                 id="expansion"
                 type="checkbox"
@@ -269,14 +306,14 @@ class ReactVote extends Component {
                   this.expansionCheck = c;
                 }}
               />
-              {text.expansionCheckbox}
             </label>&nbsp;
-            <label htmlFor="autoClose">autoClose:&nbsp;
+            <label htmlFor="autoClose">{text.autoCloseText}
               <input
                 id="autoClose"
                 ref={(c) => {
                   this.autoClose = c;
                 }}
+                placeholder={text.autoClosePlaceholder}
               />
             </label>
           </div>

@@ -36,7 +36,19 @@ document.addEventListener('DOMContentLoaded', () => {
     totalText: 'Total number of vote is:',
   };
   const getData = (data, diff) => {
-    console.log(data, diff);
+    console.log('getData', data, diff);
+  };
+  const onCreate = (title, data) => {
+    console.log('created', title, data);
+  };
+  const onUpvote = (title, index, data) => {
+    console.log('upvoted', title, index, data);
+  };
+  const onClose = (title, data) => {
+    console.log('closed', title, data);
+  };
+  const onExpand = (title, item, data) => {
+    console.log('expanded', title, item, data);
   };
   const isAdmin = () => true;
   document.body.appendChild(rootNode);
@@ -45,6 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
       <ReactVote
         styles={basicCss}
         getData={getData}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
         isAdmin={isAdmin()}
       />
       <br />
@@ -54,6 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
         text={customText}
         isAdmin={isAdmin()}
         getData={getData}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
         clientId="tester"
       />
       <br />
@@ -63,24 +83,36 @@ document.addEventListener('DOMContentLoaded', () => {
         text={customText}
         isAdmin={isAdmin()}
         getData={getData}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
         clientId="tester"
         voted
       />
       <br />
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Multiple Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
+        data={{ title: 'Multiple Choice Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
         isAdmin={false}
         getData={getData}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
         clientId="tester"
         multiple
       />
       <br />
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Expansion Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
+        data={{ title: 'Expandable Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
         isAdmin={isAdmin()}
         getData={getData}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
         expansion
       />
       <br />
@@ -88,6 +120,20 @@ document.addEventListener('DOMContentLoaded', () => {
         styles={basicCss}
         data={{ title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: true }}
         getData={getData}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
+      />
+      <br />
+      <ReactVote
+        styles={basicCss}
+        data={{ title: 'Auto Closing Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], autoClose: 1 }}
+        getData={getData}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
       />
     </div>,
     rootNode,
