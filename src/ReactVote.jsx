@@ -127,7 +127,7 @@ class ReactVote extends Component {
   };
 
   componentWillMount() {
-    if (this.props.getData && this.props.getData) {
+    if (this.props.getData) {
       console.error('props getData is deprecated. Please use onCreate, onUpvote, onClose, onExpand instead. getData will be deleted next update and it will break your application');
     }
   }
@@ -190,7 +190,6 @@ class ReactVote extends Component {
       expansion,
       closed: false,
     };
-    console.log(autoClose);
     if (autoClose && !Number.isNaN(autoClose)) {
       data.autoClose = autoClose;
     }
@@ -371,7 +370,7 @@ class ReactVote extends Component {
             </button>;
           const itemComponent = (
             <div key={`react-vote-item-${j}`} className={styles.itemWrapper}>
-              <div className={styles.itemTitle}>
+              <div className={styles.itemTitle} title={item.title}>
                 {item.title}
               </div>
               {this.state.data.title
@@ -409,6 +408,7 @@ class ReactVote extends Component {
               <div key={`react-vote-result-${i}`} className={styles.itemWrapper}>
                 <div
                   className={styles.itemTitle}
+                  title={item.title}
                 >
                   {item.title}
                 </div>
