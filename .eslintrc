@@ -13,12 +13,6 @@
   },
   "rules": {
     "import/no-unresolved": 0,
-    "react/no-unused-prop-types": [
-      2,
-      {
-        "skipShapeProps": true
-      }
-    ],
     "global-require": 0,
     "no-console": 0,
     "max-len": 0,
