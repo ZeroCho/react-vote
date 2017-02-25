@@ -16,6 +16,7 @@
   "keywords": [
     "react",
     "vote",
+    "system",
     "poll",
     "component"
   ],
@@ -45,6 +46,8 @@
     "eslint-plugin-react": "^6.10.0",
     "rimraf": "^2.6.1",
     "style-loader": "^0.13.2",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "react": "latest",
+    "react-dom": "latest"
   }
 }
