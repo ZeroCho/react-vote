@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.3.2] - 2017-02-25
+### Updated
+- webpack2
+
 ## [1.3.1] - 2017-02-22
 ### Added
 - title shows when mouse is on the item
@@ -56,7 +60,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Bump up dependencies
 - Code cleanup
 
-[Unreleased]: https://github.com/zerocho/react-vote/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/zerocho/react-vote/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/zerocho/react-vote/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/zerocho/react-vote/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/zerocho/react-vote/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/zerocho/react-vote/compare/v1.2.0...v1.2.1
