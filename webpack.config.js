@@ -15,6 +15,7 @@ module.exports = [{
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'react-vote.js',
+    libraryTarget: 'commonjs2',
   },
   devtool: 'source-map',
   module: { rules },
