@@ -35,9 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     votedText: 'I chose this',
     totalText: 'Total number of vote is:',
   };
-  const getData = (data, diff) => {
-    console.log('getData', data, diff);
-  };
   const onCreate = (title, data) => {
     console.log('created', title, data);
   };
@@ -56,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
     <div>
       <ReactVote
         styles={basicCss}
-        getData={getData}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
@@ -69,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         data={{ title: 'Ongoing Vote with Custom Text', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
         text={customText}
         isAdmin={isAdmin()}
-        getData={getData}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
@@ -82,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
         data={{ title: 'Ongoing Vote with already voted person', voters: ['tester'], items: [{ title: 'a', count: 5 }, { title: 'b', count: 3, voters: ['tester'] }], closed: false }}
         text={customText}
         isAdmin={isAdmin()}
-        getData={getData}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
@@ -95,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
         styles={basicCss}
         data={{ title: 'Multiple Choice Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
         isAdmin={false}
-        getData={getData}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
@@ -108,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         styles={basicCss}
         data={{ title: 'Expandable Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
         isAdmin={isAdmin()}
-        getData={getData}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
@@ -119,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <ReactVote
         styles={basicCss}
         data={{ title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: true }}
-        getData={getData}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
@@ -129,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <ReactVote
         styles={basicCss}
         data={{ title: 'Auto Closing Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], autoClose: 1 }}
-        getData={getData}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}

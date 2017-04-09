@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.3.4] - 2017-02-25
+### Add
+- yarn support
+- react@15.5.0
+
+## [1.3.4] - 2017-02-25
+### Fix
+- libraryTarget
+
 ## [1.3.2] - 2017-02-25
 ### Updated
 - webpack2
@@ -60,7 +69,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Bump up dependencies
 - Code cleanup
 
-[Unreleased]: https://github.com/zerocho/react-vote/compare/v1.3.2...HEAD
+[Unreleased]: https://github.com/zerocho/react-vote/compare/v1.3.5...HEAD
+[1.3.5]: https://github.com/zerocho/react-vote/compare/v1.3.2...v1.3.5
+[1.3.4]: https://github.com/zerocho/react-vote/compare/v1.3.2...v1.3.4
 [1.3.2]: https://github.com/zerocho/react-vote/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/zerocho/react-vote/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/zerocho/react-vote/compare/v1.2.1...v1.3.0
