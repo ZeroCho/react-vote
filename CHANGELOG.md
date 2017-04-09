@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.3.4] - 2017-02-25
+## [1.3.5] - 2017-04-09
 ### Add
 - yarn support
 - react@15.5.0
