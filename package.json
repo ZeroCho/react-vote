@@ -51,6 +51,6 @@
     "webpack": "^2.6.1"
   },
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "latest"
   }
 }
