@@ -205,7 +205,7 @@ class ReactVote extends Component {
     if (!title || !title.trim()) {
       return this.setState({ showMessage: true, errorMessage: noTitle });
     }
-    if (data.items.length < 2) {
+    if (!data.expansion && data.items.length < 2) {
       return this.setState({ showMessage: true, errorMessage: notEnoughItems });
     }
     this.setState({ data, showMessage: false, multiple, expansion, autoClose, items });
