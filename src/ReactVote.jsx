@@ -74,6 +74,14 @@ class ReactVote extends Component {
     total: true,
     expansion: false,
     voted: false,
+    clientId: null,
+    data: null,
+    autoClose: null,
+    getData: null, // TODO: deprecate it
+    onCreate: null,
+    onUpvote: null,
+    onExpand: null,
+    onClose: null,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
