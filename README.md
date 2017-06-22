@@ -8,10 +8,11 @@ npm install react-vote --save
 ```
 
 ## How to use
-For a new voting system, **DO NOT** put the **data** prop.
-Put **onCreate, onUpvote, onClose** callback function to get voting data and connect with database.
+For a new voting system, Do **NOT** put the **data** prop.
+Put **onCreate, onUpvote, onClose, onReset, onExpand** callback function to get voting data and connect with database.
 Use unique identifier of client IP adress as **clientId** to check whether the client already voted or not.
-You can only create or close vote when **isAdmin** prop is true. Make it false when you open vote to others.
+You can only create, reset or close vote when **isAdmin** prop is true. Make it false when you open vote to others.
+
 ```
 var ReactVote = require('react-vote'); // or import ReactVote from 'react-vote';
 <ReactVote
@@ -30,7 +31,7 @@ You can get voting data inside the callback function. See **Props** section belo
 ```
 function onCreate (title, data) {
  // Save data into the  databasehere!
- console.log(data); // { title: 'title of this vote', items: [{ title: 'option1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'option2', count: 3, voters: ['f', 'g', 'h'] }], done: false, multiple: false, expansion: false }
+ console.log(data); // { title: 'title of this vote', items: [{ title: 'option1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'option2', count: 3, voters: ['f', 'g', 'h'] }], closed: false, multiple: false, expansion: false, voters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] }
 }
 ```
 
@@ -38,7 +39,7 @@ For ongoing vote or voting result, fetch vote data from the database and put it 
 This component will read the **data** prop and execute it. The structure of data prop is detailed below.
 ```
 <ReactVote
-  data={data}
+  data={data} // put data object here and you will get ongoing vote
   onUpvote={onUpvote}
   isAdmin={false}
   clientId={clientId}
@@ -76,16 +77,35 @@ Put unique identifier of client here. React-vote will check whether that client 
 ### data: Object
 Object that contains the whole information about the vote
 
-- title: String. Title of vote.
-- items: Array. Array of objects composed with title and count `[{ title: 'vote option 1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'vote option 2', count: 3, voters: ['f', 'g', 'h'] }]`
-- closed: Boolean. Tell you whether this vote is done or not. If done prop is true, you can only see the result, else you can toggle between voting window and result window.
-- voters: Array. Array of unique identifier of voters.
+```
+{
+  title: String, // Title of vote
+  items: [ // Array of vote options
+    {
+      title: String, // Title of option
+      count: Number, // Number of votes
+      voters: [String/Number] // Array of unique identifers of voters for this option
+    }
+  ],
+  closed: Boolean, // Whether this vote is closed or not. If this prop is true, you can only see the result, otherwise you can toggle between voting view and result view.
+  voters: [String/Number] // Array of unique identifiers of all voters.
+}
+```
 
 ### onCreate: Function(title: String, data: Object)
 It's an callback function triggered when you create a new vote. The first parameter is the title of vote, and the second is a whole vote data.
 
-### onUpvote: Function(title: String, index: Number, data: Object)
-It's an callback function triggered when you upvoted. The first parameter is the title of vote, and the second is the index of upvoted item, and the third is a whole vote data.
+### onUpvote: Function(title: String, diff: Object, data: Object)
+It's an callback function triggered when you upvoted. The first parameter is the title of vote, the second is the difference between previous and current data, and the third is a whole vote data.
+
+```
+// diff object
+{
+  index: Number,
+  item: Object,
+  voter: String/Number
+}
+```
 
 ### onClose: Function(title: String, data: Object)
 It's an callback function triggered when the vote is closed. The first parameter is the title of vote, and the second is a whole vote data.
@@ -94,7 +114,7 @@ It's an callback function triggered when the vote is closed. The first parameter
 It's an callback function triggered when the vote is reset. The first parameter is the title of vote, and the second is a whole vote data.
 
 ### onExpand: Function(title: String, item: Object, data: Object)
-It's an callback function triggered when you add a new option. The first parameter is the title of vote, and the second is the added item, and the third is a whole vote data.
+It's an callback function triggered when you add a new option. The first parameter is the title of vote, the second is the added item, and the third is a whole vote data.
 
 ### getData: Function(data: Object, diff: itemTitle)
 **Obsolete** It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function.

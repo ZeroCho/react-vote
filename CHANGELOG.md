@@ -4,25 +4,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.0] - 2017-06-22
+### Updated
+- babel-prest-env
+- the second parameter of onUpvote callback is difference object instead of index(BREAKING)
+
+### Fixed
+- reset && close button on result view
+- voting shouldn't change view
+
+### Removed
+- getData props(BREAKING)
+
 ## [1.4.0] - 2017-06-22
-### Add
+### Added
 - reset vote
 
-### Fix
+### Fixed
 - prevent this.props from totally overriding defaultProps
 
 ## [1.3.7] - 2017-06-03
-### Fix
+### Fixed
 - prop-types warning
 - expandable vote doesn't need minimum 2 items
 
 ## [1.3.5] - 2017-04-09
-### Add
+### Added
 - yarn support
 - react@15.5.0
 
 ## [1.3.4] - 2017-02-25
-### Fix
+### Fixed
 - libraryTarget
 
 ## [1.3.2] - 2017-02-25
@@ -81,8 +93,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Bump up dependencies
 - Code cleanup
 
-[Unreleased]: https://github.com/zerocho/react-vote/compare/v1.4.0...HEAD
-[1.3.7]: https://github.com/zerocho/react-vote/compare/v1.3.7...v1.4.0
+[Unreleased]: https://github.com/zerocho/react-vote/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/zerocho/react-vote/compare/v1.4.0...v2.0.0
+[1.4.0]: https://github.com/zerocho/react-vote/compare/v1.3.7...v1.4.0
 [1.3.7]: https://github.com/zerocho/react-vote/compare/v1.3.5...v1.3.7
 [1.3.5]: https://github.com/zerocho/react-vote/compare/v1.3.4...v1.3.5
 [1.3.4]: https://github.com/zerocho/react-vote/compare/v1.3.2...v1.3.4

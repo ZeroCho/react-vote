@@ -296,9 +296,14 @@ class ReactVote extends Component {
     } else {
       data.voters = [clientId];
     }
+    const diff = {
+      index: idx,
+      item: items[idx],
+      voter: clientId,
+    };
     this.setState(() => ({ voted: true, items, data }));
     if (onUpvote && typeof onUpvote === 'function') {
-      onUpvote(data.title, idx, data);
+      onUpvote(data.title, diff, data);
     }
     if (autoClose) {
       if (currentTotal + 1 >= autoClose) {
