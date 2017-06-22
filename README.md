@@ -48,9 +48,10 @@ This component will read the **data** prop and execute it. The structure of data
 />
 ```
 
-## Result
-I know, the style of this component looks crappy, but it's for **customization**. I didn't put any css codes for your **customization**. You can use **styles** prop to style it in your own way. **styles** prop is detailed in below. Also, you can change texts by using **text** prop. 
-![reactvote](https://cloud.githubusercontent.com/assets/10962668/19619889/d797c13e-98ab-11e6-8836-30afd0e34186.png)
+## Preview
+I didn't put any css codes for your **customization**. You can use **styles** prop to style it in your own way. **styles** prop is detailed in below. Also, you can change texts by using **text** prop.
+
+![reactvote](https://user-images.githubusercontent.com/10962668/27418372-b20345d8-5755-11e7-8e84-3373f7fa6b54.png)
 
 ## Props
 

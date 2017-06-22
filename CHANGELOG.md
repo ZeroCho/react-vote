@@ -81,7 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Bump up dependencies
 - Code cleanup
 
-[Unreleased]: https://github.com/zerocho/react-vote/compare/v1.3.7...HEAD
+[Unreleased]: https://github.com/zerocho/react-vote/compare/v1.4.0...HEAD
+[1.3.7]: https://github.com/zerocho/react-vote/compare/v1.3.7...v1.4.0
 [1.3.7]: https://github.com/zerocho/react-vote/compare/v1.3.5...v1.3.7
 [1.3.5]: https://github.com/zerocho/react-vote/compare/v1.3.4...v1.3.5
 [1.3.4]: https://github.com/zerocho/react-vote/compare/v1.3.2...v1.3.4
