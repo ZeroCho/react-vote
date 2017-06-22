@@ -13,6 +13,7 @@ class ReactVote extends Component {
       voters: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
       items: PropTypes.arrayOf(PropTypes.object).isRequired,
       closed: PropTypes.bool,
+      autoClose: PropTypes.number,
     }),
     autoClose: PropTypes.number,
     expansion: PropTypes.bool,
@@ -111,7 +112,6 @@ class ReactVote extends Component {
     styles: {},
   };
 
-  // TODO: check the case when is multiple and voted every options
   state = {
     showResult: false,
     items: this.props.data ? this.props.data.items : [],
@@ -140,7 +140,14 @@ class ReactVote extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
-      this.setState(() => ({ data: nextProps.data, items: nextProps.data.items, isAdmin: nextProps.isAdmin }));
+      this.setState(() => ({
+        data: nextProps.data,
+        items: nextProps.data.items,
+        isAdmin: nextProps.isAdmin,
+        autoClose: nextProps.autoClose,
+        multiple: nextProps.multiple,
+        expansion: nextProps.expansion,
+      }));
     }
   }
 
@@ -410,7 +417,6 @@ class ReactVote extends Component {
     let i = 0;
     const total = items.reduce((prev, current) => prev + current.count, 0);
     const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
-    const isAlreadyVoted = (this.props.clientId && !this.state.multiple && this.state.data.voters.indexOf(this.props.clientId) > -1);
     const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
     return (
       <div>
@@ -437,7 +443,7 @@ class ReactVote extends Component {
             <div className={styles.itemCount}>{total}</div>
           </div>}
         </div>
-        {!this.state.data.closed && !isAlreadyVoted &&
+        {!this.state.data.closed &&
         <div className={styles.buttonWrapper}>
           <button
             className={styles.goBackButton}
@@ -445,16 +451,26 @@ class ReactVote extends Component {
           >
             {text.goBackButtonText}
           </button>
+          {this.state.isAdmin && <button
+            className={styles.resetButton}
+            onClick={this.resetVote}
+          >
+            {text.resetButtonText}
+          </button>}
+          {this.state.isAdmin && <button
+            className={styles.closeButton}
+            onClick={this.closeVote}
+          >
+            {text.closeButtonText}
+          </button>}
         </div>}
       </div>
     );
   };
 
   render() {
-    const { clientId } = this.props;
-    const isAlreadyVoted = (clientId && !this.state.multiple && this.state.data.voters.indexOf(clientId) > -1);
     const checkVotingClosed = this.state.data.closed;
-    const isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult || isAlreadyVoted);
+    const isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult);
     const canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
     const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
     const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);

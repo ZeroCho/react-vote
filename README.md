@@ -68,7 +68,7 @@ If true, you can show total number of votes at result.
 If true, voters can add an option(See demo)
 
 ### autoClose: Number
-If set, vote closed automatically when voting count equals autoClose number.
+If set, vote closed automatically when voting count equals the number of autoClose.
 
 ### clientId: String/Number
 Put unique identifier of client here. React-vote will check whether that client already voted or not. Good example of identifiers are IPs or ObjectIds

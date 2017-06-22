@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const onExpand = (title, item, data) => {
     console.log('expanded', title, item, data);
   };
+  const onReset = (title, data) => {
+    console.log('reset', title, data);
+  };
   const isAdmin = () => true;
   document.body.appendChild(rootNode);
   ReactDOM.render(
@@ -57,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onUpvote={onUpvote}
         onClose={onClose}
         onExpand={onExpand}
+        onReset={onReset}
         isAdmin={isAdmin()}
       />
       <br />
@@ -68,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
+        onReset={onReset}
         onExpand={onExpand}
         clientId="tester"
       />
@@ -81,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onUpvote={onUpvote}
         onClose={onClose}
         onExpand={onExpand}
+        onReset={onReset}
         clientId="tester"
         voted
       />
@@ -93,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onUpvote={onUpvote}
         onClose={onClose}
         onExpand={onExpand}
+        onReset={onReset}
         clientId="tester"
         multiple
       />
@@ -105,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onUpvote={onUpvote}
         onClose={onClose}
         onExpand={onExpand}
+        onReset={onReset}
         expansion
       />
       <br />
@@ -116,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         onUpvote={onUpvote}
         onClose={onClose}
         onExpand={onExpand}
+        onReset={onReset}
         expansion
         multiple
       />
@@ -127,15 +136,21 @@ document.addEventListener('DOMContentLoaded', () => {
         onUpvote={onUpvote}
         onClose={onClose}
         onExpand={onExpand}
+        onReset={onReset}
       />
       <br />
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Auto Closing Vote for designated number', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], autoClose: 9 }}
+        data={{
+          title: 'Auto Closing Vote for designated number',
+          items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }],
+        }}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}
         onExpand={onExpand}
+        onReset={onReset}
+        autoClose={9}
       />
     </div>,
     rootNode,
