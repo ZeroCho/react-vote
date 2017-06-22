@@ -1,13 +1,13 @@
-#React Vote
+# React Vote
 React component for simple voting system, easy to customize and internationalize
 
-##How to install
+## How to install
 [Live Demo](https://www.zerocho.com/portfolio/ReactVote)
 ```
 npm install react-vote --save
 ```
 
-##How to use
+## How to use
 For a new voting system, **DO NOT** put the **data** prop.
 Put **onCreate, onUpvote, onClose** callback function to get voting data and connect with database.
 Use unique identifier of client IP adress as **clientId** to check whether the client already voted or not.
@@ -20,6 +20,7 @@ var ReactVote = require('react-vote'); // or import ReactVote from 'react-vote';
   onCreate={onCreate}
   onUpvote={onUpvote}
   onClose={onClose}
+  onReset={onReset}
   isAdmin={true}
   clientId={clientId}
 />
@@ -47,11 +48,11 @@ This component will read the **data** prop and execute it. The structure of data
 />
 ```
 
-##Result
+## Result
 I know, the style of this component looks crappy, but it's for **customization**. I didn't put any css codes for your **customization**. You can use **styles** prop to style it in your own way. **styles** prop is detailed in below. Also, you can change texts by using **text** prop. 
 ![reactvote](https://cloud.githubusercontent.com/assets/10962668/19619889/d797c13e-98ab-11e6-8836-30afd0e34186.png)
 
-##Props
+## Props
 
 ### isAdmin: Boolean, Default: false
 Tell react-vote whether the client is an admin or not. Only admins can close vote.
@@ -88,6 +89,9 @@ It's an callback function triggered when you upvoted. The first parameter is the
 ### onClose: Function(title: String, data: Object)
 It's an callback function triggered when the vote is closed. The first parameter is the title of vote, and the second is a whole vote data.
 
+### onReset: Function(title: String, data: Object)
+It's an callback function triggered when the vote is reset. The first parameter is the title of vote, and the second is a whole vote data.
+
 ### onExpand: Function(title: String, item: Object, data: Object)
 It's an callback function triggered when you add a new option. The first parameter is the title of vote, and the second is the added item, and the third is a whole vote data.
 
@@ -115,6 +119,7 @@ A group of classNames in this voting component. You can change these for style *
 - voteButton
 - votedText
 - closeButton
+- resetButton
 - errorMessage
 - expansionButton
 - expansionInput
@@ -131,6 +136,7 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - voteButtonText: Default: 'Upvote'
 - createButtonText: Default: 'Create'
 - closeButtonText: Default: 'Close vote'
+- resetButtonText: Default: 'Reset vote'
 - votedText: Default: 'Voted'
 - totalText: Default: 'Total'
 - multipleCheckbox: Default: 'Multiple choice?'

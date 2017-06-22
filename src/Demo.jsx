@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <br />
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Ongoing Vote with already voted person', voters: ['tester'], items: [{ title: 'a', count: 5 }, { title: 'b', count: 3, voters: ['tester'] }], closed: false }}
+        data={{ title: 'Ongoing voted Vote', voters: ['tester'], items: [{ title: 'a', count: 5 }, { title: 'b', count: 3, voters: ['tester'] }], closed: false }}
         text={customText}
         isAdmin={isAdmin()}
         onCreate={onCreate}
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <br />
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Multiple Choice Vote and not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
+        data={{ title: 'Multiple Choice Vote && not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
         isAdmin={false}
         onCreate={onCreate}
         onUpvote={onUpvote}
@@ -110,6 +110,18 @@ document.addEventListener('DOMContentLoaded', () => {
       <br />
       <ReactVote
         styles={basicCss}
+        data={{ title: 'Expandable && Multiple Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
+        isAdmin={isAdmin()}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
+        expansion
+        multiple
+      />
+      <br />
+      <ReactVote
+        styles={basicCss}
         data={{ title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: true }}
         onCreate={onCreate}
         onUpvote={onUpvote}
@@ -119,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <br />
       <ReactVote
         styles={basicCss}
-        data={{ title: 'Auto Closing Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], autoClose: 1 }}
+        data={{ title: 'Auto Closing Vote for designated number', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], autoClose: 9 }}
         onCreate={onCreate}
         onUpvote={onUpvote}
         onClose={onClose}

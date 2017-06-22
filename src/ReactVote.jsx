@@ -432,9 +432,9 @@ class ReactVote extends Component {
   renderResult = (items) => {
     let i = 0;
     const total = items.reduce((prev, current) => prev + current.count, 0);
-    const styles = this.props.styles;
+    const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
     const isAlreadyVoted = (this.props.clientId && !this.state.multiple && this.state.data.voters.indexOf(this.props.clientId) > -1);
-    const text = this.props.text;
+    const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
     return (
       <div>
         <div className={styles.voteTitle}>{this.state.data.title}</div>
@@ -474,11 +474,13 @@ class ReactVote extends Component {
   };
 
   render() {
-    const { styles, text, clientId } = this.props;
+    const { clientId } = this.props;
     const isAlreadyVoted = (clientId && !this.state.multiple && this.state.data.voters.indexOf(clientId) > -1);
     const checkVotingClosed = this.state.data.closed;
     const isVotingClosed = this.state.data.title && (checkVotingClosed || this.state.showResult || isAlreadyVoted);
     const canExpanded = this.state.expansion && (!this.state.voted || this.state.multiple);
+    const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
+    const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
     const ongoingOnClosed = isVotingClosed
       ? this.renderResult(this.state.items)
       : (
