@@ -97,7 +97,7 @@ It's an callback function triggered when the vote is reset. The first parameter 
 It's an callback function triggered when you add a new option. The first parameter is the title of vote, and the second is the added item, and the third is a whole vote data.
 
 ### getData: Function(data: Object, diff: itemTitle)
-**Deprecated** It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function.
+**Obsolete** It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function.
 When somebody upvotes, this function provides the second argument that shows the title of upvoted item.
 
 ### styles: Object

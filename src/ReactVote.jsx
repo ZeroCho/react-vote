@@ -39,7 +39,6 @@ class ReactVote extends Component {
       expansionButton: PropTypes.string,
       expansionInput: PropTypes.string,
     }),
-    getData: PropTypes.func, // TODO: deprecate it
     onCreate: PropTypes.func,
     onUpvote: PropTypes.func,
     onExpand: PropTypes.func,
@@ -80,7 +79,6 @@ class ReactVote extends Component {
     clientId: null,
     data: null,
     autoClose: null,
-    getData: null, // TODO: deprecate it
     onCreate: null,
     onUpvote: null,
     onExpand: null,
@@ -140,12 +138,6 @@ class ReactVote extends Component {
     expansionInput: '',
   };
 
-  componentWillMount() {
-    if (this.props.getData) {
-      console.error('props getData is deprecated. Please use onCreate, onUpvote, onClose, onExpand instead. getData will be deleted next update and it will break your application');
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
       this.setState(() => ({ data: nextProps.data, items: nextProps.data.items, isAdmin: nextProps.isAdmin }));
@@ -197,7 +189,7 @@ class ReactVote extends Component {
   };
 
   createVote = () => {
-    const { onCreate, getData, errorMessage: { noTitle, notEnoughItems } } = this.props;
+    const { onCreate, errorMessage: { noTitle, notEnoughItems } } = this.props;
     const items = this.state.items;
     const title = this.state.voteTitle;
     const multiple = this.state.multipleCheck;
@@ -220,9 +212,6 @@ class ReactVote extends Component {
       return this.setState(() => ({ showMessage: true, errorMessage: notEnoughItems }));
     }
     this.setState(() => ({ data, showMessage: false, multiple, expansion, autoClose, items }));
-    if (getData && typeof getData === 'function') { // TODO: deprecate it
-      getData(data);
-    }
     if (onCreate && typeof onCreate === 'function') {
       return onCreate(data.title, data);
     }
@@ -230,7 +219,7 @@ class ReactVote extends Component {
   };
 
   expandVote = () => {
-    const { onExpand, getData } = this.props;
+    const { onExpand } = this.props;
     const title = this.state.expansionInput;
     if (!title || !title.trim()) {
       return false;
@@ -243,9 +232,6 @@ class ReactVote extends Component {
     };
     data.items.push(item);
     this.setState(() => ({ data, items: data.items, expansionInput: '' }));
-    if (getData && typeof getData === 'function') { // TODO: deprecate it
-      getData(data);
-    }
     if (onExpand && typeof onExpand === 'function') {
       return onExpand(data.title, item, data);
     }
@@ -261,20 +247,17 @@ class ReactVote extends Component {
   };
 
   closeVote = () => {
-    const { getData, onClose } = this.props;
+    const { onClose } = this.props;
     const data = this.state.data;
     data.closed = true;
     this.setState(() => ({ data }));
-    if (getData && typeof getData === 'function') { // TODO: deprecate it
-      getData(data);
-    }
     if (onClose && typeof onClose === 'function') {
       onClose(data.title, data);
     }
   };
 
   resetVote = () => {
-    const { getData, onReset } = this.props;
+    const { onReset } = this.props;
     const data = this.state.data;
     data.voters = [];
     data.items.forEach((item) => {
@@ -282,9 +265,6 @@ class ReactVote extends Component {
     });
     console.log(data);
     this.setState(() => ({ data }));
-    if (getData && typeof getData === 'function') { // TODO: deprecate it
-      getData(data);
-    }
     if (onReset && typeof onReset === 'function') {
       onReset(data.title, data);
     }
@@ -292,7 +272,7 @@ class ReactVote extends Component {
 
   upvote = (idx) => {
     const { items, data, autoClose } = this.state;
-    const { getData, onUpvote } = this.props;
+    const { onUpvote } = this.props;
     const currentTotal = items.reduce((prev, current) => prev + current.count, 0);
     items[idx].count += 1;
     items[idx].voted = true;
@@ -310,9 +290,6 @@ class ReactVote extends Component {
       data.voters = [clientId];
     }
     this.setState(() => ({ voted: true, items, data }));
-    if (getData && typeof getData === 'function') { // TODO: deprecate it
-      getData(data, items[idx].title);
-    }
     if (onUpvote && typeof onUpvote === 'function') {
       onUpvote(data.title, idx, data);
     }
