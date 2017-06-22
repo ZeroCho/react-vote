@@ -269,9 +269,11 @@ class ReactVote extends Component {
     data.voters = [];
     data.items.forEach((item) => {
       item.count = 0;
+      item.voters = [];
+      item.voted = false;
     });
     console.log(data);
-    this.setState(() => ({ data }));
+    this.setState(() => ({ data, voted: false }));
     if (onReset && typeof onReset === 'function') {
       onReset(data.title, data);
     }
@@ -378,24 +380,22 @@ class ReactVote extends Component {
   }
 
   renderItems = (items) => {
-    let i = 0;
     return (
       <div>
-        {items.map((item) => {
-          const j = i;
+        {items.map((item, i) => {
           const { styles, text, clientId } = this.props;
           const isAlreadyVoted = (clientId && item.voters && item.voters.indexOf(clientId) > -1);
           const checkVoted = item.voted || isAlreadyVoted
             ? <span className={styles.votedText}>{text.votedText}</span>
             : (this.state.multiple || !this.state.voted)
             && <button
-              onClick={() => this.upvote(j)}
+              onClick={() => this.upvote(i)}
               className={styles.voteButton}
             >
               {text.voteButtonText}
             </button>;
-          const itemComponent = (
-            <div key={`react-vote-item-${j}`} className={styles.itemWrapper}>
+          return (
+            <div key={`react-vote-item-${i}`} className={styles.itemWrapper}>
               <div className={styles.itemTitle} title={item.title}>
                 {item.title}
               </div>
@@ -403,7 +403,7 @@ class ReactVote extends Component {
                 ? checkVoted
                 : (
                   <button
-                    onClick={() => this.removeItem(j)}
+                    onClick={() => this.removeItem(i)}
                     className={styles.removeButton}
                   >
                     {text.removeButtonText}
@@ -411,8 +411,6 @@ class ReactVote extends Component {
                 )}
             </div>
           );
-          i += 1;
-          return itemComponent;
         })}
       </div>
     );

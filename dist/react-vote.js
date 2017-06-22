@@ -329,24 +329,24 @@ object-assign
           return { items: e }
         })
       }, r.createVote = function () {
-        var t = r.props, e = t.onCreate, n = t.getData, o = t.errorMessage, a = o.noTitle, i = o.notEnoughItems,
-          s = r.state.items, u = r.state.voteTitle, l = r.state.multipleCheck, c = r.state.expansionCheck,
-          p = !!r.state.autoCloseNumber && parseInt(r.state.autoCloseNumber, 10),
-          f = { title: u, items: s, multiple: l, expansion: c, closed: !1 };
-        return p && !Number.isNaN(p) && (f.autoClose = p), u && u.trim() ? !f.expansion && f.items.length < 2 ? r.setState(function () {
-          return { showMessage: !0, errorMessage: i }
-        }) : (r.setState(function () {
-          return { data: f, showMessage: !1, multiple: l, expansion: c, autoClose: p, items: s }
-        }), n && "function" == typeof n && n(f), !e || "function" != typeof e || e(f.title, f)) : r.setState(function () {
+        var t = r.props, e = t.onCreate, n = t.errorMessage, o = n.noTitle, a = n.notEnoughItems, i = r.state.items,
+          s = r.state.voteTitle, u = r.state.multipleCheck, l = r.state.expansionCheck,
+          c = !!r.state.autoCloseNumber && parseInt(r.state.autoCloseNumber, 10),
+          p = { title: s, items: i, multiple: u, expansion: l, closed: !1 };
+        return c && !Number.isNaN(c) && (p.autoClose = c), s && s.trim() ? !p.expansion && p.items.length < 2 ? r.setState(function () {
           return { showMessage: !0, errorMessage: a }
+        }) : (r.setState(function () {
+          return { data: p, showMessage: !1, multiple: u, expansion: l, autoClose: c, items: i }
+        }), !e || "function" != typeof e || e(p.title, p)) : r.setState(function () {
+          return { showMessage: !0, errorMessage: o }
         })
       }, r.expandVote = function () {
-        var t = r.props, e = t.onExpand, n = t.getData, o = r.state.expansionInput;
-        if (!o || !o.trim())return !1;
-        var a = r.state.data, i = { title: o, count: 0, voters: [] };
-        return a.items.push(i), r.setState(function () {
-          return { data: a, items: a.items, expansionInput: "" }
-        }), n && "function" == typeof n && n(a), !e || "function" != typeof e || e(a.title, i, a)
+        var t = r.props.onExpand, e = r.state.expansionInput;
+        if (!e || !e.trim())return !1;
+        var n = r.state.data, o = { title: e, count: 0, voters: [] };
+        return n.items.push(o), r.setState(function () {
+          return { data: n, items: n.items, expansionInput: "" }
+        }), !t || "function" != typeof t || t(n.title, o, n)
       }, r.showResult = function () {
         r.setState(function () {
           return { showResult: !0 }
@@ -356,55 +356,53 @@ object-assign
           return { showResult: !1 }
         })
       }, r.closeVote = function () {
-        var t = r.props, e = t.getData, n = t.onClose, o = r.state.data;
-        o.closed = !0, r.setState(function () {
-          return { data: o }
-        }), e && "function" == typeof e && e(o), n && "function" == typeof n && n(o.title, o)
+        var t = r.props.onClose, e = r.state.data;
+        e.closed = !0, r.setState(function () {
+          return { data: e }
+        }), t && "function" == typeof t && t(e.title, e)
       }, r.resetVote = function () {
-        var t = r.props, e = t.getData, n = t.onReset, o = r.state.data;
-        o.voters = [], o.items.forEach(function (t) {
-          t.count = 0
-        }), console.log(o), r.setState(function () {
-          return { data: o }
-        }), e && "function" == typeof e && e(o), n && "function" == typeof n && n(o.title, o)
+        var t = r.props.onReset, e = r.state.data;
+        e.voters = [], e.items.forEach(function (t) {
+          t.count = 0, t.voters = [], t.voted = !1
+        }), console.log(e), r.setState(function () {
+          return { data: e, voted: !1 }
+        }), t && "function" == typeof t && t(e.title, e)
       }, r.upvote = function (t) {
-        var e = r.state, n = e.items, o = e.data, a = e.autoClose, i = r.props, s = i.getData, u = i.onUpvote,
-          l = n.reduce(function (t, e) {
-            return t + e.count
-          }, 0);
+        var e = r.state, n = e.items, o = e.data, a = e.autoClose, i = r.props.onUpvote, s = n.reduce(function (t, e) {
+          return t + e.count
+        }, 0);
         n[t].count += 1, n[t].voted = !0;
-        var c = r.props.clientId;
-        return n[t].voters || (n[t].voters = []), n[t].voters.push(c), o.items = n, o.voters ? -1 === o.voters.indexOf(c) && o.voters.push(c) : o.voters = [c], r.setState(function () {
+        var u = r.props.clientId;
+        n[t].voters || (n[t].voters = []), n[t].voters.push(u), o.items = n, o.voters ? -1 === o.voters.indexOf(u) && o.voters.push(u) : o.voters = [u];
+        var l = { index: t, item: n[t], voter: u };
+        return r.setState(function () {
           return { voted: !0, items: n, data: o }
-        }), s && "function" == typeof s && s(o, n[t].title), u && "function" == typeof u && u(o.title, t, o), !(a && l + 1 >= a) || r.closeVote()
+        }), i && "function" == typeof i && i(o.title, l, o), !(a && s + 1 >= a) || r.closeVote()
       }, r.renderItems = function (t) {
-        var e = 0;
-        return c.default.createElement("div", null, t.map(function (t) {
-          var n = e, o = r.props, a = o.styles, i = o.text, s = o.clientId,
-            u = s && t.voters && t.voters.indexOf(s) > -1,
-            l = t.voted || u ? c.default.createElement("span", { className: a.votedText }, i.votedText) : (r.state.multiple || !r.state.voted) && c.default.createElement("button", {
+        return c.default.createElement("div", null, t.map(function (t, e) {
+          var n = r.props, o = n.styles, a = n.text, i = n.clientId, s = i && t.voters && t.voters.indexOf(i) > -1,
+            u = t.voted || s ? c.default.createElement("span", { className: o.votedText }, a.votedText) : (r.state.multiple || !r.state.voted) && c.default.createElement("button", {
                 onClick: function () {
-                  return r.upvote(n)
-                }, className: a.voteButton
-              }, i.voteButtonText), p = c.default.createElement("div", {
-              key: "react-vote-item-" + n,
-              className: a.itemWrapper
-            }, c.default.createElement("div", {
-              className: a.itemTitle,
-              title: t.title
-            }, t.title), r.state.data.title ? l : c.default.createElement("button", {
-              onClick: function () {
-                return r.removeItem(n)
-              }, className: a.removeButton
-            }, i.removeButtonText));
-          return e += 1, p
+                  return r.upvote(e)
+                }, className: o.voteButton
+              }, a.voteButtonText);
+          return c.default.createElement("div", {
+            key: "react-vote-item-" + e,
+            className: o.itemWrapper
+          }, c.default.createElement("div", {
+            className: o.itemTitle,
+            title: t.title
+          }, t.title), r.state.data.title ? u : c.default.createElement("button", {
+            onClick: function () {
+              return r.removeItem(e)
+            }, className: o.removeButton
+          }, a.removeButtonText))
         }))
       }, r.renderResult = function (t) {
         var n = 0, o = t.reduce(function (t, e) {
             return t + e.count
           }, 0), a = Object.assign({}, e.defaultProps.styles, r.props.styles),
-          i = r.props.clientId && !r.state.multiple && r.state.data.voters.indexOf(r.props.clientId) > -1,
-          s = Object.assign({}, e.defaultProps.text, r.props.text);
+          i = Object.assign({}, e.defaultProps.text, r.props.text);
         return c.default.createElement("div", null, c.default.createElement("div", { className: a.voteTitle }, r.state.data.title), c.default.createElement("div", null, t.map(function (t) {
           var e = 0 === o ? 0 : (t.count / o * 100).toFixed(2), r = c.default.createElement("div", {
             key: "react-vote-result-" + n,
@@ -414,21 +412,30 @@ object-assign
             title: t.title
           }, t.title), c.default.createElement("div", { className: a.itemCount }, t.count + "(" + e + "%)"));
           return n += 1, r
-        }), r.state.total && c.default.createElement("div", { className: a.itemWrapper }, c.default.createElement("div", { className: a.itemTitle }, s.totalText), c.default.createElement("div", { className: a.itemCount }, o))), !r.state.data.closed && !i && c.default.createElement("div", { className: a.buttonWrapper }, c.default.createElement("button", {
+        }), r.state.total && c.default.createElement("div", { className: a.itemWrapper }, c.default.createElement("div", { className: a.itemTitle }, i.totalText), c.default.createElement("div", { className: a.itemCount }, o))), !r.state.data.closed && c.default.createElement("div", { className: a.buttonWrapper }, c.default.createElement("button", {
             className: a.goBackButton,
             onClick: r.showVoting
-          }, s.goBackButtonText)))
+          }, i.goBackButtonText), r.state.isAdmin && c.default.createElement("button", {
+              className: a.resetButton,
+              onClick: r.resetVote
+            }, i.resetButtonText), r.state.isAdmin && c.default.createElement("button", {
+              className: a.closeButton,
+              onClick: r.closeVote
+            }, i.closeButtonText)))
       }, i = n, a(r, i)
     }
 
     return i(e, t), u(e, [{
-      key: "componentWillMount", value: function () {
-        this.props.getData && console.error("props getData is deprecated. Please use onCreate, onUpvote, onClose, onExpand instead. getData will be deleted next update and it will break your application")
-      }
-    }, {
       key: "componentWillReceiveProps", value: function (t) {
         t.data && this.setState(function () {
-          return { data: t.data, items: t.data.items, isAdmin: t.isAdmin }
+          return {
+            data: t.data,
+            items: t.data.items,
+            isAdmin: t.isAdmin,
+            autoClose: t.autoClose,
+            multiple: t.multiple,
+            expansion: t.expansion
+          }
         })
       }
     }, {
@@ -469,30 +476,29 @@ object-assign
       }
     }, {
       key: "render", value: function () {
-        var t = this.props.clientId, n = t && !this.state.multiple && this.state.data.voters.indexOf(t) > -1,
-          r = this.state.data.closed, o = this.state.data.title && (r || this.state.showResult || n),
-          a = this.state.expansion && (!this.state.voted || this.state.multiple),
-          i = Object.assign({}, e.defaultProps.text, this.props.text),
-          s = Object.assign({}, e.defaultProps.styles, this.props.styles),
-          u = o ? this.renderResult(this.state.items) : c.default.createElement("div", null, c.default.createElement("div", { className: s.voteTitle }, this.state.data.title), this.renderItems(this.state.items), a && c.default.createElement("div", { className: s.itemWrapper }, c.default.createElement("input", {
-              className: s.expansionInput,
+        var t = this.state.data.closed, n = this.state.data.title && (t || this.state.showResult),
+          r = this.state.expansion && (!this.state.voted || this.state.multiple),
+          o = Object.assign({}, e.defaultProps.text, this.props.text),
+          a = Object.assign({}, e.defaultProps.styles, this.props.styles),
+          i = n ? this.renderResult(this.state.items) : c.default.createElement("div", null, c.default.createElement("div", { className: a.voteTitle }, this.state.data.title), this.renderItems(this.state.items), r && c.default.createElement("div", { className: a.itemWrapper }, c.default.createElement("input", {
+              className: a.expansionInput,
               value: this.state.expansionInput,
               onChange: this.onExpansionInputChange,
-              placeholder: i.expansionPlaceholder
+              placeholder: o.expansionPlaceholder
             }), c.default.createElement("button", {
-              className: s.expansionButton,
+              className: a.expansionButton,
               onClick: this.expandVote
-            }, i.expansionButtonText)), c.default.createElement("div", { className: s.buttonWrapper }, c.default.createElement("button", {
-            className: s.resultButton,
+            }, o.expansionButtonText)), c.default.createElement("div", { className: a.buttonWrapper }, c.default.createElement("button", {
+            className: a.resultButton,
             onClick: this.showResult
-          }, i.resultButtonText), this.state.isAdmin && c.default.createElement("button", {
-              className: s.resetButton,
+          }, o.resultButtonText), this.state.isAdmin && c.default.createElement("button", {
+              className: a.resetButton,
               onClick: this.resetVote
-            }, i.resetButtonText), this.state.isAdmin && c.default.createElement("button", {
-              className: s.closeButton,
+            }, o.resetButtonText), this.state.isAdmin && c.default.createElement("button", {
+              className: a.closeButton,
               onClick: this.closeVote
-            }, i.closeButtonText)));
-        return c.default.createElement("div", { className: s.voteWrapper }, this.state.data.title ? u : this.renderCreationView())
+            }, o.closeButtonText)));
+        return c.default.createElement("div", { className: a.voteWrapper }, this.state.data.title ? i : this.renderCreationView())
       }
     }]), e
   }(l.Component);
@@ -505,7 +511,8 @@ object-assign
       title: f.default.string.isRequired,
       voters: f.default.arrayOf(f.default.oneOfType([f.default.string, f.default.number])),
       items: f.default.arrayOf(f.default.object).isRequired,
-      closed: f.default.bool
+      closed: f.default.bool,
+      autoClose: f.default.number
     }),
     autoClose: f.default.number,
     expansion: f.default.bool,
@@ -532,7 +539,6 @@ object-assign
       expansionButton: f.default.string,
       expansionInput: f.default.string
     }),
-    getData: f.default.func,
     onCreate: f.default.func,
     onUpvote: f.default.func,
     onExpand: f.default.func,
@@ -568,7 +574,6 @@ object-assign
     clientId: null,
     data: null,
     autoClose: null,
-    getData: null,
     onCreate: null,
     onUpvote: null,
     onExpand: null,
@@ -584,7 +589,7 @@ object-assign
       createButtonText: "Create",
       resultButtonText: "Show result",
       goBackButtonText: "Go back to vote",
-      voteButtonText: "Upvote",
+      voteButtonText: "Vote",
       votedText: "Voted",
       totalText: "Total",
       multipleCheckbox: "Multiple choice?",
@@ -953,7 +958,7 @@ object-assign
 
     function c(t) {
       function n(n, r, a, s, u, c, p) {
-        if (s = s || I, c = c || a, p !== i)if (e) o(!1, "Calling PropTypes validators directly is not supported by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at http://fb.me/use-check-prop-types"); else;
+        if (s = s || N, c = c || a, p !== i)if (e) o(!1, "Calling PropTypes validators directly is not supported by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at http://fb.me/use-check-prop-types"); else;
         return null == r[a] ? n ? new l(null === r[a] ? "The " + u + " `" + c + "` is marked as required in `" + s + "`, but its value is `null`." : "The " + u + " `" + c + "` is marked as required in `" + s + "`, but its value is `undefined`.") : null : t(r, a, s, u, c)
       }
 
@@ -991,7 +996,7 @@ object-assign
     function d(t) {
       function e(e, n, r, o, a) {
         if (!(e[n] instanceof t)) {
-          var i = t.name || I;
+          var i = t.name || N;
           return new l("Invalid " + o + " `" + a + "` of type `" + P(e[n]) + "` supplied to `" + r + "`, expected instance of `" + i + "`.")
         }
         return null
@@ -1118,10 +1123,10 @@ object-assign
     }
 
     function P(t) {
-      return t.constructor && t.constructor.name ? t.constructor.name : I
+      return t.constructor && t.constructor.name ? t.constructor.name : N
     }
 
-    var T = "function" == typeof Symbol && Symbol.iterator, k = "@@iterator", I = "<<anonymous>>", N = {
+    var T = "function" == typeof Symbol && Symbol.iterator, k = "@@iterator", N = "<<anonymous>>", I = {
       array: p("array"),
       bool: p("boolean"),
       func: p("function"),
@@ -1157,7 +1162,7 @@ object-assign
       oneOfType: v,
       shape: y
     };
-    return l.prototype = Error.prototype, N.checkPropTypes = s, N.PropTypes = N, N
+    return l.prototype = Error.prototype, I.checkPropTypes = s, I.PropTypes = I, I
   }
 }, function (t, e, n) {
   "use strict";

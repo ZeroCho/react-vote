@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - reset && close button on result view
 - voting shouldn't change view
+- can vote again after reset
 
 ### Removed
 - getData props(BREAKING)
