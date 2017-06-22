@@ -95,7 +95,7 @@ class ReactVote extends Component {
       createButtonText: 'Create',
       resultButtonText: 'Show result',
       goBackButtonText: 'Go back to vote',
-      voteButtonText: 'Upvote',
+      voteButtonText: 'Vote',
       votedText: 'Voted',
       totalText: 'Total',
       multipleCheckbox: 'Multiple choice?',
