@@ -33,6 +33,7 @@ class ReactVote extends Component {
       goBackButton: PropTypes.string,
       voteButton: PropTypes.string,
       closeButton: PropTypes.string,
+      resetButton: PropTypes.string,
       errorMessage: PropTypes.string,
       votedText: PropTypes.string,
       expansionButton: PropTypes.string,
@@ -42,6 +43,7 @@ class ReactVote extends Component {
     onCreate: PropTypes.func,
     onUpvote: PropTypes.func,
     onExpand: PropTypes.func,
+    onReset: PropTypes.func,
     onClose: PropTypes.func,
     text: PropTypes.shape({
       titleInputPlaceholder: PropTypes.string,
@@ -49,6 +51,7 @@ class ReactVote extends Component {
       addButtonText: PropTypes.string,
       removeButtonText: PropTypes.string,
       closeButtonText: PropTypes.string,
+      resetButtonText: PropTypes.string,
       createButtonText: PropTypes.string,
       resultButtonText: PropTypes.string,
       goBackButtonText: PropTypes.string,
@@ -82,12 +85,14 @@ class ReactVote extends Component {
     onUpvote: null,
     onExpand: null,
     onClose: null,
+    onReset: null,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
       addInputPlaceholder: 'Type title of new option here',
       removeButtonText: '×',
       closeButtonText: 'Close vote',
+      resetButtonText: 'Reset vote',
       createButtonText: 'Create',
       resultButtonText: 'Show result',
       goBackButtonText: 'Go back to vote',
@@ -143,32 +148,38 @@ class ReactVote extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
-      this.setState({ data: nextProps.data, items: nextProps.data.items, isAdmin: nextProps.isAdmin });
+      this.setState(() => ({ data: nextProps.data, items: nextProps.data.items, isAdmin: nextProps.isAdmin }));
     }
   }
 
   onVoteTitleChange = (e) => {
-    this.setState({ voteTitle: e.target.value });
+    const voteTitle = e.target.value;
+    this.setState(() => ({ voteTitle }));
   };
 
   onAddInputChange = (e) => {
-    this.setState({ addInput: e.target.value });
+    const addInput = e.target.value;
+    this.setState(() => ({ addInput }));
   };
 
   onMultipleCheckChange = (e) => {
-    this.setState({ multipleCheck: e.target.checked });
+    const multipleCheck = e.target.checked;
+    this.setState(() => ({ multipleCheck }));
   };
 
   onExpansionCheckChange = (e) => {
-    this.setState({ expansionCheck: e.target.checked });
+    const expansionCheck = e.target.checked;
+    this.setState(() => ({ expansionCheck }));
   };
 
   onAutoCloseChange = (e) => {
-    this.setState({ autoCloseNumber: e.target.value });
+    const autoCloseNumber = e.target.value;
+    this.setState(() => ({ autoCloseNumber }));
   };
 
   onExpansionInputChange = (e) => {
-    this.setState({ expansionInput: e.target.value });
+    const expansionInput = e.target.value;
+    this.setState(() => ({ expansionInput }));
   };
 
   addItem = () => {
@@ -176,13 +187,13 @@ class ReactVote extends Component {
     const items = this.state.items;
     if (!title || !title.trim()) return;
     items.push({ title, count: 0 });
-    this.setState({ items, addInput: '' });
+    this.setState(() => ({ items, addInput: '' }));
   };
 
   removeItem = (target) => {
     let items = this.state.items;
     items = items.filter((item, index) => index !== target);
-    this.setState({ items });
+    this.setState(() => ({ items }));
   };
 
   createVote = () => {
@@ -203,12 +214,12 @@ class ReactVote extends Component {
       data.autoClose = autoClose;
     }
     if (!title || !title.trim()) {
-      return this.setState({ showMessage: true, errorMessage: noTitle });
+      return this.setState(() => ({ showMessage: true, errorMessage: noTitle }));
     }
     if (!data.expansion && data.items.length < 2) {
-      return this.setState({ showMessage: true, errorMessage: notEnoughItems });
+      return this.setState(() => ({ showMessage: true, errorMessage: notEnoughItems }));
     }
-    this.setState({ data, showMessage: false, multiple, expansion, autoClose, items });
+    this.setState(() => ({ data, showMessage: false, multiple, expansion, autoClose, items }));
     if (getData && typeof getData === 'function') { // TODO: deprecate it
       getData(data);
     }
@@ -231,7 +242,7 @@ class ReactVote extends Component {
       voters: [],
     };
     data.items.push(item);
-    this.setState({ data, items: data.items, expansionInput: '' });
+    this.setState(() => ({ data, items: data.items, expansionInput: '' }));
     if (getData && typeof getData === 'function') { // TODO: deprecate it
       getData(data);
     }
@@ -242,23 +253,40 @@ class ReactVote extends Component {
   };
 
   showResult = () => {
-    this.setState({ showResult: true });
+    this.setState(() => ({ showResult: true }));
   };
 
   showVoting = () => {
-    this.setState({ showResult: false });
+    this.setState(() => ({ showResult: false }));
   };
 
   closeVote = () => {
     const { getData, onClose } = this.props;
     const data = this.state.data;
     data.closed = true;
-    this.setState({ data });
+    this.setState(() => ({ data }));
     if (getData && typeof getData === 'function') { // TODO: deprecate it
       getData(data);
     }
     if (onClose && typeof onClose === 'function') {
       onClose(data.title, data);
+    }
+  };
+
+  resetVote = () => {
+    const { getData, onReset } = this.props;
+    const data = this.state.data;
+    data.voters = [];
+    data.items.forEach((item) => {
+      item.count = 0;
+    });
+    console.log(data);
+    this.setState(() => ({ data }));
+    if (getData && typeof getData === 'function') { // TODO: deprecate it
+      getData(data);
+    }
+    if (onReset && typeof onReset === 'function') {
+      onReset(data.title, data);
     }
   };
 
@@ -281,7 +309,7 @@ class ReactVote extends Component {
     } else {
       data.voters = [clientId];
     }
-    this.setState({ voted: true, items, data });
+    this.setState(() => ({ voted: true, items, data }));
     if (getData && typeof getData === 'function') { // TODO: deprecate it
       getData(data, items[idx].title);
     }
@@ -479,6 +507,12 @@ class ReactVote extends Component {
             >
               {text.resultButtonText}
             </button>
+            {this.state.isAdmin && <button
+              className={styles.resetButton}
+              onClick={this.resetVote}
+            >
+              {text.resetButtonText}
+            </button>}
             {this.state.isAdmin && <button
               className={styles.closeButton}
               onClick={this.closeVote}
