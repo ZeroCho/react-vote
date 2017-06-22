@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// TODO: export only changed data
 class ReactVote extends Component {
   static propTypes = {
     isAdmin: PropTypes.bool,
@@ -236,6 +235,7 @@ class ReactVote extends Component {
       title,
       count: 0,
       voters: [],
+      adder: this.props.clientId,
     };
     data.items.push(item);
     this.setState(() => ({ data, items: data.items, expansionInput: '' }));

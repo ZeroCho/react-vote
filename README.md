@@ -85,6 +85,7 @@ Object that contains the whole information about the vote
       title: String, // Title of option
       count: Number, // Number of votes
       voters: [String/Number] // Array of unique identifers of voters for this option
+      adder: String/Number // Unique identifier of the one who added this item(Expandable vote only)
     }
   ],
   closed: Boolean, // Whether this vote is closed or not. If this prop is true, you can only see the result, otherwise you can toggle between voting view and result view.
