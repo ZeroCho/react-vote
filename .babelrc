@@ -1,6 +1,17 @@
 {
   "presets": [
-    ["es2015", { "modules": false }],
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 2 versions",
+            "> 5% in KR"
+          ]
+        },
+        "debug": true
+      }
+    ],
     "react",
     "stage-1"
   ]
