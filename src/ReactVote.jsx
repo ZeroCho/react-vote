@@ -151,12 +151,12 @@ class ReactVote extends Component {
   }
 
   onVoteTitleChange = (e) => {
-    const voteTitle = e.target.value;
+    const voteTitle = e.target.value.trim();
     this.setState(() => ({ voteTitle }));
   };
 
   onAddInputChange = (e) => {
-    const addInput = e.target.value;
+    const addInput = e.target.value.trim();
     this.setState(() => ({ addInput }));
   };
 
@@ -171,19 +171,19 @@ class ReactVote extends Component {
   };
 
   onAutoCloseChange = (e) => {
-    const autoCloseNumber = e.target.value;
+    const autoCloseNumber = e.target.value.trim();
     this.setState(() => ({ autoCloseNumber }));
   };
 
   onExpansionInputChange = (e) => {
-    const expansionInput = e.target.value;
+    const expansionInput = e.target.value.trim();
     this.setState(() => ({ expansionInput }));
   };
 
   addItem = () => {
     const title = this.state.addInput;
     const items = this.state.items;
-    if (!title || !title.trim()) return;
+    if (!title) return;
     items.push({ title, count: 0 });
     this.setState(() => ({ items, addInput: '' }));
   };
@@ -211,7 +211,7 @@ class ReactVote extends Component {
     if (autoClose && !Number.isNaN(autoClose)) {
       data.autoClose = autoClose;
     }
-    if (!title || !title.trim()) {
+    if (!title) {
       return this.setState(() => ({ showMessage: true, errorMessage: noTitle }));
     }
     if (!data.expansion && data.items.length < 2) {
@@ -227,7 +227,7 @@ class ReactVote extends Component {
   expandVote = () => {
     const { onExpand } = this.props;
     const title = this.state.expansionInput;
-    if (!title || !title.trim()) {
+    if (!title) {
       return false;
     }
     const data = this.state.data;
@@ -245,12 +245,8 @@ class ReactVote extends Component {
     return true;
   };
 
-  showResult = () => {
-    this.setState(() => ({ showResult: true }));
-  };
-
-  showVoting = () => {
-    this.setState(() => ({ showResult: false }));
+  toggleView = () => {
+    this.setState(prevState => ({ showResult: !prevState.showResult }));
   };
 
   closeVote = () => {
@@ -308,7 +304,8 @@ class ReactVote extends Component {
       onUpvote(data.title, diff, data);
     }
     if (autoClose) {
-      if (currentTotal + 1 >= autoClose) {
+      const newTotal = currentTotal + 1;
+      if (newTotal >= autoClose) {
         return this.closeVote();
       }
     }
@@ -379,42 +376,42 @@ class ReactVote extends Component {
     );
   }
 
-  renderItems = (items) => {
-    return (
-      <div>
-        {items.map((item, i) => {
-          const { styles, text, clientId } = this.props;
-          const isAlreadyVoted = (clientId && item.voters && item.voters.indexOf(clientId) > -1);
-          const checkVoted = item.voted || isAlreadyVoted
-            ? <span className={styles.votedText}>{text.votedText}</span>
-            : (this.state.multiple || !this.state.voted)
-            && <button
-              onClick={() => this.upvote(i)}
-              className={styles.voteButton}
-            >
-              {text.voteButtonText}
-            </button>;
-          return (
-            <div key={`react-vote-item-${i}`} className={styles.itemWrapper}>
-              <div className={styles.itemTitle} title={item.title}>
-                {item.title}
-              </div>
-              {this.state.data.title
-                ? checkVoted
-                : (
-                  <button
-                    onClick={() => this.removeItem(i)}
-                    className={styles.removeButton}
-                  >
-                    {text.removeButtonText}
-                  </button>
-                )}
+  renderItems = items => ((
+    <div>
+      {items.map((item, i) => {
+        const { styles, text, clientId } = this.props;
+        const isAlreadyVoted = (clientId && item.voters && item.voters.indexOf(clientId) > -1);
+        const canVote = (this.state.multiple || !this.state.voted);
+        const checkVoted = item.voted || isAlreadyVoted
+          ? <span className={styles.votedText}>{text.votedText}</span>
+          : canVote
+          && <button
+            onClick={() => this.upvote(i)}
+            className={styles.voteButton}
+          >
+            {text.voteButtonText}
+          </button>;
+        const key = `react-vote-item-${i}`;
+        return (
+          <div key={key} className={styles.itemWrapper}>
+            <div className={styles.itemTitle} title={item.title}>
+              {item.title}
             </div>
-          );
-        })}
-      </div>
-    );
-  };
+            {this.state.data.title
+              ? checkVoted
+              : (
+                <button
+                  onClick={() => this.removeItem(i)}
+                  className={styles.removeButton}
+                >
+                  {text.removeButtonText}
+                </button>
+              )}
+          </div>
+        );
+      })}
+    </div>
+  ));
 
   renderResult = (items) => {
     let i = 0;
@@ -450,7 +447,7 @@ class ReactVote extends Component {
         <div className={styles.buttonWrapper}>
           <button
             className={styles.goBackButton}
-            onClick={this.showVoting}
+            onClick={this.toggleView}
           >
             {text.goBackButtonText}
           </button>
@@ -501,7 +498,7 @@ class ReactVote extends Component {
           <div className={styles.buttonWrapper}>
             <button
               className={styles.resultButton}
-              onClick={this.showResult}
+              onClick={this.toggleView}
             >
               {text.resultButtonText}
             </button>
