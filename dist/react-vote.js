@@ -1,13 +1,13 @@
 module.exports = function (t) {
-  function e(r) {
-    if (n[r])return n[r].exports;
-    var o = n[r] = { i: r, l: !1, exports: {} };
-    return t[r].call(o.exports, o, o.exports, e), o.l = !0, o.exports
+  function e(o) {
+    if (n[o])return n[o].exports;
+    var r = n[o] = { i: o, l: !1, exports: {} };
+    return t[o].call(r.exports, r, r.exports, e), r.l = !0, r.exports
   }
 
   var n = {};
-  return e.m = t, e.c = n, e.d = function (t, n, r) {
-    e.o(t, n) || Object.defineProperty(t, n, { configurable: !1, enumerable: !0, get: r })
+  return e.m = t, e.c = n, e.d = function (t, n, o) {
+    e.o(t, n) || Object.defineProperty(t, n, { configurable: !1, enumerable: !0, get: o })
   }, e.n = function (t) {
     var n = t && t.__esModule ? function () {
       return t.default
@@ -20,11 +20,11 @@ module.exports = function (t) {
   }, e.p = "", e(e.s = 13)
 }([function (t, e, n) {
   "use strict";
-  function r(t, e, n, r, a, i, s, u) {
-    if (o(e), !t) {
+  function o(t, e, n, o, a, i, s, u) {
+    if (r(e), !t) {
       var l;
       if (void 0 === e) l = new Error("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings."); else {
-        var c = [n, r, a, i, s, u], p = 0;
+        var c = [n, o, a, i, s, u], p = 0;
         l = new Error(e.replace(/%s/g, function () {
           return c[p++]
         })), l.name = "Invariant Violation"
@@ -33,28 +33,28 @@ module.exports = function (t) {
     }
   }
 
-  var o = function (t) {
+  var r = function (t) {
   };
-  t.exports = r
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
+  function o(t) {
     return void 0 !== t.ref
   }
 
-  function o(t) {
+  function r(t) {
     return void 0 !== t.key
   }
 
   var a = n(2), i = n(10), s = (n(4), n(8), Object.prototype.hasOwnProperty), u = n(11),
-    l = { key: !0, ref: !0, __self: !0, __source: !0 }, c = function (t, e, n, r, o, a, i) {
+    l = { key: !0, ref: !0, __self: !0, __source: !0 }, c = function (t, e, n, o, r, a, i) {
       var s = { $$typeof: u, type: t, key: e, ref: n, props: i, _owner: a };
       return s
     };
   c.createElement = function (t, e, n) {
     var a, u = {}, p = null, f = null;
     if (null != e) {
-      r(e) && (f = e.ref), o(e) && (p = "" + e.key), void 0 === e.__self ? null : e.__self, void 0 === e.__source ? null : e.__source;
+      o(e) && (f = e.ref), r(e) && (p = "" + e.key), void 0 === e.__self ? null : e.__self, void 0 === e.__source ? null : e.__source;
       for (a in e)s.call(e, a) && !l.hasOwnProperty(a) && (u[a] = e[a])
     }
     var d = arguments.length - 2;
@@ -75,7 +75,7 @@ module.exports = function (t) {
   }, c.cloneElement = function (t, e, n) {
     var u, p = a({}, t.props), f = t.key, d = t.ref, m = (t._self, t._source, t._owner);
     if (null != e) {
-      r(e) && (d = e.ref, m = i.current), o(e) && (f = "" + e.key);
+      o(e) && (d = e.ref, m = i.current), r(e) && (f = "" + e.key);
       var h;
       t.type && t.type.defaultProps && (h = t.type.defaultProps);
       for (u in e)s.call(e, u) && !l.hasOwnProperty(u) && (void 0 === e[u] && void 0 !== h ? p[u] = h[u] : p[u] = e[u])
@@ -91,7 +91,7 @@ module.exports = function (t) {
   }, t.exports = c
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
+  function o(t) {
     if (null === t || void 0 === t)throw new TypeError("Object.assign cannot be called with null or undefined");
     return Object(t)
   }
@@ -101,7 +101,7 @@ object-assign
 (c) Sindre Sorhus
 @license MIT
 */
-  var o = Object.getOwnPropertySymbols, a = Object.prototype.hasOwnProperty, i = Object.prototype.propertyIsEnumerable;
+  var r = Object.getOwnPropertySymbols, a = Object.prototype.hasOwnProperty, i = Object.prototype.propertyIsEnumerable;
   t.exports = function () {
     try {
       if (!Object.assign)return !1;
@@ -111,19 +111,19 @@ object-assign
       if ("0123456789" !== Object.getOwnPropertyNames(e).map(function (t) {
           return e[t]
         }).join(""))return !1;
-      var r = {};
+      var o = {};
       return "abcdefghijklmnopqrst".split("").forEach(function (t) {
-        r[t] = t
-      }), "abcdefghijklmnopqrst" === Object.keys(Object.assign({}, r)).join("")
+        o[t] = t
+      }), "abcdefghijklmnopqrst" === Object.keys(Object.assign({}, o)).join("")
     } catch (t) {
       return !1
     }
   }() ? Object.assign : function (t, e) {
-    for (var n, s, u = r(t), l = 1; l < arguments.length; l++) {
+    for (var n, s, u = o(t), l = 1; l < arguments.length; l++) {
       n = Object(arguments[l]);
       for (var c in n)a.call(n, c) && (u[c] = n[c]);
-      if (o) {
-        s = o(n);
+      if (r) {
+        s = r(n);
         for (var p = 0; p < s.length; p++)i.call(n, s[p]) && (u[s[p]] = n[s[p]])
       }
     }
@@ -131,40 +131,40 @@ object-assign
   }
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
-    for (var e = arguments.length - 1, n = "Minified React error #" + t + "; visit http://facebook.github.io/react/docs/error-decoder.html?invariant=" + t, r = 0; r < e; r++)n += "&args[]=" + encodeURIComponent(arguments[r + 1]);
+  function o(t) {
+    for (var e = arguments.length - 1, n = "Minified React error #" + t + "; visit http://facebook.github.io/react/docs/error-decoder.html?invariant=" + t, o = 0; o < e; o++)n += "&args[]=" + encodeURIComponent(arguments[o + 1]);
     n += " for the full message or use the non-minified dev environment for full errors and additional helpful warnings.";
-    var o = new Error(n);
-    throw o.name = "Invariant Violation", o.framesToPop = 1, o
+    var r = new Error(n);
+    throw r.name = "Invariant Violation", r.framesToPop = 1, r
   }
 
-  t.exports = r
-}, function (t, e, n) {
-  "use strict";
-  var r = n(5), o = r;
   t.exports = o
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
+  var o = n(5), r = o;
+  t.exports = r
+}, function (t, e, n) {
+  "use strict";
+  function o(t) {
     return function () {
       return t
     }
   }
 
-  var o = function () {
+  var r = function () {
   };
-  o.thatReturns = r, o.thatReturnsFalse = r(!1), o.thatReturnsTrue = r(!0), o.thatReturnsNull = r(null), o.thatReturnsThis = function () {
+  r.thatReturns = o, r.thatReturnsFalse = o(!1), r.thatReturnsTrue = o(!0), r.thatReturnsNull = o(null), r.thatReturnsThis = function () {
     return this
-  }, o.thatReturnsArgument = function (t) {
+  }, r.thatReturnsArgument = function (t) {
     return t
-  }, t.exports = o
+  }, t.exports = r
 }, function (t, e, n) {
   "use strict";
-  function r(t, e, n) {
+  function o(t, e, n) {
     this.props = t, this.context = e, this.refs = l, this.updater = n || u
   }
 
-  function o(t, e, n) {
+  function r(t, e, n) {
     this.props = t, this.context = e, this.refs = l, this.updater = n || u
   }
 
@@ -173,18 +173,18 @@ object-assign
 
   var i = n(3), s = n(2), u = n(7), l = (n(8), n(9));
   n(0), n(16);
-  r.prototype.isReactComponent = {}, r.prototype.setState = function (t, e) {
+  o.prototype.isReactComponent = {}, o.prototype.setState = function (t, e) {
     "object" != typeof t && "function" != typeof t && null != t && i("85"), this.updater.enqueueSetState(this, t), e && this.updater.enqueueCallback(this, e, "setState")
-  }, r.prototype.forceUpdate = function (t) {
+  }, o.prototype.forceUpdate = function (t) {
     this.updater.enqueueForceUpdate(this), t && this.updater.enqueueCallback(this, t, "forceUpdate")
   };
-  a.prototype = r.prototype, o.prototype = new a, o.prototype.constructor = o, s(o.prototype, r.prototype), o.prototype.isPureReactComponent = !0, t.exports = {
-    Component: r,
-    PureComponent: o
+  a.prototype = o.prototype, r.prototype = new a, r.prototype.constructor = r, s(r.prototype, o.prototype), r.prototype.isPureReactComponent = !0, t.exports = {
+    Component: o,
+    PureComponent: r
   }
 }, function (t, e, n) {
   "use strict";
-  var r = (n(4), {
+  var o = (n(4), {
     isMounted: function (t) {
       return !1
     }, enqueueCallback: function (t, e) {
@@ -193,33 +193,33 @@ object-assign
     }, enqueueSetState: function (t, e) {
     }
   });
-  t.exports = r
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
-  var r = !1;
-  t.exports = r
+  var o = !1;
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
-  var r = {};
-  t.exports = r
+  var o = {};
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
-  var r = { current: null };
-  t.exports = r
+  var o = { current: null };
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
-  var r = "function" == typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103;
-  t.exports = r
+  var o = "function" == typeof Symbol && Symbol.for && Symbol.for("react.element") || 60103;
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
   t.exports = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED"
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
+  function o(t) {
     return t && t.__esModule ? t : { default: t }
   }
 
-  function o(t, e) {
+  function r(t, e) {
     if (!(t instanceof e))throw new TypeError("Cannot call a class as a function")
   }
 
@@ -244,185 +244,208 @@ object-assign
   var s = Object.assign || function (t) {
       for (var e = 1; e < arguments.length; e++) {
         var n = arguments[e];
-        for (var r in n)Object.prototype.hasOwnProperty.call(n, r) && (t[r] = n[r])
+        for (var o in n)Object.prototype.hasOwnProperty.call(n, o) && (t[o] = n[o])
       }
       return t
     }, u = function () {
     function t(t, e) {
       for (var n = 0; n < e.length; n++) {
-        var r = e[n];
-        r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r)
+        var o = e[n];
+        o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(t, o.key, o)
       }
     }
 
-    return function (e, n, r) {
-      return n && t(e.prototype, n), r && t(e, r), e
+    return function (e, n, o) {
+      return n && t(e.prototype, n), o && t(e, o), e
     }
-  }(), l = n(14), c = r(l), p = n(31), f = r(p), d = function (t) {
+  }(), l = n(14), c = o(l), p = n(31), f = o(p), d = function (t) {
     function e() {
-      var t, n, r, i;
-      o(this, e);
+      var t, n, o, i;
+      r(this, e);
       for (var u = arguments.length, l = Array(u), p = 0; p < u; p++)l[p] = arguments[p];
-      return n = r = a(this, (t = e.__proto__ || Object.getPrototypeOf(e)).call.apply(t, [this].concat(l))), r.state = {
+      return n = o = a(this, (t = e.__proto__ || Object.getPrototypeOf(e)).call.apply(t, [this].concat(l))), o.state = {
         showResult: !1,
-        items: r.props.data ? r.props.data.items : [],
-        data: s({}, r.props.data, {
-          title: r.props.data && r.props.data.title,
-          items: r.props.data && r.props.data.items,
-          voters: r.props.data && r.props.data.voters || [],
-          closed: r.props.data && r.props.data.closed || !1
+        items: o.props.data ? o.props.data.items : [],
+        data: s({}, o.props.data, {
+          title: o.props.data && o.props.data.title,
+          items: o.props.data && o.props.data.items,
+          voters: o.props.data && o.props.data.voters || [],
+          closed: o.props.data && o.props.data.closed || !1
         }),
-        isAdmin: r.props.isAdmin,
-        total: r.props.total,
-        expansion: r.props.expansion,
-        voted: r.props.clientId && !r.props.multiple && r.props.data.voters && r.props.data.voters.indexOf(r.props.clientId) > -1 || !1,
-        multiple: r.props.multiple,
+        isAdmin: o.props.isAdmin,
+        total: o.props.total,
+        expansion: o.props.expansion,
+        voted: o.props.clientId && !o.props.multiple && o.props.data.voters && o.props.data.voters.indexOf(o.props.clientId) > -1 || !1,
+        multiple: o.props.multiple,
         showMessage: !1,
         errorMessage: !1,
-        autoClose: r.props.autoClose,
+        autoClose: o.props.autoClose,
         voteTitle: "",
         addInput: "",
         autoCloseNumber: null,
         multipleCheck: !1,
         expansionCheck: !1,
         expansionInput: ""
-      }, r.onVoteTitleChange = function (t) {
-        var e = t.target.value;
-        r.setState(function () {
+      }, o.onVoteTitleChange = function (t) {
+        var e = t.target.value.trim();
+        o.setState(function () {
           return { voteTitle: e }
         })
-      }, r.onAddInputChange = function (t) {
-        var e = t.target.value;
-        r.setState(function () {
+      }, o.onAddInputChange = function (t) {
+        var e = t.target.value.trim();
+        o.setState(function () {
           return { addInput: e }
         })
-      }, r.onMultipleCheckChange = function (t) {
+      }, o.onMultipleCheckChange = function (t) {
         var e = t.target.checked;
-        r.setState(function () {
+        o.setState(function () {
           return { multipleCheck: e }
         })
-      }, r.onExpansionCheckChange = function (t) {
+      }, o.onExpansionCheckChange = function (t) {
         var e = t.target.checked;
-        r.setState(function () {
+        o.setState(function () {
           return { expansionCheck: e }
         })
-      }, r.onAutoCloseChange = function (t) {
-        var e = t.target.value;
-        r.setState(function () {
+      }, o.onAutoCloseChange = function (t) {
+        var e = t.target.value.trim();
+        o.setState(function () {
           return { autoCloseNumber: e }
         })
-      }, r.onExpansionInputChange = function (t) {
-        var e = t.target.value;
-        r.setState(function () {
+      }, o.onExpansionInputChange = function (t) {
+        var e = t.target.value.trim();
+        o.setState(function () {
           return { expansionInput: e }
         })
-      }, r.addItem = function () {
-        var t = r.state.addInput, e = r.state.items;
-        t && t.trim() && (e.push({ title: t, count: 0 }), r.setState(function () {
+      }, o.addItem = function () {
+        var t = o.state.addInput, e = o.state.items;
+        t && (e.push({ title: t, count: 0, total: 0, voters: [] }), o.setState(function () {
           return { items: e, addInput: "" }
         }))
-      }, r.removeItem = function (t) {
-        var e = r.state.items;
+      }, o.removeItem = function (t) {
+        var e = o.state.items;
         e = e.filter(function (e, n) {
           return n !== t
-        }), r.setState(function () {
+        }), o.setState(function () {
           return { items: e }
         })
-      }, r.createVote = function () {
-        var t = r.props, e = t.onCreate, n = t.errorMessage, o = n.noTitle, a = n.notEnoughItems, i = r.state.items,
-          s = r.state.voteTitle, u = r.state.multipleCheck, l = r.state.expansionCheck,
-          c = !!r.state.autoCloseNumber && parseInt(r.state.autoCloseNumber, 10),
+      }, o.createVote = function () {
+        var t = o.props, e = t.onCreate, n = t.errorMessage, r = n.noTitle, a = n.notEnoughItems, i = o.state.items,
+          s = o.state.voteTitle, u = o.state.multipleCheck, l = o.state.expansionCheck,
+          c = !!o.state.autoCloseNumber && parseInt(o.state.autoCloseNumber, 10),
           p = { title: s, items: i, multiple: u, expansion: l, closed: !1 };
-        return c && !Number.isNaN(c) && (p.autoClose = c), s && s.trim() ? !p.expansion && p.items.length < 2 ? r.setState(function () {
+        return c && !Number.isNaN(c) && (p.autoClose = c), s ? !p.expansion && p.items.length < 2 ? o.setState(function () {
           return { showMessage: !0, errorMessage: a }
-        }) : (r.setState(function () {
+        }) : (o.setState(function () {
           return { data: p, showMessage: !1, multiple: u, expansion: l, autoClose: c, items: i }
-        }), !e || "function" != typeof e || e(p.title, p)) : r.setState(function () {
-          return { showMessage: !0, errorMessage: o }
+        }), !e || "function" != typeof e || e(p.title, p)) : o.setState(function () {
+          return { showMessage: !0, errorMessage: r }
         })
-      }, r.expandVote = function () {
-        var t = r.props.onExpand, e = r.state.expansionInput;
-        if (!e || !e.trim())return !1;
-        var n = r.state.data, o = { title: e, count: 0, voters: [] };
-        return n.items.push(o), r.setState(function () {
+      }, o.expandVote = function () {
+        var t = o.props.onExpand, e = o.state.expansionInput;
+        if (!e)return !1;
+        var n = o.state.data,
+          r = { title: e, count: 0, total: 0, voters: [], upvoters: [], downvoters: [], adder: o.props.clientId };
+        return n.items.push(r), o.setState(function () {
           return { data: n, items: n.items, expansionInput: "" }
-        }), !t || "function" != typeof t || t(n.title, o, n)
-      }, r.showResult = function () {
-        r.setState(function () {
-          return { showResult: !0 }
+        }), !t || "function" != typeof t || t(n.title, r, n)
+      }, o.toggleView = function () {
+        o.setState(function (t) {
+          return { showResult: !t.showResult }
         })
-      }, r.showVoting = function () {
-        r.setState(function () {
-          return { showResult: !1 }
-        })
-      }, r.closeVote = function () {
-        var t = r.props.onClose, e = r.state.data;
-        e.closed = !0, r.setState(function () {
+      }, o.closeVote = function () {
+        var t = o.props.onClose, e = o.state.data;
+        e.closed = !0, o.setState(function () {
           return { data: e }
         }), t && "function" == typeof t && t(e.title, e)
-      }, r.resetVote = function () {
-        var t = r.props.onReset, e = r.state.data;
+      }, o.resetVote = function () {
+        var t = o.props.onReset, e = o.state.data;
         e.voters = [], e.items.forEach(function (t) {
-          t.count = 0, t.voters = [], t.voted = !1
-        }), console.log(e), r.setState(function () {
+          t.count = 0, t.total = 0, t.voters = [], t.upvoters = [], t.downvoters = [], t.voted = null
+        }), console.log(e), o.setState(function () {
           return { data: e, voted: !1 }
         }), t && "function" == typeof t && t(e.title, e)
-      }, r.upvote = function (t) {
-        var e = r.state, n = e.items, o = e.data, a = e.autoClose, i = r.props.onUpvote, s = n.reduce(function (t, e) {
-          return t + e.count
+      }, o.upvote = function (t) {
+        var e = o.state, n = e.items, r = e.data, a = e.autoClose, i = o.props.onUpvote, s = n.reduce(function (t, e) {
+          return e.total || (e.total = e.count), t + e.total
         }, 0);
-        n[t].count += 1, n[t].voted = !0;
-        var u = r.props.clientId;
-        n[t].voters || (n[t].voters = []), n[t].voters.push(u), o.items = n, o.voters ? -1 === o.voters.indexOf(u) && o.voters.push(u) : o.voters = [u];
+        n[t].count += 1, n[t].total += 1, n[t].voted = !0;
+        var u = o.props.clientId;
+        n[t].voters || (n[t].voters = [], n[t].downvoters = [], n[t].upvoters = []), n[t].voters.push(u), n[t].upvoters.push(u), r.items = n, r.voters ? -1 === r.voters.indexOf(u) && r.voters.push(u) : r.voters = [u];
         var l = { index: t, item: n[t], voter: u };
-        return r.setState(function () {
-          return { voted: !0, items: n, data: o }
-        }), i && "function" == typeof i && i(o.title, l, o), !(a && s + 1 >= a) || r.closeVote()
-      }, r.renderItems = function (t) {
+        if (o.setState(function () {
+            return { voted: !0, items: n, data: r }
+          }), i && "function" == typeof i && i(r.title, l, r), a) {
+          if (s + 1 >= a)return o.closeVote()
+        }
+        return !0
+      }, o.downvote = function (t) {
+        var e = o.state, n = e.items, r = e.data, a = e.autoClose, i = o.props.onDownvote,
+          s = n.reduce(function (t, e) {
+            return e.total || (e.total = e.count), t + e.total
+          }, 0);
+        n[t].count -= 1, n[t].total += 1, n[t].voted = !0;
+        var u = o.props.clientId;
+        n[t].voters || (n[t].voters = [], n[t].downvoters = [], n[t].upvoters = []), n[t].voters.push(u), n[t].downvoters.push(u), r.items = n, r.voters ? -1 === r.voters.indexOf(u) && r.voters.push(u) : r.voters = [u];
+        var l = { index: t, item: n[t], voter: u };
+        if (o.setState(function () {
+            return { voted: !0, items: n, data: r }
+          }), i && "function" == typeof i && i(r.title, l, r), a) {
+          if (s + 1 >= a)return o.closeVote()
+        }
+        return !0
+      }, o.renderItems = function (t) {
+        var n = o.props, r = n.clientId, a = n.downvote, i = Object.assign({}, e.defaultProps.styles, o.props.styles),
+          s = Object.assign({}, e.defaultProps.text, o.props.text), u = o.state.multiple || !o.state.voted;
         return c.default.createElement("div", null, t.map(function (t, e) {
-          var n = r.props, o = n.styles, a = n.text, i = n.clientId, s = i && t.voters && t.voters.indexOf(i) > -1,
-            u = t.voted || s ? c.default.createElement("span", { className: o.votedText }, a.votedText) : (r.state.multiple || !r.state.voted) && c.default.createElement("button", {
+          var n = r && t.voters && t.voters.indexOf(r) > -1,
+            l = t.voted || n ? c.default.createElement("span", { className: i.votedText }, s.votedText) : u && c.default.createElement("span", { className: i.voteButtons }, c.default.createElement("button", {
                 onClick: function () {
-                  return r.upvote(e)
-                }, className: o.voteButton
-              }, a.voteButtonText);
+                  return o.upvote(e)
+                }, className: i.voteButton
+              }, s.voteButtonText), a && c.default.createElement("button", {
+                  onClick: function () {
+                    return o.downvote(e)
+                  }, className: i.downvoteButton
+                }, s.downvoteButtonText)), p = "react-vote-item-" + e;
           return c.default.createElement("div", {
-            key: "react-vote-item-" + e,
-            className: o.itemWrapper
+            key: p,
+            className: i.itemWrapper
           }, c.default.createElement("div", {
-            className: o.itemTitle,
+            className: i.itemTitle,
             title: t.title
-          }, t.title), r.state.data.title ? u : c.default.createElement("button", {
+          }, t.title), o.state.data.title ? l : c.default.createElement("button", {
             onClick: function () {
-              return r.removeItem(e)
-            }, className: o.removeButton
-          }, a.removeButtonText))
+              return o.removeItem(e)
+            }, className: i.removeButton
+          }, s.removeButtonText))
         }))
-      }, r.renderResult = function (t) {
-        var n = 0, o = t.reduce(function (t, e) {
+      }, o.renderResult = function (t) {
+        var n = t.reduce(function (t, e) {
             return t + e.count
-          }, 0), a = Object.assign({}, e.defaultProps.styles, r.props.styles),
-          i = Object.assign({}, e.defaultProps.text, r.props.text);
-        return c.default.createElement("div", null, c.default.createElement("div", { className: a.voteTitle }, r.state.data.title), c.default.createElement("div", null, t.map(function (t) {
-          var e = 0 === o ? 0 : (t.count / o * 100).toFixed(2), r = c.default.createElement("div", {
-            key: "react-vote-result-" + n,
-            className: a.itemWrapper
+          }, 0), r = Object.assign({}, e.defaultProps.styles, o.props.styles),
+          a = Object.assign({}, e.defaultProps.text, o.props.text), i = t.reduce(function (t, e) {
+            return e.total || (e.total = e.count), t + e.total
+          }, 0), s = n === i ? "" : "(" + i + ")";
+        return c.default.createElement("div", null, c.default.createElement("div", { className: r.voteTitle }, o.state.data.title), c.default.createElement("div", null, t.map(function (t, e) {
+          var o = 0 === n ? 0 : (t.count / n * 100).toFixed(2), a = "react-vote-result-" + e;
+          return c.default.createElement("div", {
+            key: a,
+            className: r.itemWrapper
           }, c.default.createElement("div", {
-            className: a.itemTitle,
+            className: r.itemTitle,
             title: t.title
-          }, t.title), c.default.createElement("div", { className: a.itemCount }, t.count + "(" + e + "%)"));
-          return n += 1, r
-        }), r.state.total && c.default.createElement("div", { className: a.itemWrapper }, c.default.createElement("div", { className: a.itemTitle }, i.totalText), c.default.createElement("div", { className: a.itemCount }, o))), !r.state.data.closed && c.default.createElement("div", { className: a.buttonWrapper }, c.default.createElement("button", {
-            className: a.goBackButton,
-            onClick: r.showVoting
-          }, i.goBackButtonText), r.state.isAdmin && c.default.createElement("button", {
-              className: a.resetButton,
-              onClick: r.resetVote
-            }, i.resetButtonText), r.state.isAdmin && c.default.createElement("button", {
-              className: a.closeButton,
-              onClick: r.closeVote
-            }, i.closeButtonText)))
-      }, i = n, a(r, i)
+          }, t.title), c.default.createElement("div", { className: r.itemCount }, t.count + "(" + o + "%)"))
+        }), o.state.total && c.default.createElement("div", { className: r.itemWrapper }, c.default.createElement("div", { className: r.itemTitle }, a.totalText), c.default.createElement("div", { className: r.itemCount }, n, s))), !o.state.data.closed && c.default.createElement("div", { className: r.buttonWrapper }, c.default.createElement("button", {
+            className: r.goBackButton,
+            onClick: o.toggleView
+          }, a.goBackButtonText), o.state.isAdmin && c.default.createElement("button", {
+              className: r.resetButton,
+              onClick: o.resetVote
+            }, a.resetButtonText), o.state.isAdmin && c.default.createElement("button", {
+              className: r.closeButton,
+              onClick: o.closeVote
+            }, a.closeButtonText)))
+      }, i = n, a(o, i)
     }
 
     return i(e, t), u(e, [{
@@ -477,27 +500,27 @@ object-assign
     }, {
       key: "render", value: function () {
         var t = this.state.data.closed, n = this.state.data.title && (t || this.state.showResult),
-          r = this.state.expansion && (!this.state.voted || this.state.multiple),
-          o = Object.assign({}, e.defaultProps.text, this.props.text),
+          o = this.state.expansion && (!this.state.voted || this.state.multiple),
+          r = Object.assign({}, e.defaultProps.text, this.props.text),
           a = Object.assign({}, e.defaultProps.styles, this.props.styles),
-          i = n ? this.renderResult(this.state.items) : c.default.createElement("div", null, c.default.createElement("div", { className: a.voteTitle }, this.state.data.title), this.renderItems(this.state.items), r && c.default.createElement("div", { className: a.itemWrapper }, c.default.createElement("input", {
+          i = n ? this.renderResult(this.state.items) : c.default.createElement("div", null, c.default.createElement("div", { className: a.voteTitle }, this.state.data.title), this.renderItems(this.state.items), o && c.default.createElement("div", { className: a.itemWrapper }, c.default.createElement("input", {
               className: a.expansionInput,
               value: this.state.expansionInput,
               onChange: this.onExpansionInputChange,
-              placeholder: o.expansionPlaceholder
+              placeholder: r.expansionPlaceholder
             }), c.default.createElement("button", {
               className: a.expansionButton,
               onClick: this.expandVote
-            }, o.expansionButtonText)), c.default.createElement("div", { className: a.buttonWrapper }, c.default.createElement("button", {
+            }, r.expansionButtonText)), c.default.createElement("div", { className: a.buttonWrapper }, c.default.createElement("button", {
             className: a.resultButton,
-            onClick: this.showResult
-          }, o.resultButtonText), this.state.isAdmin && c.default.createElement("button", {
+            onClick: this.toggleView
+          }, r.resultButtonText), this.state.isAdmin && c.default.createElement("button", {
               className: a.resetButton,
               onClick: this.resetVote
-            }, o.resetButtonText), this.state.isAdmin && c.default.createElement("button", {
+            }, r.resetButtonText), this.state.isAdmin && c.default.createElement("button", {
               className: a.closeButton,
               onClick: this.closeVote
-            }, o.closeButtonText)));
+            }, r.closeButtonText)));
         return c.default.createElement("div", { className: a.voteWrapper }, this.state.data.title ? i : this.renderCreationView())
       }
     }]), e
@@ -514,6 +537,7 @@ object-assign
       closed: f.default.bool,
       autoClose: f.default.number
     }),
+    downvote: f.default.bool,
     autoClose: f.default.number,
     expansion: f.default.bool,
     styles: f.default.shape({
@@ -531,7 +555,9 @@ object-assign
       createButton: f.default.string,
       resultButton: f.default.string,
       goBackButton: f.default.string,
+      voteButtons: f.default.string,
       voteButton: f.default.string,
+      downvoteButton: f.default.string,
       closeButton: f.default.string,
       resetButton: f.default.string,
       errorMessage: f.default.string,
@@ -541,6 +567,7 @@ object-assign
     }),
     onCreate: f.default.func,
     onUpvote: f.default.func,
+    onDownvote: f.default.func,
     onExpand: f.default.func,
     onReset: f.default.func,
     onClose: f.default.func,
@@ -555,6 +582,7 @@ object-assign
       resultButtonText: f.default.string,
       goBackButtonText: f.default.string,
       voteButtonText: f.default.string,
+      downvoteButtonText: f.default.string,
       votedText: f.default.string,
       totalText: f.default.string,
       multipleCheckbox: f.default.string,
@@ -572,24 +600,27 @@ object-assign
     expansion: !1,
     voted: !1,
     clientId: null,
+    downvote: !1,
     data: null,
     autoClose: null,
     onCreate: null,
     onUpvote: null,
+    onDownvote: null,
     onExpand: null,
     onClose: null,
     onReset: null,
     text: {
       addButtonText: "Add",
       titleInputPlaceholder: "Title of this vote",
-      addInputPlaceholder: "Type title of new option here",
+      addInputPlaceholder: "Title of a new option",
       removeButtonText: "×",
       closeButtonText: "Close vote",
       resetButtonText: "Reset vote",
       createButtonText: "Create",
       resultButtonText: "Show result",
       goBackButtonText: "Go back to vote",
-      voteButtonText: "Vote",
+      voteButtonText: "Upvote",
+      downvoteButtonText: "Downvote",
       votedText: "Voted",
       totalText: "Total",
       multipleCheckbox: "Multiple choice?",
@@ -607,13 +638,13 @@ object-assign
   t.exports = n(15)
 }, function (t, e, n) {
   "use strict";
-  var r = n(2), o = n(6), a = n(17), i = n(22), s = n(1), u = n(23), l = n(27), c = n(28), p = n(30),
-    f = s.createElement, d = s.createFactory, m = s.cloneElement, h = r, v = function (t) {
+  var o = n(2), r = n(6), a = n(17), i = n(22), s = n(1), u = n(23), l = n(27), c = n(28), p = n(30),
+    f = s.createElement, d = s.createFactory, m = s.cloneElement, h = o, v = function (t) {
       return t
     }, y = {
       Children: { map: a.map, forEach: a.forEach, count: a.count, toArray: a.toArray, only: p },
-      Component: o.Component,
-      PureComponent: o.PureComponent,
+      Component: r.Component,
+      PureComponent: r.PureComponent,
       createElement: f,
       cloneElement: m,
       isValidElement: s.isValidElement,
@@ -628,50 +659,50 @@ object-assign
   t.exports = y
 }, function (t, e, n) {
   "use strict";
-  var r = function () {
+  var o = function () {
   };
-  t.exports = r
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
+  function o(t) {
     return ("" + t).replace(x, "$&/")
   }
 
-  function o(t, e) {
+  function r(t, e) {
     this.func = t, this.context = e, this.count = 0
   }
 
   function a(t, e, n) {
-    var r = t.func, o = t.context;
-    r.call(o, e, t.count++)
+    var o = t.func, r = t.context;
+    o.call(r, e, t.count++)
   }
 
   function i(t, e, n) {
     if (null == t)return t;
-    var r = o.getPooled(e, n);
-    y(t, a, r), o.release(r)
+    var o = r.getPooled(e, n);
+    y(t, a, o), r.release(o)
   }
 
-  function s(t, e, n, r) {
-    this.result = t, this.keyPrefix = e, this.func = n, this.context = r, this.count = 0
+  function s(t, e, n, o) {
+    this.result = t, this.keyPrefix = e, this.func = n, this.context = o, this.count = 0
   }
 
   function u(t, e, n) {
-    var o = t.result, a = t.keyPrefix, i = t.func, s = t.context, u = i.call(s, e, t.count++);
-    Array.isArray(u) ? l(u, o, n, v.thatReturnsArgument) : null != u && (h.isValidElement(u) && (u = h.cloneAndReplaceKey(u, a + (!u.key || e && e.key === u.key ? "" : r(u.key) + "/") + n)), o.push(u))
+    var r = t.result, a = t.keyPrefix, i = t.func, s = t.context, u = i.call(s, e, t.count++);
+    Array.isArray(u) ? l(u, r, n, v.thatReturnsArgument) : null != u && (h.isValidElement(u) && (u = h.cloneAndReplaceKey(u, a + (!u.key || e && e.key === u.key ? "" : o(u.key) + "/") + n)), r.push(u))
   }
 
-  function l(t, e, n, o, a) {
+  function l(t, e, n, r, a) {
     var i = "";
-    null != n && (i = r(n) + "/");
-    var l = s.getPooled(e, i, o, a);
+    null != n && (i = o(n) + "/");
+    var l = s.getPooled(e, i, r, a);
     y(t, u, l), s.release(l)
   }
 
   function c(t, e, n) {
     if (null == t)return t;
-    var r = [];
-    return l(t, r, null, e, n), r
+    var o = [];
+    return l(t, o, null, e, n), o
   }
 
   function p(t, e, n) {
@@ -688,16 +719,16 @@ object-assign
   }
 
   var m = n(18), h = n(1), v = n(5), y = n(19), g = m.twoArgumentPooler, b = m.fourArgumentPooler, x = /\/+/g;
-  o.prototype.destructor = function () {
+  r.prototype.destructor = function () {
     this.func = null, this.context = null, this.count = 0
-  }, m.addPoolingTo(o, g), s.prototype.destructor = function () {
+  }, m.addPoolingTo(r, g), s.prototype.destructor = function () {
     this.result = null, this.keyPrefix = null, this.func = null, this.context = null, this.count = 0
   }, m.addPoolingTo(s, b);
   var E = { forEach: i, map: c, mapIntoWithKeyPrefixInternal: l, count: f, toArray: d };
   t.exports = E
 }, function (t, e, n) {
   "use strict";
-  var r = n(3), o = (n(0), function (t) {
+  var o = n(3), r = (n(0), function (t) {
     var e = this;
     if (e.instancePool.length) {
       var n = e.instancePool.pop();
@@ -707,49 +738,49 @@ object-assign
   }), a = function (t, e) {
     var n = this;
     if (n.instancePool.length) {
-      var r = n.instancePool.pop();
-      return n.call(r, t, e), r
+      var o = n.instancePool.pop();
+      return n.call(o, t, e), o
     }
     return new n(t, e)
   }, i = function (t, e, n) {
-    var r = this;
-    if (r.instancePool.length) {
-      var o = r.instancePool.pop();
-      return r.call(o, t, e, n), o
-    }
-    return new r(t, e, n)
-  }, s = function (t, e, n, r) {
     var o = this;
     if (o.instancePool.length) {
-      var a = o.instancePool.pop();
-      return o.call(a, t, e, n, r), a
+      var r = o.instancePool.pop();
+      return o.call(r, t, e, n), r
     }
-    return new o(t, e, n, r)
+    return new o(t, e, n)
+  }, s = function (t, e, n, o) {
+    var r = this;
+    if (r.instancePool.length) {
+      var a = r.instancePool.pop();
+      return r.call(a, t, e, n, o), a
+    }
+    return new r(t, e, n, o)
   }, u = function (t) {
     var e = this;
-    t instanceof e || r("25"), t.destructor(), e.instancePool.length < e.poolSize && e.instancePool.push(t)
-  }, l = o, c = function (t, e) {
+    t instanceof e || o("25"), t.destructor(), e.instancePool.length < e.poolSize && e.instancePool.push(t)
+  }, l = r, c = function (t, e) {
     var n = t;
     return n.instancePool = [], n.getPooled = e || l, n.poolSize || (n.poolSize = 10), n.release = u, n
-  }, p = { addPoolingTo: c, oneArgumentPooler: o, twoArgumentPooler: a, threeArgumentPooler: i, fourArgumentPooler: s };
+  }, p = { addPoolingTo: c, oneArgumentPooler: r, twoArgumentPooler: a, threeArgumentPooler: i, fourArgumentPooler: s };
   t.exports = p
 }, function (t, e, n) {
   "use strict";
-  function r(t, e) {
+  function o(t, e) {
     return t && "object" == typeof t && null != t.key ? l.escape(t.key) : e.toString(36)
   }
 
-  function o(t, e, n, a) {
+  function r(t, e, n, a) {
     var f = typeof t;
-    if ("undefined" !== f && "boolean" !== f || (t = null), null === t || "string" === f || "number" === f || "object" === f && t.$$typeof === s)return n(a, t, "" === e ? c + r(t, 0) : e), 1;
+    if ("undefined" !== f && "boolean" !== f || (t = null), null === t || "string" === f || "number" === f || "object" === f && t.$$typeof === s)return n(a, t, "" === e ? c + o(t, 0) : e), 1;
     var d, m, h = 0, v = "" === e ? c : e + p;
-    if (Array.isArray(t))for (var y = 0; y < t.length; y++)d = t[y], m = v + r(d, y), h += o(d, m, n, a); else {
+    if (Array.isArray(t))for (var y = 0; y < t.length; y++)d = t[y], m = v + o(d, y), h += r(d, m, n, a); else {
       var g = u(t);
       if (g) {
         var b, x = g.call(t);
-        if (g !== t.entries)for (var E = 0; !(b = x.next()).done;)d = b.value, m = v + r(d, E++), h += o(d, m, n, a); else for (; !(b = x.next()).done;) {
+        if (g !== t.entries)for (var E = 0; !(b = x.next()).done;)d = b.value, m = v + o(d, E++), h += r(d, m, n, a); else for (; !(b = x.next()).done;) {
           var C = b.value;
-          C && (d = C[1], m = v + l.escape(C[0]) + p + r(d, 0), h += o(d, m, n, a))
+          C && (d = C[1], m = v + l.escape(C[0]) + p + o(d, 0), h += r(d, m, n, a))
         }
       } else if ("object" === f) {
         var P = "", T = String(t);
@@ -760,191 +791,191 @@ object-assign
   }
 
   function a(t, e, n) {
-    return null == t ? 0 : o(t, "", e, n)
+    return null == t ? 0 : r(t, "", e, n)
   }
 
   var i = n(3), s = (n(10), n(11)), u = n(20), l = (n(0), n(21)), c = (n(4), "."), p = ":";
   t.exports = a
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
-    var e = t && (o && t[o] || t[a]);
+  function o(t) {
+    var e = t && (r && t[r] || t[a]);
     if ("function" == typeof e)return e
   }
 
-  var o = "function" == typeof Symbol && Symbol.iterator, a = "@@iterator";
-  t.exports = r
+  var r = "function" == typeof Symbol && Symbol.iterator, a = "@@iterator";
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
+  function o(t) {
     var e = { "=": "=0", ":": "=2" };
     return "$" + ("" + t).replace(/[=:]/g, function (t) {
         return e[t]
       })
   }
 
-  function o(t) {
+  function r(t) {
     var e = /(=0|=2)/g, n = { "=0": "=", "=2": ":" };
     return ("" + ("." === t[0] && "$" === t[1] ? t.substring(2) : t.substring(1))).replace(e, function (t) {
       return n[t]
     })
   }
 
-  var a = { escape: r, unescape: o };
+  var a = { escape: o, unescape: r };
   t.exports = a
 }, function (t, e, n) {
   "use strict";
-  var r = n(1), o = r.createFactory, a = {
-    a: o("a"),
-    abbr: o("abbr"),
-    address: o("address"),
-    area: o("area"),
-    article: o("article"),
-    aside: o("aside"),
-    audio: o("audio"),
-    b: o("b"),
-    base: o("base"),
-    bdi: o("bdi"),
-    bdo: o("bdo"),
-    big: o("big"),
-    blockquote: o("blockquote"),
-    body: o("body"),
-    br: o("br"),
-    button: o("button"),
-    canvas: o("canvas"),
-    caption: o("caption"),
-    cite: o("cite"),
-    code: o("code"),
-    col: o("col"),
-    colgroup: o("colgroup"),
-    data: o("data"),
-    datalist: o("datalist"),
-    dd: o("dd"),
-    del: o("del"),
-    details: o("details"),
-    dfn: o("dfn"),
-    dialog: o("dialog"),
-    div: o("div"),
-    dl: o("dl"),
-    dt: o("dt"),
-    em: o("em"),
-    embed: o("embed"),
-    fieldset: o("fieldset"),
-    figcaption: o("figcaption"),
-    figure: o("figure"),
-    footer: o("footer"),
-    form: o("form"),
-    h1: o("h1"),
-    h2: o("h2"),
-    h3: o("h3"),
-    h4: o("h4"),
-    h5: o("h5"),
-    h6: o("h6"),
-    head: o("head"),
-    header: o("header"),
-    hgroup: o("hgroup"),
-    hr: o("hr"),
-    html: o("html"),
-    i: o("i"),
-    iframe: o("iframe"),
-    img: o("img"),
-    input: o("input"),
-    ins: o("ins"),
-    kbd: o("kbd"),
-    keygen: o("keygen"),
-    label: o("label"),
-    legend: o("legend"),
-    li: o("li"),
-    link: o("link"),
-    main: o("main"),
-    map: o("map"),
-    mark: o("mark"),
-    menu: o("menu"),
-    menuitem: o("menuitem"),
-    meta: o("meta"),
-    meter: o("meter"),
-    nav: o("nav"),
-    noscript: o("noscript"),
-    object: o("object"),
-    ol: o("ol"),
-    optgroup: o("optgroup"),
-    option: o("option"),
-    output: o("output"),
-    p: o("p"),
-    param: o("param"),
-    picture: o("picture"),
-    pre: o("pre"),
-    progress: o("progress"),
-    q: o("q"),
-    rp: o("rp"),
-    rt: o("rt"),
-    ruby: o("ruby"),
-    s: o("s"),
-    samp: o("samp"),
-    script: o("script"),
-    section: o("section"),
-    select: o("select"),
-    small: o("small"),
-    source: o("source"),
-    span: o("span"),
-    strong: o("strong"),
-    style: o("style"),
-    sub: o("sub"),
-    summary: o("summary"),
-    sup: o("sup"),
-    table: o("table"),
-    tbody: o("tbody"),
-    td: o("td"),
-    textarea: o("textarea"),
-    tfoot: o("tfoot"),
-    th: o("th"),
-    thead: o("thead"),
-    time: o("time"),
-    title: o("title"),
-    tr: o("tr"),
-    track: o("track"),
-    u: o("u"),
-    ul: o("ul"),
-    var: o("var"),
-    video: o("video"),
-    wbr: o("wbr"),
-    circle: o("circle"),
-    clipPath: o("clipPath"),
-    defs: o("defs"),
-    ellipse: o("ellipse"),
-    g: o("g"),
-    image: o("image"),
-    line: o("line"),
-    linearGradient: o("linearGradient"),
-    mask: o("mask"),
-    path: o("path"),
-    pattern: o("pattern"),
-    polygon: o("polygon"),
-    polyline: o("polyline"),
-    radialGradient: o("radialGradient"),
-    rect: o("rect"),
-    stop: o("stop"),
-    svg: o("svg"),
-    text: o("text"),
-    tspan: o("tspan")
+  var o = n(1), r = o.createFactory, a = {
+    a: r("a"),
+    abbr: r("abbr"),
+    address: r("address"),
+    area: r("area"),
+    article: r("article"),
+    aside: r("aside"),
+    audio: r("audio"),
+    b: r("b"),
+    base: r("base"),
+    bdi: r("bdi"),
+    bdo: r("bdo"),
+    big: r("big"),
+    blockquote: r("blockquote"),
+    body: r("body"),
+    br: r("br"),
+    button: r("button"),
+    canvas: r("canvas"),
+    caption: r("caption"),
+    cite: r("cite"),
+    code: r("code"),
+    col: r("col"),
+    colgroup: r("colgroup"),
+    data: r("data"),
+    datalist: r("datalist"),
+    dd: r("dd"),
+    del: r("del"),
+    details: r("details"),
+    dfn: r("dfn"),
+    dialog: r("dialog"),
+    div: r("div"),
+    dl: r("dl"),
+    dt: r("dt"),
+    em: r("em"),
+    embed: r("embed"),
+    fieldset: r("fieldset"),
+    figcaption: r("figcaption"),
+    figure: r("figure"),
+    footer: r("footer"),
+    form: r("form"),
+    h1: r("h1"),
+    h2: r("h2"),
+    h3: r("h3"),
+    h4: r("h4"),
+    h5: r("h5"),
+    h6: r("h6"),
+    head: r("head"),
+    header: r("header"),
+    hgroup: r("hgroup"),
+    hr: r("hr"),
+    html: r("html"),
+    i: r("i"),
+    iframe: r("iframe"),
+    img: r("img"),
+    input: r("input"),
+    ins: r("ins"),
+    kbd: r("kbd"),
+    keygen: r("keygen"),
+    label: r("label"),
+    legend: r("legend"),
+    li: r("li"),
+    link: r("link"),
+    main: r("main"),
+    map: r("map"),
+    mark: r("mark"),
+    menu: r("menu"),
+    menuitem: r("menuitem"),
+    meta: r("meta"),
+    meter: r("meter"),
+    nav: r("nav"),
+    noscript: r("noscript"),
+    object: r("object"),
+    ol: r("ol"),
+    optgroup: r("optgroup"),
+    option: r("option"),
+    output: r("output"),
+    p: r("p"),
+    param: r("param"),
+    picture: r("picture"),
+    pre: r("pre"),
+    progress: r("progress"),
+    q: r("q"),
+    rp: r("rp"),
+    rt: r("rt"),
+    ruby: r("ruby"),
+    s: r("s"),
+    samp: r("samp"),
+    script: r("script"),
+    section: r("section"),
+    select: r("select"),
+    small: r("small"),
+    source: r("source"),
+    span: r("span"),
+    strong: r("strong"),
+    style: r("style"),
+    sub: r("sub"),
+    summary: r("summary"),
+    sup: r("sup"),
+    table: r("table"),
+    tbody: r("tbody"),
+    td: r("td"),
+    textarea: r("textarea"),
+    tfoot: r("tfoot"),
+    th: r("th"),
+    thead: r("thead"),
+    time: r("time"),
+    title: r("title"),
+    tr: r("tr"),
+    track: r("track"),
+    u: r("u"),
+    ul: r("ul"),
+    var: r("var"),
+    video: r("video"),
+    wbr: r("wbr"),
+    circle: r("circle"),
+    clipPath: r("clipPath"),
+    defs: r("defs"),
+    ellipse: r("ellipse"),
+    g: r("g"),
+    image: r("image"),
+    line: r("line"),
+    linearGradient: r("linearGradient"),
+    mask: r("mask"),
+    path: r("path"),
+    pattern: r("pattern"),
+    polygon: r("polygon"),
+    polyline: r("polyline"),
+    radialGradient: r("radialGradient"),
+    rect: r("rect"),
+    stop: r("stop"),
+    svg: r("svg"),
+    text: r("text"),
+    tspan: r("tspan")
   };
   t.exports = a
 }, function (t, e, n) {
   "use strict";
-  var r = n(1), o = r.isValidElement, a = n(24);
-  t.exports = a(o)
+  var o = n(1), r = o.isValidElement, a = n(24);
+  t.exports = a(r)
 }, function (t, e, n) {
   "use strict";
-  var r = n(25);
+  var o = n(25);
   t.exports = function (t) {
-    return r(t, !1)
+    return o(t, !1)
   }
 }, function (t, e, n) {
   "use strict";
-  var r = n(5), o = n(0), a = n(4), i = n(12), s = n(26);
+  var o = n(5), r = n(0), a = n(4), i = n(12), s = n(26);
   t.exports = function (t, e) {
     function n(t) {
-      var e = t && (T && t[T] || t[k]);
+      var e = t && (T && t[T] || t[w]);
       if ("function" == typeof e)return e
     }
 
@@ -957,19 +988,19 @@ object-assign
     }
 
     function c(t) {
-      function n(n, r, a, s, u, c, p) {
-        if (s = s || N, c = c || a, p !== i)if (e) o(!1, "Calling PropTypes validators directly is not supported by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at http://fb.me/use-check-prop-types"); else;
-        return null == r[a] ? n ? new l(null === r[a] ? "The " + u + " `" + c + "` is marked as required in `" + s + "`, but its value is `null`." : "The " + u + " `" + c + "` is marked as required in `" + s + "`, but its value is `undefined`.") : null : t(r, a, s, u, c)
+      function n(n, o, a, s, u, c, p) {
+        if (s = s || k, c = c || a, p !== i)if (e) r(!1, "Calling PropTypes validators directly is not supported by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at http://fb.me/use-check-prop-types"); else;
+        return null == o[a] ? n ? new l(null === o[a] ? "The " + u + " `" + c + "` is marked as required in `" + s + "`, but its value is `null`." : "The " + u + " `" + c + "` is marked as required in `" + s + "`, but its value is `undefined`.") : null : t(o, a, s, u, c)
       }
 
-      var r = n.bind(null, !1);
-      return r.isRequired = n.bind(null, !0), r
+      var o = n.bind(null, !1);
+      return o.isRequired = n.bind(null, !0), o
     }
 
     function p(t) {
-      function e(e, n, r, o, a, i) {
+      function e(e, n, o, r, a, i) {
         var s = e[n];
-        if (x(s) !== t)return new l("Invalid " + o + " `" + a + "` of type `" + E(s) + "` supplied to `" + r + "`, expected `" + t + "`.");
+        if (x(s) !== t)return new l("Invalid " + r + " `" + a + "` of type `" + E(s) + "` supplied to `" + o + "`, expected `" + t + "`.");
         return null
       }
 
@@ -977,14 +1008,14 @@ object-assign
     }
 
     function f(t) {
-      function e(e, n, r, o, a) {
-        if ("function" != typeof t)return new l("Property `" + a + "` of component `" + r + "` has invalid PropType notation inside arrayOf.");
+      function e(e, n, o, r, a) {
+        if ("function" != typeof t)return new l("Property `" + a + "` of component `" + o + "` has invalid PropType notation inside arrayOf.");
         var s = e[n];
         if (!Array.isArray(s)) {
-          return new l("Invalid " + o + " `" + a + "` of type `" + x(s) + "` supplied to `" + r + "`, expected an array.")
+          return new l("Invalid " + r + " `" + a + "` of type `" + x(s) + "` supplied to `" + o + "`, expected an array.")
         }
         for (var u = 0; u < s.length; u++) {
-          var c = t(s, u, r, o, a + "[" + u + "]", i);
+          var c = t(s, u, o, r, a + "[" + u + "]", i);
           if (c instanceof Error)return c
         }
         return null
@@ -994,10 +1025,10 @@ object-assign
     }
 
     function d(t) {
-      function e(e, n, r, o, a) {
+      function e(e, n, o, r, a) {
         if (!(e[n] instanceof t)) {
-          var i = t.name || N;
-          return new l("Invalid " + o + " `" + a + "` of type `" + P(e[n]) + "` supplied to `" + r + "`, expected instance of `" + i + "`.")
+          var i = t.name || k;
+          return new l("Invalid " + r + " `" + a + "` of type `" + P(e[n]) + "` supplied to `" + o + "`, expected instance of `" + i + "`.")
         }
         return null
       }
@@ -1006,21 +1037,21 @@ object-assign
     }
 
     function m(t) {
-      function e(e, n, r, o, a) {
+      function e(e, n, o, r, a) {
         for (var i = e[n], s = 0; s < t.length; s++)if (u(i, t[s]))return null;
-        return new l("Invalid " + o + " `" + a + "` of value `" + i + "` supplied to `" + r + "`, expected one of " + JSON.stringify(t) + ".")
+        return new l("Invalid " + r + " `" + a + "` of value `" + i + "` supplied to `" + o + "`, expected one of " + JSON.stringify(t) + ".")
       }
 
-      return Array.isArray(t) ? c(e) : r.thatReturnsNull
+      return Array.isArray(t) ? c(e) : o.thatReturnsNull
     }
 
     function h(t) {
-      function e(e, n, r, o, a) {
-        if ("function" != typeof t)return new l("Property `" + a + "` of component `" + r + "` has invalid PropType notation inside objectOf.");
+      function e(e, n, o, r, a) {
+        if ("function" != typeof t)return new l("Property `" + a + "` of component `" + o + "` has invalid PropType notation inside objectOf.");
         var s = e[n], u = x(s);
-        if ("object" !== u)return new l("Invalid " + o + " `" + a + "` of type `" + u + "` supplied to `" + r + "`, expected an object.");
+        if ("object" !== u)return new l("Invalid " + r + " `" + a + "` of type `" + u + "` supplied to `" + o + "`, expected an object.");
         for (var c in s)if (s.hasOwnProperty(c)) {
-          var p = t(s, c, r, o, a + "." + c, i);
+          var p = t(s, c, o, r, a + "." + c, i);
           if (p instanceof Error)return p
         }
         return null
@@ -1030,29 +1061,29 @@ object-assign
     }
 
     function v(t) {
-      function e(e, n, r, o, a) {
+      function e(e, n, o, r, a) {
         for (var s = 0; s < t.length; s++) {
-          if (null == (0, t[s])(e, n, r, o, a, i))return null
+          if (null == (0, t[s])(e, n, o, r, a, i))return null
         }
-        return new l("Invalid " + o + " `" + a + "` supplied to `" + r + "`.")
+        return new l("Invalid " + r + " `" + a + "` supplied to `" + o + "`.")
       }
 
-      if (!Array.isArray(t))return r.thatReturnsNull;
+      if (!Array.isArray(t))return o.thatReturnsNull;
       for (var n = 0; n < t.length; n++) {
-        var o = t[n];
-        if ("function" != typeof o)return a(!1, "Invalid argument supplid to oneOfType. Expected an array of check functions, but received %s at index %s.", C(o), n), r.thatReturnsNull
+        var r = t[n];
+        if ("function" != typeof r)return a(!1, "Invalid argument supplid to oneOfType. Expected an array of check functions, but received %s at index %s.", C(r), n), o.thatReturnsNull
       }
       return c(e)
     }
 
     function y(t) {
-      function e(e, n, r, o, a) {
+      function e(e, n, o, r, a) {
         var s = e[n], u = x(s);
-        if ("object" !== u)return new l("Invalid " + o + " `" + a + "` of type `" + u + "` supplied to `" + r + "`, expected `object`.");
+        if ("object" !== u)return new l("Invalid " + r + " `" + a + "` of type `" + u + "` supplied to `" + o + "`, expected `object`.");
         for (var c in t) {
           var p = t[c];
           if (p) {
-            var f = p(s, c, r, o, a + "." + c, i);
+            var f = p(s, c, o, r, a + "." + c, i);
             if (f)return f
           }
         }
@@ -1073,13 +1104,13 @@ object-assign
         case"object":
           if (Array.isArray(e))return e.every(g);
           if (null === e || t(e))return !0;
-          var r = n(e);
-          if (!r)return !1;
-          var o, a = r.call(e);
-          if (r !== e.entries) {
-            for (; !(o = a.next()).done;)if (!g(o.value))return !1
-          } else for (; !(o = a.next()).done;) {
-            var i = o.value;
+          var o = n(e);
+          if (!o)return !1;
+          var r, a = o.call(e);
+          if (o !== e.entries) {
+            for (; !(r = a.next()).done;)if (!g(r.value))return !1
+          } else for (; !(r = a.next()).done;) {
+            var i = r.value;
             if (i && !g(i[1]))return !1
           }
           return !0;
@@ -1123,10 +1154,10 @@ object-assign
     }
 
     function P(t) {
-      return t.constructor && t.constructor.name ? t.constructor.name : N
+      return t.constructor && t.constructor.name ? t.constructor.name : k
     }
 
-    var T = "function" == typeof Symbol && Symbol.iterator, k = "@@iterator", N = "<<anonymous>>", I = {
+    var T = "function" == typeof Symbol && Symbol.iterator, w = "@@iterator", k = "<<anonymous>>", N = {
       array: p("array"),
       bool: p("boolean"),
       func: p("function"),
@@ -1135,14 +1166,14 @@ object-assign
       string: p("string"),
       symbol: p("symbol"),
       any: function () {
-        return c(r.thatReturnsNull)
+        return c(o.thatReturnsNull)
       }(),
       arrayOf: f,
       element: function () {
-        function e(e, n, r, o, a) {
+        function e(e, n, o, r, a) {
           var i = e[n];
           if (!t(i)) {
-            return new l("Invalid " + o + " `" + a + "` of type `" + x(i) + "` supplied to `" + r + "`, expected a single ReactElement.")
+            return new l("Invalid " + r + " `" + a + "` of type `" + x(i) + "` supplied to `" + o + "`, expected a single ReactElement.")
           }
           return null
         }
@@ -1151,8 +1182,8 @@ object-assign
       }(),
       instanceOf: d,
       node: function () {
-        function t(t, e, n, r, o) {
-          return g(t[e]) ? null : new l("Invalid " + r + " `" + o + "` supplied to `" + n + "`, expected a ReactNode.")
+        function t(t, e, n, o, r) {
+          return g(t[e]) ? null : new l("Invalid " + o + " `" + r + "` supplied to `" + n + "`, expected a ReactNode.")
         }
 
         return c(t)
@@ -1162,29 +1193,29 @@ object-assign
       oneOfType: v,
       shape: y
     };
-    return l.prototype = Error.prototype, I.checkPropTypes = s, I.PropTypes = I, I
+    return l.prototype = Error.prototype, N.checkPropTypes = s, N.PropTypes = N, N
   }
 }, function (t, e, n) {
   "use strict";
-  function r(t, e, n, r, o) {
+  function o(t, e, n, o, r) {
   }
 
-  t.exports = r
+  t.exports = o
 }, function (t, e, n) {
   "use strict";
   t.exports = "15.6.1"
 }, function (t, e, n) {
   "use strict";
-  var r = n(6), o = r.Component, a = n(1), i = a.isValidElement, s = n(7), u = n(29);
-  t.exports = u(o, i, s)
+  var o = n(6), r = o.Component, a = n(1), i = a.isValidElement, s = n(7), u = n(29);
+  t.exports = u(r, i, s)
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
+  function o(t) {
     return t
   }
 
-  function o(t, e, n) {
-    function o(t, e) {
+  function r(t, e, n) {
+    function r(t, e) {
       var n = g.hasOwnProperty(e) ? g[e] : null;
       C.hasOwnProperty(e) && s("OVERRIDE_BASE" === n, "ReactClassInterface: You are attempting to override `%s` from your class specification. Ensure that your method names do not overlap with React methods.", e), t && s("DEFINE_MANY" === n || "DEFINE_MANY_MERGED" === n, "ReactClassInterface: You are attempting to define `%s` on your component more than once. This conflict may be due to a mixin.", e)
     }
@@ -1192,16 +1223,16 @@ object-assign
     function l(t, n) {
       if (n) {
         s("function" != typeof n, "ReactClass: You're attempting to use a component class or function as a mixin. Instead, just use a regular object."), s(!e(n), "ReactClass: You're attempting to use a component as a mixin. Instead, just use a regular object.");
-        var r = t.prototype, a = r.__reactAutoBindPairs;
+        var o = t.prototype, a = o.__reactAutoBindPairs;
         n.hasOwnProperty(u) && b.mixins(t, n.mixins);
         for (var i in n)if (n.hasOwnProperty(i) && i !== u) {
-          var l = n[i], c = r.hasOwnProperty(i);
-          if (o(c, i), b.hasOwnProperty(i)) b[i](t, l); else {
+          var l = n[i], c = o.hasOwnProperty(i);
+          if (r(c, i), b.hasOwnProperty(i)) b[i](t, l); else {
             var p = g.hasOwnProperty(i), m = "function" == typeof l, h = m && !p && !c && !1 !== n.autobind;
-            if (h) a.push(i, l), r[i] = l; else if (c) {
+            if (h) a.push(i, l), o[i] = l; else if (c) {
               var v = g[i];
-              s(p && ("DEFINE_MANY_MERGED" === v || "DEFINE_MANY" === v), "ReactClass: Unexpected spec policy %s for key %s when mixing in component specs.", v, i), "DEFINE_MANY_MERGED" === v ? r[i] = f(r[i], l) : "DEFINE_MANY" === v && (r[i] = d(r[i], l))
-            } else r[i] = l
+              s(p && ("DEFINE_MANY_MERGED" === v || "DEFINE_MANY" === v), "ReactClass: Unexpected spec policy %s for key %s when mixing in component specs.", v, i), "DEFINE_MANY_MERGED" === v ? o[i] = f(o[i], l) : "DEFINE_MANY" === v && (o[i] = d(o[i], l))
+            } else o[i] = l
           }
         }
       } else;
@@ -1209,12 +1240,12 @@ object-assign
 
     function c(t, e) {
       if (e)for (var n in e) {
-        var r = e[n];
+        var o = e[n];
         if (e.hasOwnProperty(n)) {
-          var o = n in b;
-          s(!o, 'ReactClass: You are attempting to define a reserved property, `%s`, that shouldn\'t be on the "statics" key. Define it as an instance property instead; it will still be accessible on the constructor.', n);
+          var r = n in b;
+          s(!r, 'ReactClass: You are attempting to define a reserved property, `%s`, that shouldn\'t be on the "statics" key. Define it as an instance property instead; it will still be accessible on the constructor.', n);
           var a = n in t;
-          s(!a, "ReactClass: You are attempting to define `%s` on your component more than once. This conflict may be due to a mixin.", n), t[n] = r
+          s(!a, "ReactClass: You are attempting to define `%s` on your component more than once. This conflict may be due to a mixin.", n), t[n] = o
         }
       }
     }
@@ -1227,11 +1258,11 @@ object-assign
 
     function f(t, e) {
       return function () {
-        var n = t.apply(this, arguments), r = e.apply(this, arguments);
-        if (null == n)return r;
-        if (null == r)return n;
-        var o = {};
-        return p(o, n), p(o, r), o
+        var n = t.apply(this, arguments), o = e.apply(this, arguments);
+        if (null == n)return o;
+        if (null == o)return n;
+        var r = {};
+        return p(r, n), p(r, o), r
       }
     }
 
@@ -1248,19 +1279,19 @@ object-assign
 
     function h(t) {
       for (var e = t.__reactAutoBindPairs, n = 0; n < e.length; n += 2) {
-        var r = e[n], o = e[n + 1];
-        t[r] = m(t, o)
+        var o = e[n], r = e[n + 1];
+        t[o] = m(t, r)
       }
     }
 
     function v(t) {
-      var e = r(function (t, r, o) {
-        this.__reactAutoBindPairs.length && h(this), this.props = t, this.context = r, this.refs = i, this.updater = o || n, this.state = null;
+      var e = o(function (t, o, r) {
+        this.__reactAutoBindPairs.length && h(this), this.props = t, this.context = o, this.refs = i, this.updater = r || n, this.state = null;
         var a = this.getInitialState ? this.getInitialState() : null;
         s("object" == typeof a && !Array.isArray(a), "%s.getInitialState(): must return an object or null", e.displayName || "ReactCompositeComponent"), this.state = a
       });
       e.prototype = new P, e.prototype.constructor = e, e.prototype.__reactAutoBindPairs = [], y.forEach(l.bind(null, e)), l(e, x), l(e, t), l(e, E), e.getDefaultProps && (e.defaultProps = e.getDefaultProps()), s(e.prototype.render, "createClass(...): Class specification must implement a `render` method.");
-      for (var o in g)e.prototype[o] || (e.prototype[o] = null);
+      for (var r in g)e.prototype[r] || (e.prototype[r] = null);
       return e
     }
 
@@ -1319,24 +1350,24 @@ object-assign
   }
 
   var a = n(2), i = n(9), s = n(0), u = "mixins";
-  t.exports = o
+  t.exports = r
 }, function (t, e, n) {
   "use strict";
-  function r(t) {
-    return a.isValidElement(t) || o("143"), t
+  function o(t) {
+    return a.isValidElement(t) || r("143"), t
   }
 
-  var o = n(3), a = n(1);
+  var r = n(3), a = n(1);
   n(0);
-  t.exports = r
+  t.exports = o
 }, function (t, e, n) {
   t.exports = n(32)()
 }, function (t, e, n) {
   "use strict";
-  var r = n(5), o = n(0), a = n(12);
+  var o = n(5), r = n(0), a = n(12);
   t.exports = function () {
-    function t(t, e, n, r, i, s) {
-      s !== a && o(!1, "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types")
+    function t(t, e, n, o, i, s) {
+      s !== a && r(!1, "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types")
     }
 
     function e() {
@@ -1362,7 +1393,7 @@ object-assign
       oneOfType: e,
       shape: e
     };
-    return n.checkPropTypes = r, n.PropTypes = n, n
+    return n.checkPropTypes = o, n.PropTypes = n, n
   }
 }]);
 //# sourceMappingURL=react-vote.js.map

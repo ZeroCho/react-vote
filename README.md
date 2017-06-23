@@ -63,7 +63,10 @@ Tell react-vote whether the client is an admin or not. Only admins can close vot
 If true, people can choose multiple options instead of one.
 
 ### total: Boolean, Default: true
-If true, you can show total number of votes at result.
+If true, you can show total number of votes at result view.
+
+### downvote: Boolean, Default: false
+If true, you can downvote(which is -1)
 
 ### expansion: Boolean, Default: false
 If true, voters can add an option(See demo)
@@ -84,8 +87,11 @@ Object that contains the whole information about the vote
     {
       title: String, // Title of option
       count: Number, // Number of votes
-      voters: [String/Number] // Array of unique identifers of voters for this option
-      adder: String/Number // Unique identifier of the one who added this item(Expandable vote only)
+      total: Number, // Number of total votes(including downvote)
+      voters: [String/Number] // Array of unique identifers of all voters for this option
+      downvoters: [String/Number] // only downvoters
+      upvoters: [String/Number] // only upvoters
+      adder: String/Number // Unique identifier of the one who added this item(for expandable vote)
     }
   ],
   closed: Boolean, // Whether this vote is closed or not. If this prop is true, you can only see the result, otherwise you can toggle between voting view and result view.
@@ -97,7 +103,7 @@ Object that contains the whole information about the vote
 It's an callback function triggered when you create a new vote. The first parameter is the title of vote, and the second is a whole vote data.
 
 ### onUpvote: Function(title: String, diff: Object, data: Object)
-It's an callback function triggered when you upvoted. The first parameter is the title of vote, the second is the difference between previous and current data, and the third is a whole vote data.
+It's an callback function triggered when you upvote. The first parameter is the title of vote, the second is the difference between previous and current data, and the third is a whole vote data.
 
 ```
 // diff object
@@ -107,6 +113,9 @@ It's an callback function triggered when you upvoted. The first parameter is the
   voter: String/Number
 }
 ```
+
+### onDownvote: Function(title: String, diff: Object, data: Object)
+It's an callback function triggered when you downvote. The first parameter is the title of vote, the second is the difference between previous and current data, and the third is a whole vote data.
 
 ### onClose: Function(title: String, data: Object)
 It's an callback function triggered when the vote is closed. The first parameter is the title of vote, and the second is a whole vote data.
@@ -138,7 +147,9 @@ A group of classNames in this voting component. You can change these for style *
 - createButton
 - resultButton
 - goBackButton
+- voteButtons: Wrapper of voteButton and downvoteButton
 - voteButton
+- downvoteButton
 - votedText
 - closeButton
 - resetButton
@@ -156,6 +167,7 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - resultButtonText: Default: 'Show result'
 - goBackButtonText: Default: 'Go back to vote'
 - voteButtonText: Default: 'Upvote'
+- downvoteButtonText: Default: 'Downvote'
 - createButtonText: Default: 'Create'
 - closeButtonText: Default: 'Close vote'
 - resetButtonText: Default: 'Reset vote'
@@ -180,7 +192,7 @@ Messages of error, triggered when you try something invalid.
 ## TODO
 - result graph
 - option change while voting
-- downVote
+- ban
 
 ## Wanna Contribute?
 Please contribute to this package via **Pull Request**, or you can open **Issues**!

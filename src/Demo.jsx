@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     createButton: styles.createButton,
     resultButton: styles.resultButton,
     goBackButton: styles.goBackButton,
+    voteButtons: styles.voteButtons,
     voteButton: styles.voteButton,
+    downvoteButton: styles.voteButton,
     votedText: styles.votedText,
     errorMessage: styles.errorMessage,
     closeButton: styles.closeButton,
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const customText = {
     voteButtonText: 'I\'m gonna vote this!',
     resultButtonText: 'Give me the result!',
+    resetButtonText: 'Reset!!',
     goBackButtonText: 'Let\'s go back!',
     closeButtonText: 'I\'ll close this vote',
     votedText: 'I chose this',
@@ -49,6 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   const onReset = (title, data) => {
     console.log('reset', title, data);
+  };
+  const onDownvote = (title, index, data) => {
+    console.log('downvoted', title, index, data);
   };
   const isAdmin = () => true;
   document.body.appendChild(rootNode);
@@ -151,6 +157,21 @@ document.addEventListener('DOMContentLoaded', () => {
         onExpand={onExpand}
         onReset={onReset}
         autoClose={9}
+      />
+      <br />
+      <ReactVote
+        styles={basicCss}
+        data={{
+          title: 'Downvote',
+          items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }],
+        }}
+        onCreate={onCreate}
+        onUpvote={onUpvote}
+        onClose={onClose}
+        onExpand={onExpand}
+        onReset={onReset}
+        onDownvote={onDownvote}
+        downvote
       />
     </div>,
     rootNode,

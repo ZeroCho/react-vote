@@ -14,6 +14,7 @@ class ReactVote extends Component {
       closed: PropTypes.bool,
       autoClose: PropTypes.number,
     }),
+    downvote: PropTypes.bool,
     autoClose: PropTypes.number,
     expansion: PropTypes.bool,
     styles: PropTypes.shape({
@@ -31,7 +32,9 @@ class ReactVote extends Component {
       createButton: PropTypes.string,
       resultButton: PropTypes.string,
       goBackButton: PropTypes.string,
+      voteButtons: PropTypes.string,
       voteButton: PropTypes.string,
+      downvoteButton: PropTypes.string,
       closeButton: PropTypes.string,
       resetButton: PropTypes.string,
       errorMessage: PropTypes.string,
@@ -41,6 +44,7 @@ class ReactVote extends Component {
     }),
     onCreate: PropTypes.func,
     onUpvote: PropTypes.func,
+    onDownvote: PropTypes.func,
     onExpand: PropTypes.func,
     onReset: PropTypes.func,
     onClose: PropTypes.func,
@@ -55,6 +59,7 @@ class ReactVote extends Component {
       resultButtonText: PropTypes.string,
       goBackButtonText: PropTypes.string,
       voteButtonText: PropTypes.string,
+      downvoteButtonText: PropTypes.string,
       votedText: PropTypes.string,
       totalText: PropTypes.string,
       multipleCheckbox: PropTypes.string,
@@ -77,24 +82,27 @@ class ReactVote extends Component {
     expansion: false,
     voted: false,
     clientId: null,
+    downvote: false,
     data: null,
     autoClose: null,
     onCreate: null,
     onUpvote: null,
+    onDownvote: null,
     onExpand: null,
     onClose: null,
     onReset: null,
     text: {
       addButtonText: 'Add',
       titleInputPlaceholder: 'Title of this vote',
-      addInputPlaceholder: 'Type title of new option here',
+      addInputPlaceholder: 'Title of a new option',
       removeButtonText: '×',
       closeButtonText: 'Close vote',
       resetButtonText: 'Reset vote',
       createButtonText: 'Create',
       resultButtonText: 'Show result',
       goBackButtonText: 'Go back to vote',
-      voteButtonText: 'Vote',
+      voteButtonText: 'Upvote',
+      downvoteButtonText: 'Downvote',
       votedText: 'Voted',
       totalText: 'Total',
       multipleCheckbox: 'Multiple choice?',
@@ -184,7 +192,7 @@ class ReactVote extends Component {
     const title = this.state.addInput;
     const items = this.state.items;
     if (!title) return;
-    items.push({ title, count: 0 });
+    items.push({ title, count: 0, total: 0, voters: [] });
     this.setState(() => ({ items, addInput: '' }));
   };
 
@@ -234,7 +242,10 @@ class ReactVote extends Component {
     const item = {
       title,
       count: 0,
+      total: 0,
       voters: [],
+      upvoters: [],
+      downvoters: [],
       adder: this.props.clientId,
     };
     data.items.push(item);
@@ -265,8 +276,11 @@ class ReactVote extends Component {
     data.voters = [];
     data.items.forEach((item) => {
       item.count = 0;
+      item.total = 0;
       item.voters = [];
-      item.voted = false;
+      item.upvoters = [];
+      item.downvoters = [];
+      item.voted = null;
     });
     console.log(data);
     this.setState(() => ({ data, voted: false }));
@@ -278,14 +292,23 @@ class ReactVote extends Component {
   upvote = (idx) => {
     const { items, data, autoClose } = this.state;
     const { onUpvote } = this.props;
-    const currentTotal = items.reduce((prev, current) => prev + current.count, 0);
+    const currentTotal = items.reduce((prev, current) => {
+      if (!current.total) {
+        current.total = current.count;
+      }
+      return prev + current.total;
+    }, 0);
     items[idx].count += 1;
+    items[idx].total += 1;
     items[idx].voted = true;
     const clientId = this.props.clientId;
     if (!items[idx].voters) {
       items[idx].voters = [];
+      items[idx].downvoters = [];
+      items[idx].upvoters = [];
     }
     items[idx].voters.push(clientId);
+    items[idx].upvoters.push(clientId);
     data.items = items;
     if (data.voters) {
       if (data.voters.indexOf(clientId) === -1) {
@@ -302,6 +325,52 @@ class ReactVote extends Component {
     this.setState(() => ({ voted: true, items, data }));
     if (onUpvote && typeof onUpvote === 'function') {
       onUpvote(data.title, diff, data);
+    }
+    if (autoClose) {
+      const newTotal = currentTotal + 1;
+      if (newTotal >= autoClose) {
+        return this.closeVote();
+      }
+    }
+    return true;
+  };
+
+  downvote = (idx) => {
+    const { items, data, autoClose } = this.state;
+    const { onDownvote } = this.props;
+    const currentTotal = items.reduce((prev, current) => {
+      if (!current.total) {
+        current.total = current.count;
+      }
+      return prev + current.total;
+    }, 0);
+    items[idx].count -= 1;
+    items[idx].total += 1;
+    items[idx].voted = true;
+    const clientId = this.props.clientId;
+    if (!items[idx].voters) {
+      items[idx].voters = [];
+      items[idx].downvoters = [];
+      items[idx].upvoters = [];
+    }
+    items[idx].voters.push(clientId);
+    items[idx].downvoters.push(clientId);
+    data.items = items;
+    if (data.voters) {
+      if (data.voters.indexOf(clientId) === -1) {
+        data.voters.push(clientId);
+      }
+    } else {
+      data.voters = [clientId];
+    }
+    const diff = {
+      index: idx,
+      item: items[idx],
+      voter: clientId,
+    };
+    this.setState(() => ({ voted: true, items, data }));
+    if (onDownvote && typeof onDownvote === 'function') {
+      onDownvote(data.title, diff, data);
     }
     if (autoClose) {
       const newTotal = currentTotal + 1;
@@ -376,56 +445,77 @@ class ReactVote extends Component {
     );
   }
 
-  renderItems = items => ((
-    <div>
-      {items.map((item, i) => {
-        const { styles, text, clientId } = this.props;
-        const isAlreadyVoted = (clientId && item.voters && item.voters.indexOf(clientId) > -1);
-        const canVote = (this.state.multiple || !this.state.voted);
-        const checkVoted = item.voted || isAlreadyVoted
-          ? <span className={styles.votedText}>{text.votedText}</span>
-          : canVote
-          && <button
-            onClick={() => this.upvote(i)}
-            className={styles.voteButton}
-          >
-            {text.voteButtonText}
-          </button>;
-        const key = `react-vote-item-${i}`;
-        return (
-          <div key={key} className={styles.itemWrapper}>
-            <div className={styles.itemTitle} title={item.title}>
-              {item.title}
-            </div>
-            {this.state.data.title
-              ? checkVoted
-              : (
+  renderItems = (items) => {
+    const { clientId, downvote } = this.props;
+    const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
+    const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
+    const canVote = (this.state.multiple || !this.state.voted);
+    return (
+      <div>
+        {items.map((item, i) => {
+          const isAlreadyVoted = (clientId && item.voters && item.voters.indexOf(clientId) > -1);
+          const checkVoted = item.voted || isAlreadyVoted
+            ? <span className={styles.votedText}>{text.votedText}</span>
+            : canVote
+            && (
+              <span className={styles.voteButtons}>
                 <button
-                  onClick={() => this.removeItem(i)}
-                  className={styles.removeButton}
+                  onClick={() => this.upvote(i)}
+                  className={styles.voteButton}
                 >
-                  {text.removeButtonText}
+                  {text.voteButtonText}
                 </button>
-              )}
-          </div>
-        );
-      })}
-    </div>
-  ));
+                {downvote && <button
+                  onClick={() => this.downvote(i)}
+                  className={styles.downvoteButton}
+                >
+                  {text.downvoteButtonText}
+                </button>}
+              </span>
+            );
+          const key = `react-vote-item-${i}`;
+          return (
+            <div key={key} className={styles.itemWrapper}>
+              <div className={styles.itemTitle} title={item.title}>
+                {item.title}
+              </div>
+              {this.state.data.title
+                ? checkVoted
+                : (
+                  <button
+                    onClick={() => this.removeItem(i)}
+                    className={styles.removeButton}
+                  >
+                    {text.removeButtonText}
+                  </button>
+                )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   renderResult = (items) => {
-    let i = 0;
     const total = items.reduce((prev, current) => prev + current.count, 0);
     const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
     const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
+    const wholeTotal = items.reduce((prev, current) => {
+      if (!current.total) {
+        current.total = current.count;
+      }
+      return prev + current.total;
+    }, 0);
+    const realTotal = total === wholeTotal ? '' : `(${wholeTotal})`;
     return (
       <div>
         <div className={styles.voteTitle}>{this.state.data.title}</div>
         <div>
-          {items.map((item) => {
+          {items.map((item, i) => {
             const percentage = total === 0 ? 0 : ((item.count / total) * 100).toFixed(2);
-            const itemComponent = (
-              <div key={`react-vote-result-${i}`} className={styles.itemWrapper}>
+            const key = `react-vote-result-${i}`;
+            return (
+              <div key={key} className={styles.itemWrapper}>
                 <div
                   className={styles.itemTitle}
                   title={item.title}
@@ -435,12 +525,10 @@ class ReactVote extends Component {
                 <div className={styles.itemCount}>{`${item.count}(${percentage}%)`}</div>
               </div>
             );
-            i += 1;
-            return itemComponent;
           })}
           {this.state.total && <div className={styles.itemWrapper}>
             <div className={styles.itemTitle}>{text.totalText}</div>
-            <div className={styles.itemCount}>{total}</div>
+            <div className={styles.itemCount}>{total}{realTotal}</div>
           </div>}
         </div>
         {!this.state.data.closed &&

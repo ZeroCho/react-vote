@@ -17,6 +17,10 @@
   margin-right: 50px;
 }
 
+.itemWrapper {
+  overflow: hidden;
+}
+
 .itemWrapper:hover {
   background: silver;
 }
@@ -26,9 +30,12 @@
   padding-left: 50px;
 }
 
-.voteButton {
+.voteButtons {
   float: right;
   margin-right: 50px;
+}
+
+.voteButton {
 }
 
 .votedText {

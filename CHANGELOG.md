@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.0] - 2017-06-23
+### Added
+- downvote
+- item.total, item.upvoters, item.downvoters
+
+### Updated
+- show who added a vote item
+- item.total indicates total number of votes instead of item.count(item.count reflects downvote which is -1)
+- total in result view shows count(number of votes which reflect downvote) and total(number of all votes)
+
 ## [2.0.0] - 2017-06-22
 ### Updated
 - babel-prest-env
@@ -94,7 +104,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Bump up dependencies
 - Code cleanup
 
-[Unreleased]: https://github.com/zerocho/react-vote/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/zerocho/react-vote/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/zerocho/react-vote/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/zerocho/react-vote/compare/v1.4.0...v2.0.0
 [1.4.0]: https://github.com/zerocho/react-vote/compare/v1.3.7...v1.4.0
 [1.3.7]: https://github.com/zerocho/react-vote/compare/v1.3.5...v1.3.7
