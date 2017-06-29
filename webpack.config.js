@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+
 const rules = [
   { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
   {
@@ -37,12 +38,12 @@ module.exports = [{
         warnings: false,
       },
     }),
-  ]
+  ],
 }, {
   entry: './src/Demo',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'demo.js'
+    filename: 'demo.js',
   },
   resolve: {
     modules: ['node_modules', 'src'],
@@ -64,5 +65,5 @@ module.exports = [{
         warnings: false,
       },
     }),
-  ]
+  ],
 }];

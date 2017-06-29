@@ -57,7 +57,7 @@ I didn't put any css codes for your **customization**. You can use **styles** pr
 ## Props
 
 ### isAdmin: Boolean, Default: false
-Tell react-vote whether the client is an admin or not. Only admins can close vote.
+Tell react-vote whether the client is an admin or not. Only admins can close and reset vote.
 
 ### multiple: Boolean, Default: false
 If true, people can choose multiple options instead of one.
@@ -96,6 +96,9 @@ Object that contains the whole information about the vote
   ],
   closed: Boolean, // Whether this vote is closed or not. If this prop is true, you can only see the result, otherwise you can toggle between voting view and result view.
   voters: [String/Number] // Array of unique identifiers of all voters.
+  autoClose: Number // Number which closes vote when reached
+  multiple: Boolean // Whether voters can choose multiple options
+  expansion: Boolean // Whether voters can add new option
 }
 ```
 

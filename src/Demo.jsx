@@ -1,179 +1,88 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 import ReactVote from './ReactVote';
 import styles from './Demo.css';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const rootNode = document.createElement('div');
-  const basicCss = {
-    voteWrapper: styles.voteWrapper,
-    voteTitle: styles.voteTitle,
-    titleInput: styles.titleInput,
-    addWrapper: styles.addWrapper,
-    addInput: styles.addInput,
-    addButton: styles.addButton,
-    itemTitle: styles.itemTitle,
-    itemCount: styles.itemCount,
-    itemWrapper: styles.itemWrapper,
-    buttonWrapper: styles.buttonWrapper,
-    removeButton: styles.removeButton,
-    createButton: styles.createButton,
-    resultButton: styles.resultButton,
-    goBackButton: styles.goBackButton,
-    voteButtons: styles.voteButtons,
-    voteButton: styles.voteButton,
-    downvoteButton: styles.voteButton,
-    votedText: styles.votedText,
-    errorMessage: styles.errorMessage,
-    closeButton: styles.closeButton,
-    expansionButton: styles.expansionButton,
-    expansionInput: styles.expansionInput,
-  };
-  const customText = {
-    voteButtonText: 'I\'m gonna vote this!',
-    resultButtonText: 'Give me the result!',
-    resetButtonText: 'Reset!!',
-    goBackButtonText: 'Let\'s go back!',
-    closeButtonText: 'I\'ll close this vote',
-    votedText: 'I chose this',
-    totalText: 'Total number of vote is:',
-  };
-  const onCreate = (title, data) => {
-    console.log('created', title, data);
-  };
-  const onUpvote = (title, index, data) => {
-    console.log('upvoted', title, index, data);
-  };
-  const onClose = (title, data) => {
-    console.log('closed', title, data);
-  };
-  const onExpand = (title, item, data) => {
-    console.log('expanded', title, item, data);
-  };
-  const onReset = (title, data) => {
-    console.log('reset', title, data);
-  };
-  const onDownvote = (title, index, data) => {
-    console.log('downvoted', title, index, data);
-  };
-  const isAdmin = () => true;
-  document.body.appendChild(rootNode);
-  ReactDOM.render(
-    <div>
-      <ReactVote
-        styles={basicCss}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-        isAdmin={isAdmin()}
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{ title: 'Ongoing Vote with Custom Text', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
-        text={customText}
-        isAdmin={isAdmin()}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onReset={onReset}
-        onExpand={onExpand}
-        clientId="tester"
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{ title: 'Ongoing voted Vote', voters: ['tester'], items: [{ title: 'a', count: 5 }, { title: 'b', count: 3, voters: ['tester'] }], closed: false }}
-        text={customText}
-        isAdmin={isAdmin()}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-        clientId="tester"
-        voted
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{ title: 'Multiple Choice Vote && not-Admin', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
-        isAdmin={false}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-        clientId="tester"
-        multiple
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{ title: 'Expandable Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
-        isAdmin={isAdmin()}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-        expansion
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{ title: 'Expandable && Multiple Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: false }}
-        isAdmin={isAdmin()}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-        expansion
-        multiple
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{ title: 'Closed Vote', items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }], closed: true }}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{
-          title: 'Auto Closing Vote for designated number',
-          items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }],
-        }}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-        autoClose={9}
-      />
-      <br />
-      <ReactVote
-        styles={basicCss}
-        data={{
-          title: 'Downvote',
-          items: [{ title: 'a', count: 5 }, { title: 'b', count: 3 }],
-        }}
-        onCreate={onCreate}
-        onUpvote={onUpvote}
-        onClose={onClose}
-        onExpand={onExpand}
-        onReset={onReset}
-        onDownvote={onDownvote}
-        downvote
-      />
-    </div>,
+const rootNode = document.getElementById('demo');
+const basicCss = {
+  voteWrapper: styles.voteWrapper,
+  voteTitle: styles.voteTitle,
+  titleInput: styles.titleInput,
+  addWrapper: styles.addWrapper,
+  addInput: styles.addInput,
+  addButton: styles.addButton,
+  itemTitle: styles.itemTitle,
+  itemCount: styles.itemCount,
+  itemWrapper: styles.itemWrapper,
+  buttonWrapper: styles.buttonWrapper,
+  removeButton: styles.removeButton,
+  createButton: styles.createButton,
+  resultButton: styles.resultButton,
+  goBackButton: styles.goBackButton,
+  voteButtons: styles.voteButtons,
+  voteButton: styles.voteButton,
+  downvoteButton: styles.voteButton,
+  votedText: styles.votedText,
+  errorMessage: styles.errorMessage,
+  closeButton: styles.closeButton,
+  expansionButton: styles.expansionButton,
+  expansionInput: styles.expansionInput,
+};
+const customText = {
+  voteButtonText: 'I\'m gonna vote this!',
+  resultButtonText: 'Give me the result!',
+  resetButtonText: 'Reset!!',
+  goBackButtonText: 'Let\'s go back!',
+  closeButtonText: 'I\'ll close this vote',
+  votedText: 'I chose this',
+  totalText: 'Total number of vote is:',
+};
+const onCreate = (data) => {
+  console.log('created', data);
+};
+const onUpvote = (data, diff) => {
+  console.log('upvoted', data, diff);
+};
+const onClose = (data) => {
+  console.log('closed', data);
+};
+const onExpand = (data, item) => {
+  console.log('expanded', data, item);
+};
+const onReset = (data) => {
+  console.log('reset', data);
+};
+const onDownvote = (data, diff) => {
+  console.log('downvoted', data, diff);
+};
+const isAdmin = () => true;
+
+const DOMRender = RV => (
+  render(
+    <AppContainer>
+      <div>
+        <RV
+          styles={basicCss}
+          onCreate={onCreate}
+          onUpvote={onUpvote}
+          onClose={onClose}
+          onDownvote={onDownvote}
+          onExpand={onExpand}
+          onReset={onReset}
+          isAdmin={isAdmin()}
+        />
+      </div>
+    </AppContainer>,
     rootNode,
-  );
-});
+  )
+);
+
+DOMRender(ReactVote);
+
+if (module.hot) {
+  module.hot.accept('./ReactVote', () => {
+    const nextRV = require('./ReactVote').default;
+    DOMRender(nextRV);
+  });
+}
