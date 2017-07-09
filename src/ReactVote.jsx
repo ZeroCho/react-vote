@@ -205,7 +205,11 @@ class ReactVote extends Component {
     newItems[idx].voted = true;
     if (!newItems[idx].voters) { // TODO: remove at v4
       newItems[idx].voters = [];
+    }
+    if (!newItems[idx].downvoters) { // TODO: remove at v4
       newItems[idx].downvoters = [];
+    }
+    if (!newItems[idx].upvoters) { // TODO: remove at v4
       newItems[idx].upvoters = [];
     }
     newItems[idx].voters.push(clientId);
@@ -251,7 +255,11 @@ class ReactVote extends Component {
     newItems[idx].voted = true;
     if (!newItems[idx].voters) { // TODO: remove at v4
       newItems[idx].voters = [];
+    }
+    if (!newItems[idx].downvoters) { // TODO: remove at v4
       newItems[idx].downvoters = [];
+    }
+    if (!newItems[idx].upvoters) { // TODO: remove at v4
       newItems[idx].upvoters = [];
     }
     newItems[idx].voters.push(clientId);
