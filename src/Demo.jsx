@@ -70,7 +70,34 @@ const DOMRender = RV => (
           onDownvote={onDownvote}
           onExpand={onExpand}
           onReset={onReset}
+          clientId="zerocho"
           isAdmin={isAdmin()}
+        />
+        <RV
+          styles={basicCss}
+          onCreate={onCreate}
+          onUpvote={onUpvote}
+          onClose={onClose}
+          onDownvote={onDownvote}
+          onExpand={onExpand}
+          onReset={onReset}
+          data={{
+            title: 'normal vote',
+            items: [{
+              title: 'a',
+              count: 0,
+              total: 0,
+            }, {
+              title: 'b',
+              count: 0,
+              total: 0,
+            }, {
+              title: 'c',
+              count: 0,
+              total: 0,
+            }],
+          }}
+          isAdmin={false}
         />
       </div>
     </AppContainer>,

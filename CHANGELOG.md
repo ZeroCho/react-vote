@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2017-07-10
+### Updated
+- multiple, expansion, autoClose, downvote, showTotal are included in **data** object(BREAKING)
+- onClose, onCreate, onReset, onExpand, onUpvote, onDownvote callback parameters are changed(BREAKING)
+
+### Removed
+- multiple, expansion, autoClose, downvote, total props(BREAKING)
+
 ## [2.1.0] - 2017-06-23
 ### Added
 - downvote

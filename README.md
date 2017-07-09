@@ -7,6 +7,11 @@ React component for simple voting system, easy to customize and internationalize
 npm install react-vote --save
 ```
 
+## Change in v3
+All options such as multiple, expansion, downvote, autoClose, showTotal, etc. are now available in the **data** object.
+You can now control the whole vote system with one **data** object.
+Thus, multiple, expansion, total, downvote, autoClose props are omitted.
+
 ## How to use
 For a new voting system, Do **NOT** put the **data** prop.
 Put **onCreate, onUpvote, onClose, onReset, onExpand** callback function to get voting data and connect with database.
@@ -27,9 +32,9 @@ var ReactVote = require('react-vote'); // or import ReactVote from 'react-vote';
 />
 ```
 
-You can get voting data inside the callback function. See **Props** section below for more information.
+You can get voting data as a parameter inside the callback function. See **Props** section below for more information.
 ```
-function onCreate (title, data) {
+function onCreate (data, diff) {
  // Save data into the  databasehere!
  console.log(data); // { title: 'title of this vote', items: [{ title: 'option1', count: 5, voters: ['a', 'b', 'c', 'd', 'e'] }, { title: 'option2', count: 3, voters: ['f', 'g', 'h'] }], closed: false, multiple: false, expansion: false, voters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] }
 }
@@ -59,21 +64,6 @@ I didn't put any css codes for your **customization**. You can use **styles** pr
 ### isAdmin: Boolean, Default: false
 Tell react-vote whether the client is an admin or not. Only admins can close and reset vote.
 
-### multiple: Boolean, Default: false
-If true, people can choose multiple options instead of one.
-
-### total: Boolean, Default: true
-If true, you can show total number of votes at result view.
-
-### downvote: Boolean, Default: false
-If true, you can downvote(which is -1)
-
-### expansion: Boolean, Default: false
-If true, voters can add an option(See demo)
-
-### autoClose: Number
-If set, vote closed automatically when voting count equals the number of autoClose.
-
 ### clientId: String/Number
 Put unique identifier of client here. React-vote will check whether that client already voted or not. Good example of identifiers are IPs or ObjectIds
 
@@ -99,14 +89,17 @@ Object that contains the whole information about the vote
   autoClose: Number // Number which closes vote when reached
   multiple: Boolean // Whether voters can choose multiple options
   expansion: Boolean // Whether voters can add new option
+  downvote: Boolean // Whether to allow downvote
+  showTotal: Boolean // Whether to show total votes in result view
+  creator: String/Number // Unique identifier of the one who create this vote.
 }
 ```
 
-### onCreate: Function(title: String, data: Object)
-It's an callback function triggered when you create a new vote. The first parameter is the title of vote, and the second is a whole vote data.
+### onCreate: Function(data: Object)
+It's an callback function triggered when you create a new vote. The only parameter is a whole vote data.
 
-### onUpvote: Function(title: String, diff: Object, data: Object)
-It's an callback function triggered when you upvote. The first parameter is the title of vote, the second is the difference between previous and current data, and the third is a whole vote data.
+### onUpvote: Function(data: Object, diff: Object)
+It's an callback function triggered when you upvote. The first parameter is a whole vote data, the second is the difference between previous and current data.
 
 ```
 // diff object
@@ -117,21 +110,17 @@ It's an callback function triggered when you upvote. The first parameter is the 
 }
 ```
 
-### onDownvote: Function(title: String, diff: Object, data: Object)
-It's an callback function triggered when you downvote. The first parameter is the title of vote, the second is the difference between previous and current data, and the third is a whole vote data.
+### onDownvote: Function(data: Object, diff: Object)
+It's an callback function triggered when you downvote. The first parameter is a whole vote data, the second is the difference between previous and current data.
 
-### onClose: Function(title: String, data: Object)
-It's an callback function triggered when the vote is closed. The first parameter is the title of vote, and the second is a whole vote data.
+### onClose: Function(data: Object)
+It's an callback function triggered when the vote is closed. The only parameter is a whole vote data.
 
-### onReset: Function(title: String, data: Object)
-It's an callback function triggered when the vote is reset. The first parameter is the title of vote, and the second is a whole vote data.
+### onReset: Function(data: Object)
+It's an callback function triggered when the vote is reset. The only parameter is a whole vote data.
 
-### onExpand: Function(title: String, item: Object, data: Object)
-It's an callback function triggered when you add a new option. The first parameter is the title of vote, the second is the added item, and the third is a whole vote data.
-
-### getData: Function(data: Object, diff: itemTitle)
-**Obsolete** It's an callback function and if you put it as prop, you can get data when **a new vote is confirmed**, **somebody upvotes**, or **the vote is closed**. So you can put voting data into the **database** with this function.
-When somebody upvotes, this function provides the second argument that shows the title of upvoted item.
+### onExpand: Function(data: Object, item: Object)
+It's an callback function triggered when you add a new option. The first parameter is a whole vote data, the second is the added item.
 
 ### styles: Object
 A group of classNames in this voting component. You can change these for style **customization** by mapping **classNames** with css files.
@@ -193,7 +182,6 @@ Messages of error, triggered when you try something invalid.
 [Live Demo](https://www.zerocho.com/portfolio/ReactVote)
 
 ## TODO
-- result graph
 - option change while voting
 - ban
 

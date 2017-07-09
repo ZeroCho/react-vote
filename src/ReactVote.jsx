@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CreationView from './components/CreationView';
+import ExpansionInput from './components/ExpansionInput';
 import VoteItems from './components/VoteItems';
-import ResultView from './components/ResultView';
 
 class ReactVote extends Component {
   static propTypes = {
@@ -147,26 +147,11 @@ class ReactVote extends Component {
     this.setState(() => ({ data }));
   };
 
-  expandVote = () => {
+  expandVote = (data, item) => {
     const { onExpand } = this.props;
-    const title = this.state.expansionInput;
-    if (!title) {
-      return false;
-    }
-    const data = this.state.data;
-    const item = {
-      title,
-      count: 0,
-      total: 0,
-      voters: [],
-      upvoters: [],
-      downvoters: [],
-      adder: this.props.clientId,
-    };
-    data.items.push(item);
-    this.setState(() => ({ data, items: data.items, expansionInput: '' }));
+    this.setState(() => ({ data }));
     if (onExpand && typeof onExpand === 'function') {
-      return onExpand(data.title, item, data);
+      return onExpand(data, item);
     }
     return true;
   };
@@ -181,7 +166,7 @@ class ReactVote extends Component {
     data.closed = true;
     this.setState(() => ({ data }));
     if (onClose && typeof onClose === 'function') {
-      onClose(data.title, data);
+      onClose(data);
     }
   };
 
@@ -189,6 +174,7 @@ class ReactVote extends Component {
     const { onReset } = this.props;
     const data = this.state.data;
     data.voters = [];
+    data.closed = false;
     data.items.forEach((item) => {
       item.count = 0;
       item.total = 0;
@@ -197,10 +183,9 @@ class ReactVote extends Component {
       item.downvoters = [];
       item.voted = null;
     });
-    console.log(data);
     this.setState(() => ({ data, voted: false }));
     if (onReset && typeof onReset === 'function') {
-      onReset(data.title, data);
+      onReset(data);
     }
   };
 
@@ -296,66 +281,6 @@ class ReactVote extends Component {
     return true;
   };
 
-  renderResult = (items) => {
-    const total = items.reduce((prev, current) => prev + current.count, 0);
-    const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
-    const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
-    const wholeTotal = items.reduce((prev, current) => {
-      if (!current.total) {
-        current.total = current.count;
-      }
-      return prev + current.total;
-    }, 0);
-    const realTotal = total === wholeTotal ? '' : `(${wholeTotal})`;
-    return (
-      <div id="result-view">
-        <div className={styles.voteTitle}>{this.state.data.title}</div>
-        <div>
-          {items.map((item, i) => {
-            const percentage = total === 0 ? 0 : ((item.count / total) * 100).toFixed(2);
-            const key = `react-vote-result-${i}`;
-            return (
-              <div key={key} className={styles.itemWrapper}>
-                <div
-                  className={styles.itemTitle}
-                  title={item.title}
-                >
-                  {item.title}
-                </div>
-                <div className={styles.itemCount}>{`${item.count}(${percentage}%)`}</div>
-              </div>
-            );
-          })}
-          {this.state.data.showTotal && <div className={styles.itemWrapper}>
-            <div className={styles.itemTitle}>{text.totalText}</div>
-            <div className={styles.itemCount}>{total}{realTotal}</div>
-          </div>}
-        </div>
-        {!this.state.data.closed &&
-        <div className={styles.buttonWrapper}>
-          <button
-            className={styles.goBackButton}
-            onClick={this.toggleView}
-          >
-            {text.goBackButtonText}
-          </button>
-          {this.props.isAdmin && <button
-            className={styles.resetButton}
-            onClick={this.resetVote}
-          >
-            {text.resetButtonText}
-          </button>}
-          {this.props.isAdmin && <button
-            className={styles.closeButton}
-            onClick={this.closeVote}
-          >
-            {text.closeButtonText}
-          </button>}
-        </div>}
-      </div>
-    );
-  };
-
   render() {
     const { voted, data } = this.state;
     const { onCreate, errorMessage, onUpvote, onDownvote, clientId } = this.props;
@@ -364,70 +289,53 @@ class ReactVote extends Component {
     const canExpanded = data.expansion && (!this.state.voted || data.multiple);
     const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
     const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
-    const ongoingOrClosed = isVotingClosed
-      ? (
-        <ResultView
-          styles={styles}
-          text={text}
-          onCreate=""
-          errorMessage={errorMessage}
-        />
-      )
-      : (
-        <div id="vote-view">
-          <div className={styles.voteTitle}>{data.title}</div>
-          <VoteItems
-            voted={voted}
-            data={data}
-            styles={styles}
-            text={text}
-            upvote={this.upvote}
-            downvote={this.downvote}
-            clientId={this.props.clientId}
-            onUpvote={onUpvote}
-            onDownvote={onDownvote}
-          />
-          {canExpanded &&
-          <div className={styles.itemWrapper}>
-            <input
-              className={styles.expansionInput}
-              value={this.state.expansionInput}
-              onChange={this.onExpansionInputChange}
-              placeholder={text.expansionPlaceholder}
-            />
-            <button
-              className={styles.expansionButton}
-              onClick={this.expandVote}
-            >
-              {text.expansionButtonText}
-            </button>
-          </div>}
-          <div className={styles.buttonWrapper}>
-            <button
-              className={styles.resultButton}
-              onClick={this.toggleView}
-            >
-              {text.resultButtonText}
-            </button>
-            {this.props.isAdmin && <button
-              className={styles.resetButton}
-              onClick={this.resetVote}
-            >
-              {text.resetButtonText}
-            </button>}
-            {this.props.isAdmin && <button
-              className={styles.closeButton}
-              onClick={this.closeVote}
-            >
-              {text.closeButtonText}
-            </button>}
-          </div>
-        </div>
-      );
     return (
       <div className={styles.voteWrapper}>
         {data.title
-          ? ongoingOrClosed
+          ? (
+            <div id={isVotingClosed ? 'result-view' : 'vote-view'}>
+              <div className={styles.voteTitle}>{data.title}</div>
+              <VoteItems
+                voted={voted}
+                data={data}
+                styles={styles}
+                text={text}
+                upvote={this.upvote}
+                downvote={this.downvote}
+                clientId={this.props.clientId}
+                onUpvote={onUpvote}
+                onDownvote={onDownvote}
+                resultView={isVotingClosed}
+              />
+              {canExpanded && <ExpansionInput
+                data={data}
+                clientId={clientId}
+                styles={styles}
+                text={text}
+                expandVote={this.expandVote}
+              />}
+              <div className={styles.buttonWrapper}>
+                {!data.closed && <button
+                  className={this.state.showResult ? styles.goBackButton : styles.resultButton}
+                  onClick={this.toggleView}
+                >
+                  {this.state.showResult ? text.goBackButtonText : text.resultButtonText}
+                </button>}
+                {this.props.isAdmin && <button
+                  className={styles.resetButton}
+                  onClick={this.resetVote}
+                >
+                  {text.resetButtonText}
+                </button>}
+                {this.props.isAdmin && !data.closed && <button
+                  className={styles.closeButton}
+                  onClick={this.closeVote}
+                >
+                  {text.closeButtonText}
+                </button>}
+              </div>
+            </div>
+          )
           : <CreationView
             styles={styles}
             text={text}

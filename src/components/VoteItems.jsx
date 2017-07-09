@@ -10,6 +10,7 @@ class VoteItems extends Component {
     voted: PropTypes.bool.isRequired,
     upvote: PropTypes.func.isRequired,
     downvote: PropTypes.func.isRequired,
+    resultView: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -17,41 +18,54 @@ class VoteItems extends Component {
   };
 
   render = () => {
-    const { clientId, data: { title, items, multiple, downvote }, styles, text, voted } = this.props;
+    const { clientId, data: { title, items, multiple, downvote, showTotal }, styles, text, voted, resultView } = this.props;
     const canVote = (multiple || !voted);
+    const total = items.reduce((prev, current) => prev + current.count, 0);
+    const wholeTotal = items.reduce((prev, current) => {
+      if (!current.total) { // TODO: remove at v4
+        current.total = current.count;
+      }
+      return prev + current.total;
+    }, 0);
+    const realTotal = total === wholeTotal ? '' : `(${wholeTotal})`;
     return (
       <div>
         {items.map((item, i) => {
           const isAlreadyVoted = (clientId && item.voters && item.voters.indexOf(clientId) > -1);
+          const percentage = total === 0 ? 0 : ((item.count / total) * 100).toFixed(2);
           const key = `react-vote-item-${i}`;
+          const votedOrNot = (item.voted || isAlreadyVoted)
+            ? <span className={styles.votedText}>{text.votedText}</span>
+            : canVote
+            && (<span className={styles.voteButtons}>
+              <button
+                onClick={() => this.props.upvote(i)}
+                className={styles.voteButton}
+              >
+                {text.voteButtonText}
+              </button>
+              {downvote && <button
+                onClick={() => this.props.downvote(i)}
+                className={styles.downvoteButton}
+              >
+                {text.downvoteButtonText}
+              </button>}
+            </span>);
           return (
             <div key={key} className={styles.itemWrapper}>
               <div className={styles.itemTitle} title={item.title}>
                 {item.title}
               </div>
-              {title && (item.voted || isAlreadyVoted)
-                ? <span className={styles.votedText}>{text.votedText}</span>
-                : canVote
-                && (
-                  <span className={styles.voteButtons}>
-                    <button
-                      onClick={() => this.props.upvote(i)}
-                      className={styles.voteButton}
-                    >
-                      {text.voteButtonText}
-                    </button>
-                    {downvote && <button
-                      onClick={() => this.props.downvote(i)}
-                      className={styles.downvoteButton}
-                    >
-                      {text.downvoteButtonText}
-                    </button>}
-                  </span>
-                )
-              }
+              {title && resultView
+                ? <div className={styles.itemCount}>{`${item.count}(${percentage}%)`}</div>
+                : votedOrNot}
             </div>
           );
         })}
+        {resultView && showTotal && <div className={styles.itemWrapper}>
+          <div className={styles.itemTitle}>{text.totalText}</div>
+          <div className={styles.itemCount}>{total}{realTotal}</div>
+        </div>}
       </div>
     );
   };

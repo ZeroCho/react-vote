@@ -5,6 +5,13 @@ class ExpansionInput extends Component {
   static propTypes = {
     styles: PropTypes.objectOf(PropTypes.any).isRequired,
     text: PropTypes.objectOf(PropTypes.any).isRequired,
+    expandVote: PropTypes.func.isRequired,
+    clientId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    data: PropTypes.objectOf(PropTypes.any).isRequired,
+  };
+
+  static defaultProps = {
+    clientId: null,
   };
 
   state = {
@@ -14,6 +21,26 @@ class ExpansionInput extends Component {
   onExpansionInputChange = (e) => {
     const expansionInput = e.target.value.trim();
     this.setState(() => ({ expansionInput }));
+  };
+
+  expandVote = () => {
+    const title = this.state.expansionInput;
+    if (!title) {
+      return false;
+    }
+    const data = this.props.data;
+    const item = {
+      title,
+      count: 0,
+      total: 0,
+      voters: [],
+      upvoters: [],
+      downvoters: [],
+      adder: this.props.clientId,
+    };
+    data.items.push(item);
+    this.setState(() => ({ expansionInput: '' }));
+    this.props.expandVote(data, item);
   };
 
   render() {
