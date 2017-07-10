@@ -14,9 +14,12 @@ Thus, multiple, expansion, total, downvote, autoClose props are omitted.
 
 ## How to use
 For a new voting system, Do **NOT** put the **data** prop.
-Put **onCreate, onUpvote, onClose, onReset, onExpand** callback function to get voting data and connect with database.
-Use unique identifier of client IP adress as **clientId** to check whether the client already voted or not.
-You can only create, reset or close vote when **isAdmin** prop is true. Make it false when you open vote to others.
+
+Put **onCreate, onEdit, onUpvote, onDownvote, onClose, onReset, onExpand** callback functions to get voting data and connect with database.
+
+Use unique identifier of client IP address as **clientId** to check whether the client already voted or not.
+
+You can only create, edit, reset or close vote when **isAdmin** prop is true. Make it false when you open vote to others.
 
 ```
 var ReactVote = require('react-vote'); // or import ReactVote from 'react-vote';
@@ -98,6 +101,9 @@ Object that contains the whole information about the vote
 ### onCreate: Function(data: Object)
 It's an callback function triggered when you create a new vote. The only parameter is a whole vote data.
 
+### onEdit: Function(data: Object)
+It's an callback function triggered when you edit an existing vote. The only parameter is a whole vote data(edited)
+
 ### onUpvote: Function(data: Object, diff: Object)
 It's an callback function triggered when you upvote. The first parameter is a whole vote data, the second is the difference between previous and current data.
 
@@ -148,29 +154,34 @@ A group of classNames in this voting component. You can change these for style *
 - errorMessage
 - expansionButton
 - expansionInput
+- settingButton
 
 ### text: Object
 A group of texts in this voting component. You can change these for **i18n**(internationalization).
 
-- titleInputPlaceholder: Default: 'Title of this vote'
-- addInputPlaceholder: Default: 'Type title of new option here'
-- addButtonText: Default: 'Add'
-- removeButtonText: Default: '×'
-- resultButtonText: Default: 'Show result'
-- goBackButtonText: Default: 'Go back to vote'
-- voteButtonText: Default: 'Upvote'
-- downvoteButtonText: Default: 'Downvote'
-- createButtonText: Default: 'Create'
-- closeButtonText: Default: 'Close vote'
-- resetButtonText: Default: 'Reset vote'
-- votedText: Default: 'Voted'
-- totalText: Default: 'Total'
-- multipleCheckbox: Default: 'Multiple choice?'
-- expansionCheckbox: Default: 'Expandable?'
-- expansionPlaceholder: Default: 'Add an option yourself'
-- expansionButtonText: Default: 'Add'
-- autoCloseText: Default: 'AutoClose number: '
-- autoClosePlaceholder: Default: 'type autoClose number'
+- addButtonText: 'Add',
+- titleInputPlaceholder: 'Title of this vote',
+- addInputPlaceholder: 'Title of a new option',
+- removeButtonText: '×',
+- closeButtonText: 'Close vote',
+- resetButtonText: 'Reset vote',
+- createButtonText: 'Create',
+- resultButtonText: 'Show result',
+- goBackButtonText: 'Go back',
+- voteButtonText: 'Upvote',
+- downvoteCheckbox: 'Allow downvote?',
+- downvoteButtonText: 'Downvote',
+- votedText: 'Voted',
+- totalText: 'Total',
+- multipleCheckbox: 'Multiple choice?',
+- expansionCheckbox: 'Expandable?',
+- showTotalCheckbox: 'Show total?',
+- expansionPlaceholder: 'Add an option yourself',
+- expansionButtonText: 'Add',
+- autoCloseText: 'AutoClose number: ',
+- autoClosePlaceholder: 'AutoClose number',
+- settingButtonText: 'Settings',
+- editButtonText: 'Edit',
 
 ### errorMessage: Object
 Messages of error, triggered when you try something invalid.
@@ -182,7 +193,6 @@ Messages of error, triggered when you try something invalid.
 [Live Demo](https://www.zerocho.com/portfolio/ReactVote)
 
 ## TODO
-- option change while voting
 - ban
 
 ## Wanna Contribute?

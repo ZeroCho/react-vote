@@ -44,6 +44,7 @@ class ReactVote extends Component {
       votedText: PropTypes.string,
       expansionButton: PropTypes.string,
       expansionInput: PropTypes.string,
+      settingButton: PropTypes.string,
     }),
     text: PropTypes.shape({
       titleInputPlaceholder: PropTypes.string,
@@ -67,12 +68,14 @@ class ReactVote extends Component {
       expansionButtonText: PropTypes.string,
       autoCloseText: PropTypes.string,
       autoClosePlaceholder: PropTypes.string,
+      settingButtonText: PropTypes.string,
     }),
     errorMessage: PropTypes.shape({
       notEnoughItems: PropTypes.string,
       noTitle: PropTypes.string,
     }),
     onCreate: PropTypes.func,
+    onEdit: PropTypes.func,
     onUpvote: PropTypes.func,
     onDownvote: PropTypes.func,
     onExpand: PropTypes.func,
@@ -84,6 +87,7 @@ class ReactVote extends Component {
     isAdmin: false,
     clientId: null,
     data: {
+      title: '',
       items: [],
       voters: [],
       closed: false,
@@ -91,9 +95,10 @@ class ReactVote extends Component {
       expansion: false,
       showTotal: true,
       downvote: false,
-      autoClose: null,
+      autoClose: undefined,
     },
     onCreate: null,
+    onEdit: null,
     onUpvote: null,
     onDownvote: null,
     onExpand: null,
@@ -121,6 +126,8 @@ class ReactVote extends Component {
       expansionButtonText: 'Add',
       autoCloseText: 'AutoClose number: ',
       autoClosePlaceholder: 'AutoClose number',
+      settingButtonText: 'Settings',
+      editButtonText: 'Edit',
     },
     errorMessage: {
       notEnoughItems: 'Need at least 2 items!',
@@ -131,6 +138,7 @@ class ReactVote extends Component {
 
   state = {
     showResult: false,
+    showSetting: false,
     data: this.props.data,
     voted: (this.props.clientId && !this.props.data.multiple && this.props.data.voters && this.props.data.voters.indexOf(this.props.clientId) > -1) || false,
   };
@@ -144,7 +152,10 @@ class ReactVote extends Component {
   }
 
   setData = (data) => {
-    this.setState(() => ({ data }));
+    this.setState(() => ({
+      data,
+      showSetting: false,
+    }));
   };
 
   expandVote = (data, item) => {
@@ -154,6 +165,12 @@ class ReactVote extends Component {
       return onExpand(data, item);
     }
     return true;
+  };
+
+  goToSetting = () => {
+    this.setState(() => ({
+      showSetting: true,
+    }));
   };
 
   toggleView = () => {
@@ -290,18 +307,19 @@ class ReactVote extends Component {
   };
 
   render() {
-    const { voted, data } = this.state;
-    const { onCreate, errorMessage, onUpvote, onDownvote, clientId } = this.props;
+    const { voted, data, showSetting, showResult } = this.state;
+    const { onCreate, errorMessage, onUpvote, onEdit, onDownvote, clientId, isAdmin } = this.props;
     const checkVotingClosed = data.closed;
-    const isVotingClosed = data.title && (checkVotingClosed || this.state.showResult);
+    const isVotingClosed = data.title && (checkVotingClosed || showResult);
     const canExpanded = data.expansion && (!this.state.voted || data.multiple);
     const text = Object.assign({}, ReactVote.defaultProps.text, this.props.text);
     const styles = Object.assign({}, ReactVote.defaultProps.styles, this.props.styles);
     return (
       <div className={styles.voteWrapper}>
-        {data.title
+        {data.title && !showSetting
           ? (
             <div id={isVotingClosed ? 'result-view' : 'vote-view'}>
+              {isAdmin && onEdit && <button className={styles.settingButton} onClick={this.goToSetting}>{text.settingButtonText}</button>}
               <div className={styles.voteTitle}>{data.title}</div>
               <VoteItems
                 voted={voted}
@@ -310,7 +328,7 @@ class ReactVote extends Component {
                 text={text}
                 upvote={this.upvote}
                 downvote={this.downvote}
-                clientId={this.props.clientId}
+                clientId={clientId}
                 onUpvote={onUpvote}
                 onDownvote={onDownvote}
                 resultView={isVotingClosed}
@@ -324,18 +342,18 @@ class ReactVote extends Component {
               />}
               <div className={styles.buttonWrapper}>
                 {!data.closed && <button
-                  className={this.state.showResult ? styles.goBackButton : styles.resultButton}
+                  className={showResult ? styles.goBackButton : styles.resultButton}
                   onClick={this.toggleView}
                 >
-                  {this.state.showResult ? text.goBackButtonText : text.resultButtonText}
+                  {showResult ? text.goBackButtonText : text.resultButtonText}
                 </button>}
-                {this.props.isAdmin && <button
+                {isAdmin && <button
                   className={styles.resetButton}
                   onClick={this.resetVote}
                 >
                   {text.resetButtonText}
                 </button>}
-                {this.props.isAdmin && !data.closed && <button
+                {isAdmin && !data.closed && <button
                   className={styles.closeButton}
                   onClick={this.closeVote}
                 >
@@ -349,8 +367,11 @@ class ReactVote extends Component {
             text={text}
             clientId={clientId}
             setData={this.setData}
+            data={data}
             errorMessage={errorMessage}
             onCreate={onCreate}
+            onEdit={onEdit}
+            setting={showSetting}
           />}
       </div>
     );

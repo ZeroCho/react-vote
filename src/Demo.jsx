@@ -41,6 +41,9 @@ const customText = {
 const onCreate = (data) => {
   console.log('created', data);
 };
+const onEdit = (data) => {
+  console.log('edited', data);
+};
 const onUpvote = (data, diff) => {
   console.log('upvoted', data, diff);
 };
@@ -67,6 +70,7 @@ const DOMRender = RV => (
           onCreate={onCreate}
           onUpvote={onUpvote}
           onClose={onClose}
+          onEdit={onEdit}
           onDownvote={onDownvote}
           onExpand={onExpand}
           onReset={onReset}
@@ -77,6 +81,7 @@ const DOMRender = RV => (
           styles={basicCss}
           onCreate={onCreate}
           onUpvote={onUpvote}
+          onEdit={onEdit}
           onClose={onClose}
           onDownvote={onDownvote}
           onExpand={onExpand}

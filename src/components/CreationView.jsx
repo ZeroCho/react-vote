@@ -6,26 +6,32 @@ class CreationView extends Component {
   static propTypes = {
     styles: PropTypes.objectOf(PropTypes.any).isRequired,
     text: PropTypes.objectOf(PropTypes.any).isRequired,
-    onCreate: PropTypes.func.isRequired,
+    onCreate: PropTypes.func,
+    onEdit: PropTypes.func,
     setData: PropTypes.func.isRequired,
     errorMessage: PropTypes.objectOf(PropTypes.any).isRequired,
     clientId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    data: PropTypes.objectOf(PropTypes.any),
+    setting: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     clientId: null,
+    data: null,
+    onEdit: null,
+    onCreate: null,
   };
 
   state = {
-    voteTitle: '',
-    items: [],
     addInput: '',
-    multipleCheck: false,
-    expansionCheck: false,
-    downvoteCheck: false,
-    autoCloseNumber: '',
+    voteTitle: this.props.data ? this.props.data.title : '',
+    items: this.props.data ? this.props.data.items : [],
+    multipleCheck: this.props.data ? this.props.data.multiple : false,
+    expansionCheck: this.props.data ? this.props.data.expansion : false,
+    downvoteCheck: this.props.data ? this.props.data.downvote : false,
+    autoCloseNumber: this.props.data ? this.props.data.autoClose : '',
+    showTotalCheck: this.props.data ? this.props.data.showTotal : true,
     errorMessage: false,
-    showTotalCheck: true,
     showMessage: null,
   };
 
@@ -84,6 +90,41 @@ class CreationView extends Component {
     this.setState(() => ({ items, addInput: '' }));
   };
 
+  editVote = () => {
+    const { errorMessage: { noTitle, notEnoughItems }, data, setData, onEdit } = this.props;
+    const items = this.state.items;
+    const title = this.state.voteTitle;
+    const downvote = this.state.downvoteCheck;
+    const multiple = this.state.multipleCheck;
+    const expansion = this.state.expansionCheck;
+    const showTotal = this.state.showTotalCheck;
+    const autoClose = this.state.autoCloseNumber ? parseInt(this.state.autoCloseNumber, 10) : false;
+    const editData = {
+      ...data,
+      title,
+      voters: [],
+      items,
+      closed: false,
+      multiple,
+      expansion,
+      autoClose: !Number.isNaN(autoClose) && autoClose,
+      downvote,
+      showTotal,
+    };
+    if (!title) {
+      return this.setState(() => ({ showMessage: true, errorMessage: noTitle }));
+    }
+    if (!editData.expansion && editData.items.length < 2) {
+      return this.setState(() => ({ showMessage: true, errorMessage: notEnoughItems }));
+    }
+    this.setState(() => ({ showMessage: false }));
+    setData(editData);
+    if (!onEdit) {
+      return console.warn('Provide onEdit prop as a callback function to save edited vote data');
+    }
+    return onEdit && typeof onCreate === 'function' && onEdit(editData);
+  };
+
   createVote = () => {
     const { onCreate, errorMessage: { noTitle, notEnoughItems }, setData, clientId } = this.props;
     const items = this.state.items;
@@ -114,11 +155,14 @@ class CreationView extends Component {
     }
     this.setState(() => ({ showMessage: false }));
     setData(data);
+    if (!onCreate) {
+      return console.warn('Provide onCreate prop as a callback function to save new vote data');
+    }
     return onCreate && typeof onCreate === 'function' && onCreate(data);
   };
 
   render() {
-    const { styles, text } = this.props;
+    const { styles, text, setting } = this.props;
     const { voteTitle, items, downvoteCheck, showTotalCheck, addInput, multipleCheck, expansionCheck, autoCloseNumber, errorMessage, showMessage } = this.state;
     return (
       <div id="creation-view">
@@ -203,8 +247,8 @@ class CreationView extends Component {
         {showMessage &&
         <div className={styles.errorMessage}>{errorMessage}</div>}
         <div className={styles.buttonWrapper}>
-          <button className={styles.createButton} onClick={this.createVote}>
-            {text.createButtonText}
+          <button className={styles.createButton} onClick={setting ? this.editVote : this.createVote}>
+            {setting ? text.editButtonText : text.createButtonText}
           </button>
         </div>
       </div>
