@@ -182,6 +182,7 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - autoClosePlaceholder: 'AutoClose number',
 - settingButtonText: 'Settings',
 - editButtonText: 'Edit',
+- closeCheckbox: 'Closed?',
 
 ### errorMessage: Object
 Messages of error, triggered when you try something invalid.

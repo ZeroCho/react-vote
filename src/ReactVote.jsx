@@ -69,6 +69,7 @@ class ReactVote extends Component {
       autoCloseText: PropTypes.string,
       autoClosePlaceholder: PropTypes.string,
       settingButtonText: PropTypes.string,
+      closeCheckbox: PropTypes.string,
     }),
     errorMessage: PropTypes.shape({
       notEnoughItems: PropTypes.string,
@@ -128,6 +129,7 @@ class ReactVote extends Component {
       autoClosePlaceholder: 'AutoClose number',
       settingButtonText: 'Settings',
       editButtonText: 'Edit',
+      closeCheckbox: 'Closed?',
     },
     errorMessage: {
       notEnoughItems: 'Need at least 2 items!',

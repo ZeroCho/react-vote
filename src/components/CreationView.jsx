@@ -31,6 +31,7 @@ class CreationView extends Component {
     downvoteCheck: this.props.data ? this.props.data.downvote : false,
     autoCloseNumber: this.props.data ? this.props.data.autoClose : '',
     showTotalCheck: this.props.data ? this.props.data.showTotal : true,
+    closeCheck: this.props.data ? this.props.data.closed : false,
     errorMessage: false,
     showMessage: null,
   };
@@ -50,6 +51,11 @@ class CreationView extends Component {
   onAddInputChange = (e) => {
     const addInput = e.target.value.trim();
     this.setState(() => ({ addInput }));
+  };
+
+  onCloseCheckChange = (e) => {
+    const closeCheck = e.target.checked;
+    this.setState(() => ({ closeCheck }));
   };
 
   onMultipleCheckChange = (e) => {
@@ -96,6 +102,7 @@ class CreationView extends Component {
     const title = this.state.voteTitle;
     const downvote = this.state.downvoteCheck;
     const multiple = this.state.multipleCheck;
+    const closed = this.state.closeCheck;
     const expansion = this.state.expansionCheck;
     const showTotal = this.state.showTotalCheck;
     const autoClose = this.state.autoCloseNumber ? parseInt(this.state.autoCloseNumber, 10) : false;
@@ -104,7 +111,7 @@ class CreationView extends Component {
       title,
       voters: [],
       items,
-      closed: false,
+      closed,
       multiple,
       expansion,
       autoClose: !Number.isNaN(autoClose) && autoClose,
@@ -129,6 +136,7 @@ class CreationView extends Component {
     const { onCreate, errorMessage: { noTitle, notEnoughItems }, setData, clientId } = this.props;
     const items = this.state.items;
     const title = this.state.voteTitle;
+    const closed = this.state.closeCheck;
     const downvote = this.state.downvoteCheck;
     const multiple = this.state.multipleCheck;
     const expansion = this.state.expansionCheck;
@@ -138,7 +146,7 @@ class CreationView extends Component {
       title,
       voters: [],
       items,
-      closed: false,
+      closed,
       multiple,
       expansion,
       autoClose: !Number.isNaN(autoClose) && autoClose,
@@ -163,7 +171,7 @@ class CreationView extends Component {
 
   render() {
     const { styles, text, setting } = this.props;
-    const { voteTitle, items, downvoteCheck, showTotalCheck, addInput, multipleCheck, expansionCheck, autoCloseNumber, errorMessage, showMessage } = this.state;
+    const { voteTitle, items, downvoteCheck, showTotalCheck, addInput, multipleCheck, expansionCheck, autoCloseNumber, errorMessage, showMessage, closeCheck } = this.state;
     return (
       <div id="creation-view">
         <input
@@ -240,6 +248,16 @@ class CreationView extends Component {
                 type="checkbox"
                 checked={showTotalCheck}
                 onChange={this.onShowTotalCheckChange}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="closed">{text.closeCheckbox}
+              <input
+                id="closed"
+                type="checkbox"
+                checked={closeCheck}
+                onChange={this.onCloseCheckChange}
               />
             </label>
           </div>
