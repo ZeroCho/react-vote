@@ -129,7 +129,7 @@ class CreationView extends Component {
     if (!onEdit) {
       return console.warn('Provide onEdit prop as a callback function to save edited vote data');
     }
-    return onEdit && typeof onCreate === 'function' && onEdit(editData);
+    return onEdit && typeof onEdit === 'function' && onEdit(editData);
   };
 
   createVote = () => {
