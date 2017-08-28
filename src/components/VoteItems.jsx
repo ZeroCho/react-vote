@@ -17,8 +17,24 @@ class VoteItems extends Component {
     clientId: null,
   };
 
+  state = {
+    showReasonInput: -1,
+    reasonType: true,
+    reason: '',
+  };
+
+  onReasonChange = (e) => {
+    const reason = e.target.value.trim();
+    this.setState({ reason });
+  };
+
+  showReasonInput = (i, up) => () => {
+    this.setState({ showReasonInput: i, reasonType: up });
+  };
+
   render = () => {
     const { clientId, data: { title, items, multiple, downvote, showTotal }, styles, text, voted, resultView } = this.props;
+    const { reason, reasonType, showReasonInput } = this.state;
     const canVote = (multiple || !voted);
     const total = items.reduce((prev, current) => prev + current.count, 0);
     const wholeTotal = items.reduce((prev, current) => {
@@ -39,13 +55,13 @@ class VoteItems extends Component {
             : canVote
             && (<span className={styles.voteButtons}>
               <button
-                onClick={() => this.props.upvote(i)}
+                onClick={item.reason ? this.showReasonInput(i, true) : this.props.upvote(i)}
                 className={styles.voteButton}
               >
                 {text.voteButtonText}
               </button>
               {downvote && <button
-                onClick={() => this.props.downvote(i)}
+                onClick={item.reason ? this.showReasonInput(i, false) : this.props.downvote(i)}
                 className={styles.downvoteButton}
               >
                 {text.downvoteButtonText}
@@ -59,6 +75,21 @@ class VoteItems extends Component {
               {title && resultView
                 ? <div className={styles.itemCount}>{`${item.count}(${percentage}%)`}</div>
                 : votedOrNot}
+              {canVote && showReasonInput === i && <div>
+                <input
+                  id="reason"
+                  onChange={this.onReasonChange}
+                  value={reason}
+                  placeholder={text.reasonInputPlaceholder}
+                  className={styles.expansionInput}
+                />
+                <button
+                  className={styles.expansionButton}
+                  onClick={reasonType ? this.props.upvote(i, reason) : this.props.downvote(i, reason)}
+                >
+                  {reasonType ? text.voteButtonText : text.downvoteButtonText}
+                </button>
+              </div>}
             </div>
           );
         })}

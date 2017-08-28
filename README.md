@@ -81,6 +81,8 @@ Object that contains the whole information about the vote
       title: String, // Title of option
       count: Number, // Number of votes
       total: Number, // Number of total votes(including downvote)
+      reason: Boolean, // Need to put reason why voted
+      reasons: [String], // Array of reasons why voted
       voters: [String/Number] // Array of unique identifers of all voters for this option
       downvoters: [String/Number] // only downvoters
       upvoters: [String/Number] // only upvoters
@@ -183,6 +185,8 @@ A group of texts in this voting component. You can change these for **i18n**(int
 - settingButtonText: 'Settings',
 - editButtonText: 'Edit',
 - closeCheckbox: 'Closed?',
+- reasonCheckbox: 'Need reason?'
+- reasonInputPlaceholder: 'Type reason why you voted this'
 
 ### errorMessage: Object
 Messages of error, triggered when you try something invalid.

@@ -40,7 +40,7 @@ class ExpansionInput extends Component {
     };
     data.items.push(item);
     this.setState(() => ({ expansionInput: '' }));
-    this.props.expandVote(data, item);
+    return this.props.expandVote(data, item);
   };
 
   render() {

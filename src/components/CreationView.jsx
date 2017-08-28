@@ -34,6 +34,7 @@ class CreationView extends Component {
     closeCheck: this.props.data ? this.props.data.closed : false,
     errorMessage: false,
     showMessage: null,
+    reasonCheck: false,
   };
 
   componentDidMount() {
@@ -83,6 +84,11 @@ class CreationView extends Component {
     this.setState(() => ({ autoCloseNumber }));
   };
 
+  onReasonChange = (e) => {
+    const reasonCheck = e.target.checked;
+    this.setState(() => ({ reasonCheck }));
+  };
+
   onRemoveItem = (target) => {
     let items = this.state.items;
     items = items.filter((item, index) => index !== target);
@@ -90,10 +96,10 @@ class CreationView extends Component {
   };
 
   addItem = () => {
-    const { addInput, items } = this.state;
+    const { addInput, items, reasonCheck } = this.state;
     if (!addInput) return;
-    items.push({ title: addInput, count: 0, total: 0, voters: [], upvoters: [], downvoters: [] });
-    this.setState(() => ({ items, addInput: '' }));
+    items.push({ title: addInput, count: 0, total: 0, voters: [], upvoters: [], downvoters: [], reason: reasonCheck });
+    this.setState(() => ({ items, addInput: '', reasonCheck: false }));
   };
 
   editVote = () => {
@@ -171,7 +177,7 @@ class CreationView extends Component {
 
   render() {
     const { styles, text, setting } = this.props;
-    const { voteTitle, items, downvoteCheck, showTotalCheck, addInput, multipleCheck, expansionCheck, autoCloseNumber, errorMessage, showMessage, closeCheck } = this.state;
+    const { voteTitle, items, downvoteCheck, showTotalCheck, addInput, multipleCheck, expansionCheck, autoCloseNumber, errorMessage, showMessage, closeCheck, reasonCheck } = this.state;
     return (
       <div id="creation-view">
         <input
@@ -200,6 +206,10 @@ class CreationView extends Component {
             >
               {text.addButtonText}
             </button>
+            <label htmlFor="reason">
+              {text.reasonCheckbox}
+              <input id="reason" type="checkbox" checked={reasonCheck} onChange={this.onReasonChange} />
+            </label>
           </div>
           <div>
             <label htmlFor="multiple">{text.multipleCheckbox}

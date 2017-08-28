@@ -70,6 +70,8 @@ class ReactVote extends Component {
       autoClosePlaceholder: PropTypes.string,
       settingButtonText: PropTypes.string,
       closeCheckbox: PropTypes.string,
+      reasonCheckbox: PropTypes.string,
+      reasonInputPlaceholder: PropTypes.string,
     }),
     errorMessage: PropTypes.shape({
       notEnoughItems: PropTypes.string,
@@ -130,6 +132,8 @@ class ReactVote extends Component {
       settingButtonText: 'Settings',
       editButtonText: 'Edit',
       closeCheckbox: 'Closed?',
+      reasonCheckbox: 'Need reason?',
+      reasonInputPlaceholder: 'Type reason why you voted this',
     },
     errorMessage: {
       notEnoughItems: 'Need at least 2 items!',
@@ -208,7 +212,7 @@ class ReactVote extends Component {
     }
   };
 
-  upvote = (idx) => {
+  upvote = (idx, reason) => () => {
     const { onUpvote, clientId } = this.props;
     const { data } = this.state;
     const newData = Object.assign({}, data);
@@ -231,8 +235,14 @@ class ReactVote extends Component {
     if (!newItems[idx].upvoters) { // TODO: remove at v4
       newItems[idx].upvoters = [];
     }
+    if (!newItems[idx].reasons) {
+      newItems[idx].reasons = [];
+    }
     newItems[idx].voters.push(clientId);
     newItems[idx].upvoters.push(clientId);
+    if (reason) {
+      newItems[idx].reasons.push(reason);
+    }
     if (newData.voters) { // TODO: remove at v4
       if (newData.voters.indexOf(clientId) === -1) {
         newData.voters.push(clientId);
@@ -258,7 +268,7 @@ class ReactVote extends Component {
     return true;
   };
 
-  downvote = (idx) => {
+  downvote = (idx, reason) => () => {
     const { clientId, onDownvote } = this.props;
     const { data } = this.state;
     const newData = Object.assign({}, data);
@@ -280,6 +290,12 @@ class ReactVote extends Component {
     }
     if (!newItems[idx].upvoters) { // TODO: remove at v4
       newItems[idx].upvoters = [];
+    }
+    if (!newItems[idx].reasons) {
+      newItems[idx].reasons = [];
+    }
+    if (reason) {
+      newItems[idx].reasons.push(reason);
     }
     newItems[idx].voters.push(clientId);
     newItems[idx].downvoters.push(clientId);
