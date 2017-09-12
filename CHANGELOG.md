@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.2.0] - 2071-08-29
+## [3.2.1] - 2017-09-12
+### Fixed
+- spacebar in text input
+- no blank reason
+
+## [3.2.0] - 2017-08-29
 ### Added
 - can choose whether to type reason why voted
 

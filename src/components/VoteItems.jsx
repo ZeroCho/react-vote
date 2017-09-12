@@ -24,7 +24,7 @@ class VoteItems extends Component {
   };
 
   onReasonChange = (e) => {
-    const reason = e.target.value.trim();
+    const reason = e.target.value;
     this.setState({ reason });
   };
 

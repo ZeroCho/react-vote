@@ -45,12 +45,12 @@ class CreationView extends Component {
   }
 
   onVoteTitleChange = (e) => {
-    const voteTitle = e.target.value.trim();
+    const voteTitle = e.target.value;
     this.setState(() => ({ voteTitle }));
   };
 
   onAddInputChange = (e) => {
-    const addInput = e.target.value.trim();
+    const addInput = e.target.value;
     this.setState(() => ({ addInput }));
   };
 
@@ -97,15 +97,23 @@ class CreationView extends Component {
 
   addItem = () => {
     const { addInput, items, reasonCheck } = this.state;
-    if (!addInput) return;
-    items.push({ title: addInput, count: 0, total: 0, voters: [], upvoters: [], downvoters: [], reason: reasonCheck });
+    if (!addInput || !addInput.trim()) return;
+    items.push({
+      title: addInput.trim(),
+      count: 0,
+      total: 0,
+      voters: [],
+      upvoters: [],
+      downvoters: [],
+      reason: reasonCheck,
+    });
     this.setState(() => ({ items, addInput: '', reasonCheck: false }));
   };
 
   editVote = () => {
     const { errorMessage: { noTitle, notEnoughItems }, data, setData, onEdit } = this.props;
     const items = this.state.items;
-    const title = this.state.voteTitle;
+    const title = this.state.voteTitle.trim();
     const downvote = this.state.downvoteCheck;
     const multiple = this.state.multipleCheck;
     const closed = this.state.closeCheck;
@@ -148,8 +156,11 @@ class CreationView extends Component {
     const expansion = this.state.expansionCheck;
     const showTotal = this.state.showTotalCheck;
     const autoClose = this.state.autoCloseNumber ? parseInt(this.state.autoCloseNumber, 10) : false;
+    if (!title || !title.trim()) {
+      return this.setState(() => ({ showMessage: true, errorMessage: noTitle }));
+    }
     const data = {
-      title,
+      title: title.trim(),
       voters: [],
       items,
       closed,
@@ -160,10 +171,6 @@ class CreationView extends Component {
       showTotal,
       creator: clientId,
     };
-
-    if (!title) {
-      return this.setState(() => ({ showMessage: true, errorMessage: noTitle }));
-    }
     if (!data.expansion && data.items.length < 2) {
       return this.setState(() => ({ showMessage: true, errorMessage: notEnoughItems }));
     }

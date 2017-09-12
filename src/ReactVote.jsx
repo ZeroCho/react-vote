@@ -240,8 +240,11 @@ class ReactVote extends Component {
     }
     newItems[idx].voters.push(clientId);
     newItems[idx].upvoters.push(clientId);
+    if (newItems[idx].reason && (!reason || !reason.trim())) {
+      return false;
+    }
     if (reason) {
-      newItems[idx].reasons.push(reason);
+      newItems[idx].reasons.push(reason.trim());
     }
     if (newData.voters) { // TODO: remove at v4
       if (newData.voters.indexOf(clientId) === -1) {
@@ -294,8 +297,11 @@ class ReactVote extends Component {
     if (!newItems[idx].reasons) {
       newItems[idx].reasons = [];
     }
+    if (newItems[idx].reason && (!reason || !reason.trim())) {
+      return false;
+    }
     if (reason) {
-      newItems[idx].reasons.push(reason);
+      newItems[idx].reasons.push(reason.trim());
     }
     newItems[idx].voters.push(clientId);
     newItems[idx].downvoters.push(clientId);

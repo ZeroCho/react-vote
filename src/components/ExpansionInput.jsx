@@ -19,18 +19,18 @@ class ExpansionInput extends Component {
   };
 
   onExpansionInputChange = (e) => {
-    const expansionInput = e.target.value.trim();
+    const expansionInput = e.target.value;
     this.setState(() => ({ expansionInput }));
   };
 
   expandVote = () => {
     const title = this.state.expansionInput;
-    if (!title) {
+    if (!title || !title.trim()) {
       return false;
     }
     const data = this.props.data;
     const item = {
-      title,
+      title: title.trim(),
       count: 0,
       total: 0,
       voters: [],
