@@ -151,9 +151,7 @@ class ReactVote extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
-      this.setState(() => ({
-        data: nextProps.data,
-      }));
+      this.setState(() => ({ data: nextProps.data }));
     }
   }
 
@@ -174,9 +172,7 @@ class ReactVote extends Component {
   };
 
   goToSetting = () => {
-    this.setState(() => ({
-      showSetting: true,
-    }));
+    this.setState(() => ({ showSetting: true }));
   };
 
   toggleView = () => {
@@ -185,7 +181,7 @@ class ReactVote extends Component {
 
   closeVote = () => {
     const { onClose } = this.props;
-    const data = this.state.data;
+    const { data } = this.state;
     data.closed = true;
     this.setState(() => ({ data }));
     if (onClose && typeof onClose === 'function') {
@@ -195,7 +191,7 @@ class ReactVote extends Component {
 
   resetVote = () => {
     const { onReset } = this.props;
-    const data = this.state.data;
+    const { data } = this.state;
     data.voters = [];
     data.closed = false;
     data.items.forEach((item) => {
@@ -357,7 +353,7 @@ class ReactVote extends Component {
                 onDownvote={onDownvote}
                 resultView={isVotingClosed}
               />
-              {canExpanded && <ExpansionInput
+              {canExpanded && !data.closed && <ExpansionInput
                 data={data}
                 clientId={clientId}
                 styles={styles}
@@ -365,19 +361,22 @@ class ReactVote extends Component {
                 expandVote={this.expandVote}
               />}
               <div className={styles.buttonWrapper}>
-                {!data.closed && <button
+                {!data.closed &&
+                <button
                   className={showResult ? styles.goBackButton : styles.resultButton}
                   onClick={this.toggleView}
                 >
                   {showResult ? text.goBackButtonText : text.resultButtonText}
                 </button>}
-                {isAdmin && <button
+                {isAdmin &&
+                <button
                   className={styles.resetButton}
                   onClick={this.resetVote}
                 >
                   {text.resetButtonText}
                 </button>}
-                {isAdmin && !data.closed && <button
+                {isAdmin && !data.closed &&
+                <button
                   className={styles.closeButton}
                   onClick={this.closeVote}
                 >
