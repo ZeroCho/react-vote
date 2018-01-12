@@ -4,7 +4,7 @@
   "description": "React component for simple voting system, easy to customize and internationalize",
   "main": "dist/react-vote.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "rimraf dist && webpack --colors --debug --display-error-details",
     "dev": "./node_modules/.bin/webpack-dev-server --debug --output-pathinfo --config webpack.config.dev.js",
     "prepublishOnly": "npm run build",
@@ -28,37 +28,38 @@
   },
   "homepage": "https://github.com/zerocho/react-vote#readme",
   "peerDependencies": {
-    "react": "^15.3.0",
-    "react-dom": "^15.3.0"
+    "react": "^15.3.0 || ^16",
+    "react-dom": "^15.3.0 || ^16"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-eslint": "^7.2.3",
-    "babel-jest": "^20.0.3",
+    "babel-eslint": "^8.2.1",
+    "babel-jest": "^22.0.6",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-1": "^6.22.0",
     "css-loader": "^0.28.5",
-    "enzyme": "^2.9.1",
-    "eslint": "^3.16.1",
-    "eslint-config-airbnb": "^15.1.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.3.0",
-    "expect": "^1.20.2",
-    "jest": "^20.0.4",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-test-renderer": "^15.6.1",
+    "expect": "^22.0.6",
+    "jest": "^22.0.6",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-test-renderer": "^16.2.0",
+    "react-hot-loader": "^4.0.0-beta.13",
     "rimraf": "^2.6.1",
-    "style-loader": "^0.18.2",
+    "style-loader": "^0.19.1",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "prop-types": "latest",
-    "react-hot-loader": "next"
+    "prop-types": "^15.6.0"
   }
 }

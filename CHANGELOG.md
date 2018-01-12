@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.3.0] - 2018-01-13
+### Updated
+- React@16
+### Fixed
+- closed vote cannot be expanded
+
 ## [3.2.1] - 2017-09-12
 ### Fixed
 - spacebar in text input

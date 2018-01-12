@@ -10,7 +10,12 @@
     }
   },
   "rules": {
-    "linebreak-style": ["error", "windows"],
+    "object-curly-newline": [
+      "error",
+      {
+        "multiline": true
+      }
+    ],
     "import/no-unresolved": 0,
     "global-require": 0,
     "no-console": 0,
