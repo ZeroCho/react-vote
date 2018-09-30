@@ -37,6 +37,7 @@ export interface ReactVoteErrors {
 }
 
 export interface ReactVoteItem {
+  title?: string;
   count?: number;
   total?: number;
   voters?: string[] | number[];
