@@ -4,6 +4,63 @@ import CreationView from './components/CreationView';
 import ExpansionInput from './components/ExpansionInput';
 import VoteItems from './components/VoteItems';
 
+const defaultProps = {
+  isAdmin: false,
+  clientId: null,
+  data: {
+    title: '',
+    items: [],
+    voters: [],
+    closed: false,
+    multiple: false,
+    expansion: false,
+    showTotal: true,
+    downvote: false,
+    autoClose: undefined,
+  },
+  onCreate: null,
+  onEdit: null,
+  onUpvote: null,
+  onDownvote: null,
+  onExpand: null,
+  onClose: null,
+  onReset: null,
+  text: {
+    addButtonText: 'Add',
+    titleInputPlaceholder: 'Title of this vote',
+    addInputPlaceholder: 'Title of a new option',
+    removeButtonText: '×',
+    closeButtonText: 'Close vote',
+    resetButtonText: 'Reset vote',
+    createButtonText: 'Create',
+    resultButtonText: 'Show result',
+    goBackButtonText: 'Go back',
+    voteButtonText: 'Upvote',
+    downvoteCheckbox: 'Allow downvote?',
+    downvoteButtonText: 'Downvote',
+    votedText: 'Voted',
+    totalText: 'Total',
+    multipleCheckbox: 'Multiple choice?',
+    expansionCheckbox: 'Expandable?',
+    showTotalCheckbox: 'Show total?',
+    expansionPlaceholder: 'Add an option yourself',
+    expansionButtonText: 'Add',
+    autoCloseText: 'AutoClose number: ',
+    autoClosePlaceholder: 'AutoClose number',
+    settingButtonText: 'Settings',
+    editButtonText: 'Edit',
+    closeCheckbox: 'Closed?',
+    reasonCheckbox: 'Need reason?',
+    reasonInputPlaceholder: 'Type reason why you voted this',
+  },
+  errorMessage: {
+    notEnoughItems: 'Need at least 2 items!',
+    noTitle: 'Need a title!',
+  },
+  styles: {},
+};
+exports.reactVoteDefaultProps = defaultProps;
+
 class ReactVote extends Component {
   static propTypes = {
     isAdmin: PropTypes.bool,
@@ -86,61 +143,7 @@ class ReactVote extends Component {
     onClose: PropTypes.func,
   };
 
-  static defaultProps = {
-    isAdmin: false,
-    clientId: null,
-    data: {
-      title: '',
-      items: [],
-      voters: [],
-      closed: false,
-      multiple: false,
-      expansion: false,
-      showTotal: true,
-      downvote: false,
-      autoClose: undefined,
-    },
-    onCreate: null,
-    onEdit: null,
-    onUpvote: null,
-    onDownvote: null,
-    onExpand: null,
-    onClose: null,
-    onReset: null,
-    text: {
-      addButtonText: 'Add',
-      titleInputPlaceholder: 'Title of this vote',
-      addInputPlaceholder: 'Title of a new option',
-      removeButtonText: '×',
-      closeButtonText: 'Close vote',
-      resetButtonText: 'Reset vote',
-      createButtonText: 'Create',
-      resultButtonText: 'Show result',
-      goBackButtonText: 'Go back',
-      voteButtonText: 'Upvote',
-      downvoteCheckbox: 'Allow downvote?',
-      downvoteButtonText: 'Downvote',
-      votedText: 'Voted',
-      totalText: 'Total',
-      multipleCheckbox: 'Multiple choice?',
-      expansionCheckbox: 'Expandable?',
-      showTotalCheckbox: 'Show total?',
-      expansionPlaceholder: 'Add an option yourself',
-      expansionButtonText: 'Add',
-      autoCloseText: 'AutoClose number: ',
-      autoClosePlaceholder: 'AutoClose number',
-      settingButtonText: 'Settings',
-      editButtonText: 'Edit',
-      closeCheckbox: 'Closed?',
-      reasonCheckbox: 'Need reason?',
-      reasonInputPlaceholder: 'Type reason why you voted this',
-    },
-    errorMessage: {
-      notEnoughItems: 'Need at least 2 items!',
-      noTitle: 'Need a title!',
-    },
-    styles: {},
-  };
+  static defaultProps = defaultProps;
 
   state = {
     showResult: false,
@@ -200,7 +203,8 @@ class ReactVote extends Component {
       item.voters = [];
       item.upvoters = [];
       item.downvoters = [];
-      item.voted = null;
+      item.voted = false;
+      item.reasons = [];
     });
     this.setState(() => ({ data, voted: false }));
     if (onReset && typeof onReset === 'function') {
@@ -222,18 +226,6 @@ class ReactVote extends Component {
     newItems[idx].count += 1;
     newItems[idx].total += 1;
     newItems[idx].voted = true;
-    if (!newItems[idx].voters) { // TODO: remove at v4
-      newItems[idx].voters = [];
-    }
-    if (!newItems[idx].downvoters) { // TODO: remove at v4
-      newItems[idx].downvoters = [];
-    }
-    if (!newItems[idx].upvoters) { // TODO: remove at v4
-      newItems[idx].upvoters = [];
-    }
-    if (!newItems[idx].reasons) {
-      newItems[idx].reasons = [];
-    }
     newItems[idx].voters.push(clientId);
     newItems[idx].upvoters.push(clientId);
     if (newItems[idx].reason && (!reason || !reason.trim())) {
@@ -241,13 +233,6 @@ class ReactVote extends Component {
     }
     if (reason) {
       newItems[idx].reasons.push(reason.trim());
-    }
-    if (newData.voters) { // TODO: remove at v4
-      if (newData.voters.indexOf(clientId) === -1) {
-        newData.voters.push(clientId);
-      }
-    } else {
-      newData.voters = [clientId];
     }
     const diff = {
       index: idx,
@@ -281,18 +266,6 @@ class ReactVote extends Component {
     newItems[idx].count -= 1;
     newItems[idx].total += 1;
     newItems[idx].voted = true;
-    if (!newItems[idx].voters) { // TODO: remove at v4
-      newItems[idx].voters = [];
-    }
-    if (!newItems[idx].downvoters) { // TODO: remove at v4
-      newItems[idx].downvoters = [];
-    }
-    if (!newItems[idx].upvoters) { // TODO: remove at v4
-      newItems[idx].upvoters = [];
-    }
-    if (!newItems[idx].reasons) {
-      newItems[idx].reasons = [];
-    }
     if (newItems[idx].reason && (!reason || !reason.trim())) {
       return false;
     }
@@ -301,13 +274,6 @@ class ReactVote extends Component {
     }
     newItems[idx].voters.push(clientId);
     newItems[idx].downvoters.push(clientId);
-    if (newData.voters) { // TODO: remove at v4
-      if (newData.voters.indexOf(clientId) === -1) {
-        newData.voters.push(clientId);
-      }
-    } else {
-      newData.voters = [clientId];
-    }
     const diff = {
       index: idx,
       item: newItems[idx],
@@ -339,7 +305,8 @@ class ReactVote extends Component {
         {data.title && !showSetting
           ? (
             <div id={isVotingClosed ? 'result-view' : 'vote-view'}>
-              {isAdmin && onEdit && <button className={styles.settingButton} onClick={this.goToSetting}>{text.settingButtonText}</button>}
+              {isAdmin && onEdit &&
+              <button className={styles.settingButton} onClick={this.goToSetting}>{text.settingButtonText}</button>}
               <div className={styles.voteTitle}>{data.title}</div>
               <VoteItems
                 voted={voted}

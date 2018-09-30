@@ -90,7 +90,7 @@ class CreationView extends Component {
   };
 
   onRemoveItem = (target) => {
-    let items = this.state.items;
+    let { items } = this.state;
     items = items.filter((item, index) => index !== target);
     this.setState(() => ({ items }));
   };
@@ -106,13 +106,14 @@ class CreationView extends Component {
       upvoters: [],
       downvoters: [],
       reason: reasonCheck,
+      reasons: [],
     });
     this.setState(() => ({ items, addInput: '', reasonCheck: false }));
   };
 
   editVote = () => {
     const { errorMessage: { noTitle, notEnoughItems }, data, setData, onEdit } = this.props;
-    const items = this.state.items;
+    const { items } = this.state;
     const title = this.state.voteTitle.trim();
     const downvote = this.state.downvoteCheck;
     const multiple = this.state.multipleCheck;
@@ -148,7 +149,7 @@ class CreationView extends Component {
 
   createVote = () => {
     const { onCreate, errorMessage: { noTitle, notEnoughItems }, setData, clientId } = this.props;
-    const items = this.state.items;
+    const { items } = this.state;
     const title = this.state.voteTitle;
     const closed = this.state.closeCheck;
     const downvote = this.state.downvoteCheck;
@@ -188,6 +189,7 @@ class CreationView extends Component {
     return (
       <div id="creation-view">
         <input
+          id="rvote-titleinput"
           className={styles.titleInput}
           value={voteTitle}
           onChange={this.onVoteTitleChange}
@@ -202,12 +204,14 @@ class CreationView extends Component {
           />
           <div>
             <input
+              id="rvote-addinput"
               className={styles.addInput}
               value={addInput}
               onChange={this.onAddInputChange}
               placeholder={text.addInputPlaceholder}
             />
             <button
+              id="rvote-addbutton"
               className={styles.addButton}
               onClick={this.addItem}
             >
