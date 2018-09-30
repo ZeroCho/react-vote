@@ -10,12 +10,11 @@ class ExpansionInput extends Component {
     data: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
-  static defaultProps = {
-    clientId: null,
-  };
+  static defaultProps = { clientId: null };
 
   state = {
     expansionInput: '',
+    reasonCheck: false,
   };
 
   onExpansionInputChange = (e) => {
@@ -23,12 +22,17 @@ class ExpansionInput extends Component {
     this.setState(() => ({ expansionInput }));
   };
 
+  onReasonChange = (e) => {
+    const reasonCheck = e.target.checked;
+    this.setState(() => ({ reasonCheck }));
+  };
+
   expandVote = () => {
     const title = this.state.expansionInput;
     if (!title || !title.trim()) {
       return false;
     }
-    const data = this.props.data;
+    const { data } = this.props;
     const item = {
       title: title.trim(),
       count: 0,
@@ -45,6 +49,7 @@ class ExpansionInput extends Component {
 
   render() {
     const { styles, text } = this.props;
+    const { reasonCheck } = this.state;
     return (
       <div className={styles.itemWrapper}>
         <input
@@ -53,6 +58,10 @@ class ExpansionInput extends Component {
           onChange={this.onExpansionInputChange}
           placeholder={text.expansionPlaceholder}
         />
+        <label htmlFor="reason">
+          {text.reasonCheckbox}
+          <input id="reason" type="checkbox" checked={reasonCheck} onChange={this.onReasonChange} />
+        </label>
         <button
           className={styles.expansionButton}
           onClick={this.expandVote}
