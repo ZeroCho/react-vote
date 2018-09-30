@@ -67,7 +67,7 @@ export interface ReactVoteData {
   creator?: string | number;
 }
 
-interface ReactVoteStyles {
+export interface ReactVoteStyles {
   voteWrapper?: string;
   voteTitle?: string;
   titleInput?: string;
