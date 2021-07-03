@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier"],
   "parserOptions": {
     "ecmaVersion": 2017,
     "sourceType": "module",
@@ -10,12 +10,7 @@
     }
   },
   "rules": {
-    "object-curly-newline": [
-      "error",
-      {
-        "multiline": true
-      }
-    ],
+    "camelcase": 0,
     "import/no-unresolved": 0,
     "global-require": 0,
     "no-console": 0,

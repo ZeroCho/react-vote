@@ -18,17 +18,17 @@ class ExpansionInput extends Component {
     expansionInput: '',
   };
 
-  onExpansionInputChange = (e) => {
+  onExpansionInputChange = e => {
     const expansionInput = e.target.value;
     this.setState(() => ({ expansionInput }));
   };
 
   expandVote = () => {
+    const { data, expandVote, clientId } = this.props;
     const title = this.state.expansionInput;
     if (!title || !title.trim()) {
       return false;
     }
-    const data = this.props.data;
     const item = {
       title: title.trim(),
       count: 0,
@@ -36,11 +36,11 @@ class ExpansionInput extends Component {
       voters: [],
       upvoters: [],
       downvoters: [],
-      adder: this.props.clientId,
+      adder: clientId,
     };
     data.items.push(item);
     this.setState(() => ({ expansionInput: '' }));
-    return this.props.expandVote(data, item);
+    return expandVote(data, item);
   };
 
   render() {
@@ -54,6 +54,7 @@ class ExpansionInput extends Component {
           placeholder={text.expansionPlaceholder}
         />
         <button
+          type="button"
           className={styles.expansionButton}
           onClick={this.expandVote}
         >

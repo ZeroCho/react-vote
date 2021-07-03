@@ -44,53 +44,53 @@ class CreationView extends Component {
     }
   }
 
-  onVoteTitleChange = (e) => {
+  onVoteTitleChange = e => {
     const voteTitle = e.target.value;
     this.setState(() => ({ voteTitle }));
   };
 
-  onAddInputChange = (e) => {
+  onAddInputChange = e => {
     const addInput = e.target.value;
     this.setState(() => ({ addInput }));
   };
 
-  onCloseCheckChange = (e) => {
+  onCloseCheckChange = e => {
     const closeCheck = e.target.checked;
     this.setState(() => ({ closeCheck }));
   };
 
-  onMultipleCheckChange = (e) => {
+  onMultipleCheckChange = e => {
     const multipleCheck = e.target.checked;
     this.setState(() => ({ multipleCheck }));
   };
 
-  onExpansionCheckChange = (e) => {
+  onExpansionCheckChange = e => {
     const expansionCheck = e.target.checked;
     this.setState(() => ({ expansionCheck }));
   };
 
-  onDownvoteCheckChange = (e) => {
+  onDownvoteCheckChange = e => {
     const downvoteCheck = e.target.checked;
     this.setState(() => ({ downvoteCheck }));
   };
 
-  onShowTotalCheckChange = (e) => {
+  onShowTotalCheckChange = e => {
     const showTotalCheck = e.target.checked;
     this.setState(() => ({ showTotalCheck }));
   };
 
-  onAutoCloseChange = (e) => {
+  onAutoCloseChange = e => {
     const autoCloseNumber = e.target.value.trim();
     this.setState(() => ({ autoCloseNumber }));
   };
 
-  onReasonChange = (e) => {
+  onReasonChange = e => {
     const reasonCheck = e.target.checked;
     this.setState(() => ({ reasonCheck }));
   };
 
-  onRemoveItem = (target) => {
-    let items = this.state.items;
+  onRemoveItem = target => {
+    let { items } = this.state;
     items = items.filter((item, index) => index !== target);
     this.setState(() => ({ items }));
   };
@@ -111,15 +111,24 @@ class CreationView extends Component {
   };
 
   editVote = () => {
-    const { errorMessage: { noTitle, notEnoughItems }, data, setData, onEdit } = this.props;
-    const items = this.state.items;
-    const title = this.state.voteTitle.trim();
-    const downvote = this.state.downvoteCheck;
-    const multiple = this.state.multipleCheck;
-    const closed = this.state.closeCheck;
-    const expansion = this.state.expansionCheck;
-    const showTotal = this.state.showTotalCheck;
-    const autoClose = this.state.autoCloseNumber ? parseInt(this.state.autoCloseNumber, 10) : false;
+    const {
+      errorMessage: { noTitle, notEnoughItems },
+      data,
+      setData,
+      onEdit,
+    } = this.props;
+    const {
+      items,
+      voteTitle,
+      closeCheck: closed,
+      downvoteCheck: downvote,
+      multipleCheck: multiple,
+      expansionCheck: expansion,
+      showTotalCheck: showTotal,
+      autoCloseNumber,
+    } = this.state;
+    const title = voteTitle.trim();
+    const autoClose = autoCloseNumber ? parseInt(autoCloseNumber, 10) : false;
     const editData = {
       ...data,
       title,
@@ -133,31 +142,50 @@ class CreationView extends Component {
       showTotal,
     };
     if (!title) {
-      return this.setState(() => ({ showMessage: true, errorMessage: noTitle }));
+      return this.setState(() => ({
+        showMessage: true,
+        errorMessage: noTitle,
+      }));
     }
     if (!editData.expansion && editData.items.length < 2) {
-      return this.setState(() => ({ showMessage: true, errorMessage: notEnoughItems }));
+      return this.setState(() => ({
+        showMessage: true,
+        errorMessage: notEnoughItems,
+      }));
     }
     this.setState(() => ({ showMessage: false }));
     setData(editData);
     if (!onEdit) {
-      return console.warn('Provide onEdit prop as a callback function to save edited vote data');
+      return console.warn(
+        'Provide onEdit prop as a callback function to save edited vote data',
+      );
     }
     return onEdit && typeof onEdit === 'function' && onEdit(editData);
   };
 
   createVote = () => {
-    const { onCreate, errorMessage: { noTitle, notEnoughItems }, setData, clientId } = this.props;
-    const items = this.state.items;
-    const title = this.state.voteTitle;
-    const closed = this.state.closeCheck;
-    const downvote = this.state.downvoteCheck;
-    const multiple = this.state.multipleCheck;
-    const expansion = this.state.expansionCheck;
-    const showTotal = this.state.showTotalCheck;
-    const autoClose = this.state.autoCloseNumber ? parseInt(this.state.autoCloseNumber, 10) : false;
+    const {
+      onCreate,
+      errorMessage: { noTitle, notEnoughItems },
+      setData,
+      clientId,
+    } = this.props;
+    const {
+      items,
+      voteTitle: title,
+      closeCheck: closed,
+      downvoteCheck: downvote,
+      multipleCheck: multiple,
+      expansionCheck: expansion,
+      showTotalCheck: showTotal,
+      autoCloseNumber,
+    } = this.state;
+    const autoClose = autoCloseNumber ? parseInt(autoCloseNumber, 10) : false;
     if (!title || !title.trim()) {
-      return this.setState(() => ({ showMessage: true, errorMessage: noTitle }));
+      return this.setState(() => ({
+        showMessage: true,
+        errorMessage: noTitle,
+      }));
     }
     const data = {
       title: title.trim(),
@@ -172,19 +200,37 @@ class CreationView extends Component {
       creator: clientId,
     };
     if (!data.expansion && data.items.length < 2) {
-      return this.setState(() => ({ showMessage: true, errorMessage: notEnoughItems }));
+      return this.setState(() => ({
+        showMessage: true,
+        errorMessage: notEnoughItems,
+      }));
     }
     this.setState(() => ({ showMessage: false }));
     setData(data);
     if (!onCreate) {
-      return console.warn('Provide onCreate prop as a callback function to save new vote data');
+      return console.warn(
+        'Provide onCreate prop as a callback function to save new vote data',
+      );
     }
     return onCreate && typeof onCreate === 'function' && onCreate(data);
   };
 
   render() {
     const { styles, text, setting } = this.props;
-    const { voteTitle, items, downvoteCheck, showTotalCheck, addInput, multipleCheck, expansionCheck, autoCloseNumber, errorMessage, showMessage, closeCheck, reasonCheck } = this.state;
+    const {
+      voteTitle,
+      items,
+      downvoteCheck,
+      showTotalCheck,
+      addInput,
+      multipleCheck,
+      expansionCheck,
+      autoCloseNumber,
+      errorMessage,
+      showMessage,
+      closeCheck,
+      reasonCheck,
+    } = this.state;
     return (
       <div id="creation-view">
         <input
@@ -208,6 +254,7 @@ class CreationView extends Component {
               placeholder={text.addInputPlaceholder}
             />
             <button
+              type="button"
               className={styles.addButton}
               onClick={this.addItem}
             >
@@ -215,11 +262,17 @@ class CreationView extends Component {
             </button>
             <label htmlFor="reason">
               {text.reasonCheckbox}
-              <input id="reason" type="checkbox" checked={reasonCheck} onChange={this.onReasonChange} />
+              <input
+                id="reason"
+                type="checkbox"
+                checked={reasonCheck}
+                onChange={this.onReasonChange}
+              />
             </label>
           </div>
           <div>
-            <label htmlFor="multiple">{text.multipleCheckbox}
+            <label htmlFor="multiple">
+              {text.multipleCheckbox}
               <input
                 id="multiple"
                 type="checkbox"
@@ -229,7 +282,8 @@ class CreationView extends Component {
             </label>
           </div>
           <div>
-            <label htmlFor="expansion">{text.expansionCheckbox}
+            <label htmlFor="expansion">
+              {text.expansionCheckbox}
               <input
                 id="expansion"
                 type="checkbox"
@@ -239,7 +293,8 @@ class CreationView extends Component {
             </label>
           </div>
           <div>
-            <label htmlFor="autoClose">{text.autoCloseText}
+            <label htmlFor="autoClose">
+              {text.autoCloseText}
               <input
                 id="autoClose"
                 value={autoCloseNumber}
@@ -249,7 +304,8 @@ class CreationView extends Component {
             </label>
           </div>
           <div>
-            <label htmlFor="downvote">{text.downvoteCheckbox}
+            <label htmlFor="downvote">
+              {text.downvoteCheckbox}
               <input
                 id="downvote"
                 type="checkbox"
@@ -259,7 +315,8 @@ class CreationView extends Component {
             </label>
           </div>
           <div>
-            <label htmlFor="showTotal">{text.showTotalCheckbox}
+            <label htmlFor="showTotal">
+              {text.showTotalCheckbox}
               <input
                 id="showTotal"
                 type="checkbox"
@@ -269,7 +326,8 @@ class CreationView extends Component {
             </label>
           </div>
           <div>
-            <label htmlFor="closed">{text.closeCheckbox}
+            <label htmlFor="closed">
+              {text.closeCheckbox}
               <input
                 id="closed"
                 type="checkbox"
@@ -279,10 +337,15 @@ class CreationView extends Component {
             </label>
           </div>
         </div>
-        {showMessage &&
-        <div className={styles.errorMessage}>{errorMessage}</div>}
+        {showMessage && (
+          <div className={styles.errorMessage}>{errorMessage}</div>
+        )}
         <div className={styles.buttonWrapper}>
-          <button className={styles.createButton} onClick={setting ? this.editVote : this.createVote}>
+          <button
+            type="button"
+            className={styles.createButton}
+            onClick={setting ? this.editVote : this.createVote}
+          >
             {setting ? text.editButtonText : text.createButtonText}
           </button>
         </div>

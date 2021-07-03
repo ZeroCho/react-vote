@@ -8,35 +8,28 @@ const rules = [
     options: {
       presets: [
         [
-          'env',
+          '@babel/preset-env',
           {
             targets: {
-              browsers: [
-                'last 2 versions',
-                '> 5% in KR',
-              ],
+              browsers: ['last 2 versions', '> 5% in KR'],
             },
             debug: true,
           },
         ],
-        'react',
-        'stage-1',
+        '@babel/preset-react',
       ],
-      plugins: [
-        'react-hot-loader/babel',
-      ],
+      plugins: ['react-hot-loader/babel'],
     },
     exclude: /node_modules/,
   },
   {
     test: /\.css/,
-    use: [
-      'style-loader', 'css-loader?modules&importLoaders=1',
-    ],
+    use: ['style-loader', 'css-loader?modules&importLoaders=1'],
   },
 ];
 
 module.exports = {
+  mode: 'development',
   entry: ['react-hot-loader/patch', './src/Demo'],
   output: {
     path: path.join(__dirname, 'dev'),
@@ -48,11 +41,7 @@ module.exports = {
   },
   devtool: 'eval',
   module: { rules },
-  plugins: [
-    new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-  ],
+  plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
     contentBase: path.join(__dirname, 'dev'),
     port: 9001,

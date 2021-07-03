@@ -10,7 +10,7 @@ class CreationItems extends Component {
   };
 
   render = () => {
-    const { items, styles, text } = this.props;
+    const { items, styles, text, onRemove } = this.props;
     return (
       <div>
         {items.map((item, i) => {
@@ -21,7 +21,8 @@ class CreationItems extends Component {
                 {item.title}
               </div>
               <button
-                onClick={() => this.props.onRemove(i)}
+                type="button"
+                onClick={() => onRemove(i)}
                 className={styles.removeButton}
               >
                 {text.removeButtonText}
