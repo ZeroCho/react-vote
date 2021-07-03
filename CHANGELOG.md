@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.0.0] - 2018-09-30
 ### Added
 - typescript declaration
+- webpack@5
+- support react@17
 ### Removed
-- useless
+- useless if statements
 
 ## [3.3.0] - 2018-01-13
 ### Updated
