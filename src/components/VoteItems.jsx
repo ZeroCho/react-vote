@@ -13,9 +13,7 @@ class VoteItems extends Component {
     resultView: PropTypes.bool.isRequired,
   };
 
-  static defaultProps = {
-    clientId: null,
-  };
+  static defaultProps = { clientId: null };
 
   state = {
     showReasonInput: -1,
@@ -46,13 +44,7 @@ class VoteItems extends Component {
     const { reason, reasonType, showReasonInput } = this.state;
     const canVote = multiple || !voted;
     const total = items.reduce((prev, current) => prev + current.count, 0);
-    const wholeTotal = items.reduce((prev, current) => {
-      if (!current.total) {
-        // TODO: remove at v4
-        current.total = current.count;
-      }
-      return prev + current.total;
-    }, 0);
+    const wholeTotal = items.reduce(((prev, current) => prev + current.total), 0);
     const realTotal = total === wholeTotal ? '' : `(${wholeTotal})`;
     return (
       <div>
@@ -105,7 +97,7 @@ class VoteItems extends Component {
               ) : (
                 votedOrNot
               )}
-              {canVote && showReasonInput === i && (
+              {canVote && isAlreadyVoted && showReasonInput === i && (
                 <div>
                   <input
                     id="reason"

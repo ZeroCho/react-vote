@@ -106,6 +106,7 @@ class CreationView extends Component {
       upvoters: [],
       downvoters: [],
       reason: reasonCheck,
+      reasons: [],
     });
     this.setState(() => ({ items, addInput: '', reasonCheck: false }));
   };
@@ -234,6 +235,7 @@ class CreationView extends Component {
     return (
       <div id="creation-view">
         <input
+          id="rvote-titleinput"
           className={styles.titleInput}
           value={voteTitle}
           onChange={this.onVoteTitleChange}
@@ -248,12 +250,14 @@ class CreationView extends Component {
           />
           <div>
             <input
+              id="rvote-addinput"
               className={styles.addInput}
               value={addInput}
               onChange={this.onAddInputChange}
               placeholder={text.addInputPlaceholder}
             />
             <button
+              id="rvote-addbutton"
               type="button"
               className={styles.addButton}
               onClick={this.addItem}

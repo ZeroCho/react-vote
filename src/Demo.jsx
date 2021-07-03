@@ -92,14 +92,23 @@ const DOMRender = RV => (
               title: 'a',
               count: 0,
               total: 0,
+              voters: [],
+              upvoters: [],
+              downvoters: [],
             }, {
               title: 'b',
               count: 0,
               total: 0,
+              voters: [],
+              upvoters: [],
+              downvoters: [],
             }, {
               title: 'c',
               count: 0,
               total: 0,
+              voters: [],
+              upvoters: [],
+              downvoters: [],
             }],
           }}
           isAdmin={false}
